@@ -149,13 +149,14 @@ void CTripmineGrenade :: Precache( void )
 	PRECACHE_SOUND("weapons/mine_deploy.wav");
 	PRECACHE_SOUND("weapons/mine_activate.wav");
 	PRECACHE_SOUND("weapons/mine_charge.wav");
+	PRECACHE_SOUND("buttons/Blip2.wav");
 }
 
 
 void CTripmineGrenade :: WarningThink( void  )
 {
 	// play warning sound
-	// EMIT_SOUND( ENT(pev), CHAN_VOICE, "buttons/Blip2.wav", 1.0, ATTN_NORM );
+	EMIT_SOUND( ENT(pev), CHAN_VOICE, "buttons/Blip2.wav", 1.0, ATTN_NORM );
 
 	// set to power up
 	SetThink(&CTripmineGrenade :: PowerupThink );
@@ -392,16 +393,15 @@ int CTripmine::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "Trip Mine";
-	p->iMaxAmmo1 = TRIPMINE_MAX_CARRY;
+	p->iMaxAmmo1 = MAX_CARRY_TRIPMINE;
 	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 4;
-	p->iPosition = 2;
+	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
+	p->iMaxClip = MAX_AMMO_NOCLIP;
+	p->iSlot = SLOT_TRIPMINE;
+	p->iPosition = POSITION_TRIPMINE;
 	p->iId = m_iId = WEAPON_TRIPMINE;
-	p->iWeight = TRIPMINE_WEIGHT;
+	p->iWeight = WEIGHT_TRIPMINE;
 	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
-
 	return 1;
 }
 
