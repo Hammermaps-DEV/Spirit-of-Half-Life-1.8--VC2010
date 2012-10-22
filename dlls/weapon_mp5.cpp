@@ -52,7 +52,7 @@ void CMP5::Spawn( )
 	SET_MODEL(ENT(pev), "models/w_9mmAR.mdl");
 	m_iId = WEAPON_MP5;
 
-	m_iDefaultAmmo = MP5_DEFAULT_GIVE;
+	m_iDefaultAmmo = DEFAULT_GIVE_MP5;
 
 	FallInit();// get ready to fall down.
 }
@@ -91,15 +91,15 @@ int CMP5::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "9mm";
-	p->iMaxAmmo1 = _9MM_MAX_CARRY;
+	p->iMaxAmmo1 = MAX_CARRY_9MM;
 	p->pszAmmo2 = "ARgrenades";
-	p->iMaxAmmo2 = M203_GRENADE_MAX_CARRY;
-	p->iMaxClip = MP5_MAX_CLIP;
-	p->iSlot = 2;
-	p->iPosition = 0;
+	p->iMaxAmmo2 = MAX_CARRY_M203;
+	p->iMaxClip = MAX_CLIP_MP5;
+	p->iSlot = SLOT_MP5;
+	p->iPosition = POSITION_MP5;
 	p->iFlags = 0;
 	p->iId = m_iId = WEAPON_MP5;
-	p->iWeight = MP5_WEIGHT;
+	p->iWeight = WEIGHT_MP5;
 
 	return 1;
 }

@@ -111,15 +111,15 @@ int CGauss::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "uranium";
-	p->iMaxAmmo1 = URANIUM_MAX_CARRY;
+	p->iMaxAmmo1 = MAX_CARRY_URANIUM;
 	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 3;
-	p->iPosition = 1;
+	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
+	p->iMaxClip = MAX_CLIP_NOCLIP;
+	p->iSlot = SLOT_GAUSS;
+	p->iPosition = POSITION_GAUSS;
 	p->iId = m_iId = WEAPON_GAUSS;
 	p->iFlags = 0;
-	p->iWeight = GAUSS_WEIGHT;
+	p->iWeight = WEIGHT_GAUSS;
 
 	return 1;
 }

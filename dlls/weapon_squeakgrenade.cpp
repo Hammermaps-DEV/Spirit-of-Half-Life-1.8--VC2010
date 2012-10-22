@@ -448,16 +448,15 @@ int CSqueak::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "Snarks";
-	p->iMaxAmmo1 = SNARK_MAX_CARRY;
+	p->iMaxAmmo1 = MAX_CARRY_SNARK;
 	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 4;
-	p->iPosition = 3;
+	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
+	p->iMaxClip = MAX_CLIP_NOCLIP;
+	p->iSlot = SLOT_SNARK;
+	p->iPosition = POSITION_SNARK;
 	p->iId = m_iId = WEAPON_SNARK;
-	p->iWeight = SNARK_WEIGHT;
+	p->iWeight = WEIGHT_SNARK;
 	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
-
 	return 1;
 }
 

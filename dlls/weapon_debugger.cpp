@@ -86,7 +86,7 @@ int CDebugger::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = MAX_AMMO_NOCLIP;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
-	p->iMaxClip = WEAPON_NOCLIP;
+	p->iMaxClip = MAX_CLIP_NOCLIP;
 	p->iSlot = SLOT_DEBUG;
 	p->iPosition = POSITION_DEBUG;
 	p->iFlags = 0;

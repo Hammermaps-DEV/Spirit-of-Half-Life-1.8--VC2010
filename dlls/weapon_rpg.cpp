@@ -12,8 +12,6 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( OEM_BUILD )
-
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -22,9 +20,6 @@
 #include "nodes.h"
 #include "player.h"
 #include "gamerules.h"
-
-
-
 
 enum rpg_e {
 	RPG_IDLE = 0,
@@ -395,15 +390,15 @@ int CRpg::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "rockets";
-	p->iMaxAmmo1 = ROCKET_MAX_CARRY;
+	p->iMaxAmmo1 = MAX_CARRY_ROCKET;
 	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
-	p->iMaxClip = RPG_MAX_CLIP;
-	p->iSlot = 3;
-	p->iPosition = 0;
+	p->iMaxAmmo2 = MAX_CLIP_NOCLIP;
+	p->iMaxClip = MAX_CLIP_RPG;
+	p->iSlot = SLOT_RPG;
+	p->iPosition = POSITION_RPG;
 	p->iId = m_iId = WEAPON_RPG;
 	p->iFlags = 0;
-	p->iWeight = RPG_WEIGHT;
+	p->iWeight = WEIGHT_RPG;
 
 	return 1;
 }

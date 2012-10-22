@@ -685,7 +685,7 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 		m_pPlayer->TabulateAmmo();
 		PrimaryAttack();
 	}
-	else if ( m_pPlayer->pev->button & IN_RELOAD && iMaxClip() != WEAPON_NOCLIP && !m_fInReload ) 
+	else if ( m_pPlayer->pev->button & IN_RELOAD && iMaxClip() != MAX_CLIP_NOCLIP && !m_fInReload ) 
 	{
 		// reload when reload is pressed, or if no buttons are down and weapon is empty.
 		Reload();
@@ -1175,7 +1175,7 @@ int CBasePlayerWeapon::ExtractClipAmmo( CBasePlayerWeapon *pWeapon )
 {
 	int			iAmmo;
 
-	if ( m_iClip == WEAPON_NOCLIP )
+	if ( m_iClip == MAX_CLIP_NOCLIP )
 	{
 		iAmmo = 0;// guns with no clips always come empty if they are second-hand
 	}

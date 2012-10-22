@@ -12,8 +12,6 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
-
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -97,15 +95,15 @@ int CHgun::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "Hornets";
-	p->iMaxAmmo1 = HORNET_MAX_CARRY;
+	p->iMaxAmmo1 = MAX_CARRY_HORNET;
 	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 3;
-	p->iPosition = 3;
+	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
+	p->iMaxClip = MAX_CLIP_NOCLIP;
+	p->iSlot = SLOT_HORNETGUN;
+	p->iPosition = POSITION_HORNETGUN;
 	p->iId = m_iId = WEAPON_HORNETGUN;
 	p->iFlags = ITEM_FLAG_NOAUTOSWITCHEMPTY | ITEM_FLAG_NOAUTORELOAD;
-	p->iWeight = HORNETGUN_WEIGHT;
+	p->iWeight = WEIGHT_HORNETGUN;
 
 	return 1;
 }
@@ -176,8 +174,6 @@ void CHgun::PrimaryAttack()
 
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10, 15 );
 }
-
-
 
 void CHgun::SecondaryAttack( void )
 {
@@ -301,5 +297,3 @@ void CHgun::WeaponIdle( void )
 	}
 	SendWeaponAnim( iAnim );
 }
-
-#endif
