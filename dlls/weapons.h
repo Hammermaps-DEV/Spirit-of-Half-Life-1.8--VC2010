@@ -89,7 +89,7 @@ public:
 /* Weapon Debug # 1 # */
 #define WEAPON_DEBUG		6
 #define WEIGHT_DEBUG		-10
-#define SLOT_DEBUG		0
+#define SLOT_DEBUG			0
 #define POSITION_DEBUG		1
 
 /* Weapon Crowbar # 2 # */
@@ -101,8 +101,12 @@ public:
 /* Weapon Glock 9mm # 3 # */
 #define WEAPON_GLOCK		2
 #define WEIGHT_GLOCK		10
-#define SLOT_GLOCK		0
+#define SLOT_GLOCK			1
 #define POSITION_GLOCK		0
+
+//Ammo
+#define	MAX_CARRY_9MM		200
+#define	MAX_CLIP_GLOCK		17
 
 /* Weapon Python 357mm # 4 #  */
 #define WEAPON_PYTHON		3
@@ -111,22 +115,29 @@ public:
 #define POSITION_PYTHON		0
 
 /* Weapon MP5 9mm # 5 #  */
-#define WEAPON_MP5		5
-#define WEIGHT_MP5		15
-#define SLOT_MP5		0
+#define WEAPON_MP5			5
+#define WEIGHT_MP5			15
+#define SLOT_MP5			0
 #define POSITION_MP5		0
 
 /* Weapon Shotgun # 6 #  */
 #define WEAPON_SHOTGUN		8
 #define WEIGHT_SHOTGUN		15
-#define SLOT_SHOTGUN		0
-#define POSITION_SHOTGUN	0
+#define SLOT_SHOTGUN		2
+#define POSITION_SHOTGUN	1
+
+//Ammo
+#define MAX_CARRY_BUCKSHOT	125
 
 /* Weapon Crossbow # 7 #  */
 #define WEAPON_CROSSBOW		7
 #define WEIGHT_CROSSBOW		10
-#define SLOT_CROSSBOW		0
-#define POSITION_CROSSBOW	0
+#define SLOT_CROSSBOW		2
+#define POSITION_CROSSBOW	2
+
+//Ammo
+#define MAX_CARRY_BOLT		50
+#define MAX_CLIP_CROSSBOW	5
 
 /* Weapon RPG # 8 #  */
 #define WEAPON_RPG		9
@@ -141,10 +152,13 @@ public:
 #define POSITION_GAUSS		0
 
 /* Weapon EGON # 10 #  */
-#define WEAPON_EGON		11
-#define WEIGHT_EGON		20
-#define SLOT_EGON		0
-#define POSITION_EGON		0
+#define WEAPON_EGON				11
+#define WEIGHT_EGON				20
+#define SLOT_EGON				3
+#define POSITION_EGON			2
+
+//Ammo
+#define MAX_CARRY_URANIUM		100
 
 /* Weapon Hornetgun # 11 #  */
 #define WEAPON_HORNETGUN		12
@@ -157,14 +171,19 @@ public:
 #define WEIGHT_HANDGRENADE	 	0
 #define SLOT_HANDGRENADE	 	4
 #define POSITION_HANDGRENADE	 	0
+
+//Ammo
 #define DEFAULT_GIVE_HANDGRENADE	1
 #define MAX_CARRY_HANDGRENADE		10
 
 /* Weapon Tripmine # 13 #  */
 #define WEAPON_TRIPMINE		14
 #define WEIGHT_TRIPMINE		0
-#define SLOT_TRIPMINE		0
-#define POSITION_TRIPMINE	0
+#define SLOT_TRIPMINE		4
+#define POSITION_TRIPMINE	2
+
+//Ammo
+#define MAX_CARRY_TRIPMINE	5
 
 /* Weapon Exp-Satchel # 14 #  */
 #define WEAPON_SATCHEL		15
@@ -180,27 +199,18 @@ public:
 
 // weapon weight factors (for auto-switching)   (-1 = noswitch)
 //TODO Change to new Format
-#define CROWBAR_WEIGHT		0
 #define GLOCK_WEIGHT		10
 #define PYTHON_WEIGHT		15
 #define MP5_WEIGHT			15
-#define SHOTGUN_WEIGHT		15
-#define CROSSBOW_WEIGHT		10
 #define RPG_WEIGHT			20
 #define GAUSS_WEIGHT		20
-#define EGON_WEIGHT			20
 #define HORNETGUN_WEIGHT	10
-#define HANDGRENADE_WEIGHT	5
 #define SNARK_WEIGHT		5
 #define SATCHEL_WEIGHT		-10
-#define TRIPMINE_WEIGHT		-10
 
 // weapon clip/carry ammo capacities
-#define URANIUM_MAX_CARRY		100
 #define	_9MM_MAX_CARRY			250
 #define _357_MAX_CARRY			36
-#define BUCKSHOT_MAX_CARRY		125
-#define BOLT_MAX_CARRY			50
 #define ROCKET_MAX_CARRY		5
 #define HANDGRENADE_MAX_CARRY	10
 #define SATCHEL_MAX_CARRY		5
