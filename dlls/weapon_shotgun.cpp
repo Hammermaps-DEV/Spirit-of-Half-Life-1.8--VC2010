@@ -96,16 +96,15 @@ int CShotgun::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "buckshot";
-	p->iMaxAmmo1 = BUCKSHOT_MAX_CARRY;
+	p->iMaxAmmo1 = MAX_CARRY_BUCKSHOT;
 	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
+	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = SHOTGUN_MAX_CLIP;
-	p->iSlot = 2;
-	p->iPosition = 1;
+	p->iSlot = SLOT_SHOTGUN;
+	p->iPosition = POSITION_SHOTGUN;
 	p->iFlags = 0;
 	p->iId = m_iId = WEAPON_SHOTGUN;
-	p->iWeight = SHOTGUN_WEIGHT;
-
+	p->iWeight = WEIGHT_SHOTGUN;
 	return 1;
 }
 
