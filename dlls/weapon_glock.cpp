@@ -37,7 +37,6 @@ enum glock_e {
 LINK_ENTITY_TO_CLASS( weapon_glock, CGlock );
 LINK_ENTITY_TO_CLASS( weapon_9mmhandgun, CGlock );
 
-
 void CGlock::Spawn( )
 {
 	pev->classname = MAKE_STRING("weapon_9mmhandgun"); // hack to allow for old names
@@ -91,16 +90,15 @@ int CGlock::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "9mm";
-	p->iMaxAmmo1 = _9MM_MAX_CARRY;
+	p->iMaxAmmo1 = MAX_CARRY_9MM;
 	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
-	p->iMaxClip = GLOCK_MAX_CLIP;
-	p->iSlot = 1;
-	p->iPosition = 0;
+	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
+	p->iMaxClip = MAX_CLIP_GLOCK;
+	p->iSlot = SLOT_GLOCK;
+	p->iPosition = POSITION_GLOCK;
 	p->iFlags = 0;
 	p->iId = m_iId = WEAPON_GLOCK;
-	p->iWeight = GLOCK_WEIGHT;
-
+	p->iWeight = WEIGHT_GLOCK;
 	return 1;
 }
 
