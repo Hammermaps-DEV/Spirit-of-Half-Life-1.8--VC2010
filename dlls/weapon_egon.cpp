@@ -32,8 +32,8 @@
 #define EGON_SOUND_RUN			"weapons/egon_run3.wav"
 #define EGON_SOUND_STARTUP		"weapons/egon_windup2.wav"
 
-#define EGON_SWITCH_NARROW_TIME			0.75			// Time it takes to switch fire modes
-#define EGON_SWITCH_WIDE_TIME			1.5
+#define EGON_SWITCH_NARROW_TIME		0.75			// Time it takes to switch fire modes
+#define EGON_SWITCH_WIDE_TIME		1.5
 
 enum egon_e {
 	EGON_IDLE1 = 0,
@@ -65,22 +65,26 @@ void CEgon::Spawn( )
 
 void CEgon::Precache( void )
 {
+	//Models
 	PRECACHE_MODEL("models/w_egon.mdl");
 	PRECACHE_MODEL("models/v_egon.mdl");
 	PRECACHE_MODEL("models/p_egon.mdl");
 
 	PRECACHE_MODEL("models/w_9mmclip.mdl");
+	
+	//Sounds
 	PRECACHE_SOUND("items/9mmclip1.wav");
+	PRECACHE_SOUND ("weapons/357_cock1.wav");
 
 	PRECACHE_SOUND( EGON_SOUND_OFF );
 	PRECACHE_SOUND( EGON_SOUND_RUN );
 	PRECACHE_SOUND( EGON_SOUND_STARTUP );
 
+	//Sprite
 	PRECACHE_MODEL( EGON_BEAM_SPRITE );
 	PRECACHE_MODEL( EGON_FLARE_SPRITE );
 
-	PRECACHE_SOUND ("weapons/357_cock1.wav");
-
+	//Events
 	m_usEgonFire = PRECACHE_EVENT ( 1, "events/egon_fire.sc" );
 	m_usEgonStop = PRECACHE_EVENT ( 1, "events/egon_stop.sc" );
 }
@@ -107,7 +111,7 @@ int CEgon::AddToPlayer( CBasePlayer *pPlayer )
 
 
 
-void CEgon::Holster( int skiplocal /* = 0 */ )
+void CEgon::Holster( int skiplocal )
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 	SendWeaponAnim( EGON_HOLSTER );
@@ -119,20 +123,20 @@ int CEgon::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "uranium";
-	p->iMaxAmmo1 = URANIUM_MAX_CARRY;
+	p->iMaxAmmo1 = MAX_CARRY_URANIUM;
 	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 3;
-	p->iPosition = 2;
+	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
+	p->iMaxClip = MAX_CLIP_NOCLIP;
+	p->iSlot = SLOT_EGON;
+	p->iPosition = POSITION_EGON;
 	p->iId = m_iId = WEAPON_EGON;
 	p->iFlags = 0;
-	p->iWeight = EGON_WEIGHT;
+	p->iWeight = WEIGHT_EGON;
 
 	return 1;
 }
 
-#define EGON_PULSE_INTERVAL			0.1
+#define EGON_PULSE_INTERVAL		0.1
 #define EGON_DISCHARGE_INTERVAL		0.1
 
 float CEgon::GetPulseInterval( void )
