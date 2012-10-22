@@ -72,33 +72,29 @@ public:
 #define ITEM_SLOT10			10
 */
 
-#define WEAPON_NONE				0
+#define WEAPON_NONE			0
 #define WEAPON_CROWBAR			1
 #define WEAPON_GLOCK			2
 #define WEAPON_PYTHON			3
 #define WEAPON_GENERIC			4
-#define WEAPON_MP5				5
-#define WEAPON_DEBUG                           	6 //G-Cont. weapon for hunt bugs. he-he-he
+#define WEAPON_MP5			5
+#define WEAPON_DEBUG                    6 //G-Cont. weapon for hunt bugs. he-he-he
 #define WEAPON_CROSSBOW			7
 #define WEAPON_SHOTGUN			8
-#define WEAPON_RPG				9
+#define WEAPON_RPG			9
 #define WEAPON_GAUSS			10
-#define WEAPON_EGON				11
-#define WEAPON_HORNETGUN			12
-#define WEAPON_HANDGRENADE			13
+#define WEAPON_EGON			11
+#define WEAPON_HORNETGUN		12
+#define WEAPON_HANDGRENADE		13
 #define WEAPON_TRIPMINE			14
 #define WEAPON_SATCHEL			15
 #define WEAPON_SNARK			16
 
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
-
-#define WEAPON_SUIT				31	// ?????
-
+#define WEAPON_SUIT			31	// ?????
 #define MAX_WEAPONS			32
-
-
-#define MAX_NORMAL_BATTERY	100
+#define MAX_NORMAL_BATTERY		100
 
 
 // weapon weight factors (for auto-switching)   (-1 = noswitch)
@@ -234,9 +230,6 @@ typedef struct
 class CBasePlayerItem : public CBaseAnimating
 {
 public:
-
-
-	
 	virtual void SetObjectCollisionBox( void );
 	#ifndef CLIENT_DLL 								//AJH for lockable weapons
 	virtual void	KeyValue( KeyValueData* pkvd);	//
