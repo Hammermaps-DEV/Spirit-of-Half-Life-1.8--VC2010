@@ -22,16 +22,13 @@
 #include "player.h"
 #include "gamerules.h"
 
-
 #define	CROWBAR_BODYHIT_VOLUME 128
 #define	CROWBAR_WALLHIT_VOLUME 512
 
 LINK_ENTITY_TO_CLASS( weapon_crowbar, CCrowbar );
 
-
-
 enum crowbar_e {
-	CROWBAR_IDLE = 0,
+	CROWBAR_IDLE,
 	CROWBAR_DRAW,
 	CROWBAR_HOLSTER,
 	CROWBAR_ATTACK1HIT,
@@ -49,16 +46,18 @@ void CCrowbar::Spawn( )
 	m_iId = WEAPON_CROWBAR;
 	SET_MODEL(ENT(pev), "models/w_crowbar.mdl");
 	m_iClip = -1;
-
 	FallInit();// get ready to fall down.
 }
 
 
 void CCrowbar::Precache( void )
 {
+	//Models
 	PRECACHE_MODEL("models/v_crowbar.mdl");
 	PRECACHE_MODEL("models/w_crowbar.mdl");
 	PRECACHE_MODEL("models/p_crowbar.mdl");
+	
+	//Sounds
 	PRECACHE_SOUND("weapons/cbar_hit1.wav");
 	PRECACHE_SOUND("weapons/cbar_hit2.wav");
 	PRECACHE_SOUND("weapons/cbar_hitbod1.wav");
@@ -71,14 +70,14 @@ int CCrowbar::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = NULL;
-	p->iMaxAmmo1 = -1;
+	p->iMaxAmmo1 = MAX_AMMO_NOCLIP;
 	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 0;
-	p->iPosition = 0;
+	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
+	p->iMaxClip = MAX_CLIP_NOCLIP;
+	p->iSlot = SLOT_CROWBAR;
+	p->iPosition = POSITION_CROWBAR;
 	p->iId = WEAPON_CROWBAR;
-	p->iWeight = CROWBAR_WEIGHT;
+	p->iWeight = WEIGHT_CROWBAR;
 	return 1;
 }
 
@@ -89,7 +88,7 @@ BOOL CCrowbar::Deploy( )
 	return DefaultDeploy( "models/v_crowbar.mdl", "models/p_crowbar.mdl", CROWBAR_DRAW, "crowbar" );
 }
 
-void CCrowbar::Holster( int skiplocal /* = 0 */ )
+void CCrowbar::Holster( int skiplocal )
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 	SendWeaponAnim( CROWBAR_HOLSTER );
@@ -287,8 +286,8 @@ int CCrowbar::Swing( int fFirst )
 			// also play crowbar strike
 			switch( RANDOM_LONG(0,1) )
 			{
-			case 0: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/cbar_hit1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0,3)); break;
-			case 1: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/cbar_hit2.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0,3)); break;
+				case 0: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/cbar_hit1.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0,3)); break;
+				case 1: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/cbar_hit2.wav", fvolbar, ATTN_NORM, 0, 98 + RANDOM_LONG(0,3)); break;
 			}
 
 			// delay the decal a bit
@@ -298,11 +297,8 @@ int CCrowbar::Swing( int fFirst )
 		m_pPlayer->m_iWeaponVolume = flVol * CROWBAR_WALLHIT_VOLUME;
 #endif
 		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.25;
-		
 		SetThink(&CCrowbar:: Smack );
 		SetNextThink( 0.2 );
-
-		
 	}
 	return fDidHit;
 }
