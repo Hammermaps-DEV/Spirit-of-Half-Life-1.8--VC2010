@@ -72,7 +72,7 @@ public:
 #define MAX_WEAPONS			32
 #define MAX_NORMAL_BATTERY		100
 
-/* 
+/*
 * ##########################################
 * Weapons Define Settings
 * ##########################################
@@ -88,9 +88,9 @@ public:
 
 /* Weapon Debug # 1 # */
 #define WEAPON_DEBUG		6
-#define WEIGHT_DEBUG		0
+#define WEIGHT_DEBUG		-10
 #define SLOT_DEBUG		0
-#define POSITION_DEBUG		0
+#define POSITION_DEBUG		1
 
 /* Weapon Crowbar # 2 # */
 #define WEAPON_CROWBAR		1
