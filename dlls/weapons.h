@@ -55,15 +55,8 @@ public:
 	BOOL m_fRegisteredSound;// whether or not this grenade has issued its DANGER sound to the world sound list yet.
 };
 
-#define WEAPON_NONE			0
-#define WEAPON_CROWBAR			1
-#define WEAPON_GLOCK			2
-#define WEAPON_PYTHON			3
-#define WEAPON_GENERIC			4
-#define WEAPON_MP5			5
-#define WEAPON_DEBUG                    6 //G-Cont. weapon for hunt bugs. he-he-he
-#define WEAPON_CROSSBOW			7
-#define WEAPON_SHOTGUN			8
+
+
 #define WEAPON_RPG			9
 #define WEAPON_GAUSS			10
 #define WEAPON_EGON			11
@@ -79,8 +72,114 @@ public:
 #define MAX_WEAPONS			32
 #define MAX_NORMAL_BATTERY		100
 
+/* 
+* ##########################################
+* Weapons Define Settings
+* ##########################################
+*/
+
+/* Weaponss NO Clips */
+#define MAX_CLIP_NOCLIP		-1
+#define MAX_AMMO_NOCLIP		-1
+
+/* Weapon None # 0 # */
+#define WEAPON_NONE		0
+#define WEAPON_GENERIC		4 //TODO Remove
+
+/* Weapon Debug # 1 # */
+#define WEAPON_DEBUG		6
+#define WEIGHT_DEBUG		0
+#define SLOT_DEBUG		0
+#define POSITION_DEBUG		0
+
+/* Weapon Crowbar # 2 # */
+#define WEAPON_CROWBAR		1
+#define WEIGHT_CROWBAR		5
+#define SLOT_CROWBAR		0
+#define POSITION_CROWBAR	0
+
+/* Weapon Glock 9mm # 3 # */
+#define WEAPON_GLOCK		2
+#define WEIGHT_GLOCK		10
+#define SLOT_GLOCK		0
+#define POSITION_GLOCK		0
+
+/* Weapon Python 357mm # 4 #  */
+#define WEAPON_PYTHON		3
+#define WEIGHT_PYTHON		15
+#define SLOT_PYTHON		0
+#define POSITION_PYTHON		0
+
+/* Weapon MP5 9mm # 5 #  */
+#define WEAPON_MP5		5
+#define WEIGHT_MP5		15
+#define SLOT_MP5		0
+#define POSITION_MP5		0
+
+/* Weapon Shotgun # 6 #  */
+#define WEAPON_SHOTGUN		8
+#define WEIGHT_SHOTGUN		15
+#define SLOT_SHOTGUN		0
+#define POSITION_SHOTGUN	0
+
+/* Weapon Crossbow # 7 #  */
+#define WEAPON_CROSSBOW		7
+#define WEIGHT_CROSSBOW		10
+#define SLOT_CROSSBOW		0
+#define POSITION_CROSSBOW	0
+
+/* Weapon RPG # 8 #  */
+#define WEAPON_RPG		9
+#define WEIGHT_RPG		20
+#define SLOT_RPG		0
+#define POSITION_RPG		0
+
+/* Weapon Gauss # 9 #  */
+#define WEAPON_GAUSS		10
+#define WEIGHT_GAUSS		20
+#define SLOT_GAUSS		0
+#define POSITION_GAUSS		0
+
+/* Weapon EGON # 10 #  */
+#define WEAPON_EGON		11
+#define WEIGHT_EGON		20
+#define SLOT_EGON		0
+#define POSITION_EGON		0
+
+/* Weapon Hornetgun # 11 #  */
+#define WEAPON_HORNETGUN		12
+#define WEIGHT_HORNETGUN		10
+#define SLOT_HORNETGUN			0
+#define POSITION_HORNETGUN		0
+
+/* Weapon Handgrenade # 12 #  */
+#define WEAPON_HANDGRENADE	 	13
+#define WEIGHT_HANDGRENADE	 	0
+#define SLOT_HANDGRENADE	 	4
+#define POSITION_HANDGRENADE	 	0
+#define DEFAULT_GIVE_HANDGRENADE	1
+#define MAX_CARRY_HANDGRENADE		10
+
+/* Weapon Tripmine # 13 #  */
+#define WEAPON_TRIPMINE		14
+#define WEIGHT_TRIPMINE		0
+#define SLOT_TRIPMINE		0
+#define POSITION_TRIPMINE	0
+
+/* Weapon Exp-Satchel # 14 #  */
+#define WEAPON_SATCHEL		15
+#define WEIGHT_SATCHEL		0
+#define SLOT_SATCHEL		0
+#define POSITION_SATCHEL	0
+
+/* Weapon Snark # 15 #  */
+#define WEAPON_SNARK		16
+#define WEIGHT_SNARK		0
+#define SLOT_SNARK		0
+#define POSITION_SNARK		0
 
 // weapon weight factors (for auto-switching)   (-1 = noswitch)
+//TODO Change to new Format
 #define CROWBAR_WEIGHT		0
 #define GLOCK_WEIGHT		10
 #define PYTHON_WEIGHT		15
