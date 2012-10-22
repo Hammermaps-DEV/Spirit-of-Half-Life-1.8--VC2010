@@ -70,25 +70,28 @@ void CDebugger::Holster( int skiplocal )
 
 void CDebugger::Precache( void )
 {
+	//Models
 	PRECACHE_MODEL("models/v_9mmhandgun.mdl");
 	PRECACHE_MODEL("models/w_9mmhandgun.mdl");
 	PRECACHE_MODEL("models/p_9mmhandgun.mdl");
-	PRECACHE_SOUND ("buttons/blip1.wav");
+	
+	//Sounds
+	PRECACHE_SOUND("buttons/blip1.wav");
 }
 
 int CDebugger::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = NULL;
-	p->iMaxAmmo1 = -1;
+	p->iMaxAmmo1 = MAX_AMMO_NOCLIP;
 	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
+	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 0;
-	p->iPosition = 1;
+	p->iSlot = SLOT_DEBUG;
+	p->iPosition = POSITION_DEBUG;
 	p->iFlags = 0;
 	p->iId = WEAPON_DEBUG;
-	p->iWeight = -10;
+	p->iWeight = WEIGHT_DEBUG;
 	return 1;
 }
 
@@ -137,11 +140,8 @@ BOOL CDebugger::Deploy( )
 		case 13:{
 			ALERT(at_debug, "WEAPON_DEBUG -> Remove Monster\n" );
 		}break;
-		case 14:{
-			ALERT(at_debug, "WEAPON_DEBUG -> Spawn Grunt\n" );
-		}break;
 		}
-	return DefaultDeploy( "models/v_9mmhandgun.mdl", "models/p_9mmhandgun.mdl", 7, "onehanded", /*UseDecrement() ? 1 : 0*/ 0 );
+	return DefaultDeploy( "models/v_9mmhandgun.mdl", "models/p_9mmhandgun.mdl", 7, "onehanded", 0 );
 }
 
 void CDebugger::PrimaryAttack( void )
