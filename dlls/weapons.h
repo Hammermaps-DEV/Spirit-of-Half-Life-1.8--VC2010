@@ -55,23 +55,6 @@ public:
 	BOOL m_fRegisteredSound;// whether or not this grenade has issued its DANGER sound to the world sound list yet.
 };
 
-
-/* AJH we don't need to specify this stuff in here. It's now in items.h instead
-// constant items
-#define ITEM_HEALTHKIT		1
-#define ITEM_ANTIDOTE		2
-#define ITEM_SECURITY		3
-#define ITEM_BATTERY		4
-#define ITEM_LONGJUMP		5
-
-//AJH extended inventory
-#define ITEM_SLOT6			6
-#define ITEM_SLOT7			7
-#define ITEM_SLOT8			8
-#define ITEM_SLOT9			9
-#define ITEM_SLOT10			10
-*/
-
 #define WEAPON_NONE			0
 #define WEAPON_CROWBAR			1
 #define WEAPON_GLOCK			2
