@@ -20,8 +20,8 @@
 #include "nodes.h"
 #include "player.h"
 
-
 #define	HANDGRENADE_PRIMARY_VOLUME		450
+LINK_ENTITY_TO_CLASS( weapon_handgrenade, CHandGrenade );
 
 enum handgrenade_e {
 	HANDGRENADE_IDLE = 0,
@@ -34,10 +34,6 @@ enum handgrenade_e {
 	HANDGRENADE_DRAW
 };
 
-
-LINK_ENTITY_TO_CLASS( weapon_handgrenade, CHandGrenade );
-
-
 void CHandGrenade::Spawn( )
 {
 	Precache( );
@@ -48,8 +44,7 @@ void CHandGrenade::Spawn( )
 	pev->dmg = gSkillData.plrDmgHandGrenade;
 #endif
 
-	m_iDefaultAmmo = HANDGRENADE_DEFAULT_GIVE;
-
+	m_iDefaultAmmo = DEFAULT_GIVE_HANDGRENADE;
 	FallInit();// get ready to fall down.
 }
 
@@ -65,16 +60,15 @@ int CHandGrenade::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "Hand Grenade";
-	p->iMaxAmmo1 = HANDGRENADE_MAX_CARRY;
+	p->iMaxAmmo1 = MAX_CARRY_HANDGRENADE;
 	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 4;
-	p->iPosition = 0;
+	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
+	p->iMaxClip = MAX_CLIP_NOCLIP;
+	p->iSlot = SLOT_HANDGRENADE;
+	p->iPosition = POSITION_HANDGRENADE;
 	p->iId = m_iId = WEAPON_HANDGRENADE;
-	p->iWeight = HANDGRENADE_WEIGHT;
+	p->iWeight = WEIGHT_HANDGRENADE;
 	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
-
 	return 1;
 }
 
@@ -91,10 +85,9 @@ BOOL CHandGrenade::CanHolster( void )
 	return ( m_flStartThrow == 0 );
 }
 
-void CHandGrenade::Holster( int skiplocal /* = 0 */ )
+void CHandGrenade::Holster( int skiplocal )
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
-
 	if ( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] )
 	{
 		SendWeaponAnim( HANDGRENADE_HOLSTER );
@@ -106,8 +99,6 @@ void CHandGrenade::Holster( int skiplocal /* = 0 */ )
 		SetThink(&CHandGrenade:: DestroyItem );
 		SetNextThink( 0.1 );
 	}
-
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
 }
 
 void CHandGrenade::PrimaryAttack()
