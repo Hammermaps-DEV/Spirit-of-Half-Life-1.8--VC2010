@@ -120,7 +120,7 @@ void CStudioModelRenderer::StudioCalcBoneAdj( float dadt, float *adj, const byte
 			// check for 360% wrapping
 			if (pbonecontroller[j].type & STUDIO_RLOOP)
 			{
-				if (abs(pcontroller1[i] - pcontroller2[i]) > 128)
+				if (Vfabs(pcontroller1[i] - pcontroller2[i]) > 128)
 				{
 					int a, b;
 					a = (pcontroller1[j] + 128) % 256;
@@ -1028,7 +1028,7 @@ void CStudioModelRenderer::StudioMergeBones ( model_t *m_pSubModel )
 	{
 		for (j = 0; j < m_nCachedBones; j++)
 		{
-			if (stricmp(pbones[i].name, m_nCachedBoneNames[j]) == 0)
+			if (_stricmp(pbones[i].name, m_nCachedBoneNames[j]) == 0)
 			{
 				MatrixCopy( m_rgCachedBoneTransform[j], (*m_pbonetransform)[i] );
 				MatrixCopy( m_rgCachedLightTransform[j], (*m_plighttransform)[i] );

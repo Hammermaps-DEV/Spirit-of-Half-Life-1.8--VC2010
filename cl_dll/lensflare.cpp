@@ -130,15 +130,15 @@ int CHudLensflare::Draw(float flTime)
 
 		if( gEngfuncs.PM_PointContents( tr.endpos, null ) == CONTENTS_SKY )
 		{		
-			flPlayerBlend = max( DotProduct( forward, sundir ) - 0.85, 0.0 ) * 6.8;
+			flPlayerBlend = Vmax( DotProduct( forward, sundir ) - 0.85, 0.0 ) * 6.8;
 			if (flPlayerBlend > 1.0 )
 				flPlayerBlend = 1.0;
 
-			flPlayerBlend4 = max( DotProduct( forward, sundir ) - 0.90, 0.0 ) * 6.6;
+			flPlayerBlend4 = Vmax( DotProduct( forward, sundir ) - 0.90, 0.0 ) * 6.6;
 			if (flPlayerBlend4 > 1.0 )
 				flPlayerBlend4 = 1.0;
 
-			flPlayerBlend6 = max( DotProduct( forward, sundir ) - 0.80, 0.0 ) * 6.7;
+			flPlayerBlend6 = Vmax( DotProduct( forward, sundir ) - 0.80, 0.0 ) * 6.7;
 			if (flPlayerBlend6 > 1.0 )
 				flPlayerBlend6 = 1.0;
 

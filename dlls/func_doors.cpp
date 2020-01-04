@@ -360,7 +360,7 @@ void CBaseDoor::Spawn( )
 	
 	m_vecPosition1	= pev->origin;
 	// Subtract 2 from size because the engine expands bboxes by 1 in all directions making the size too big
-	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (fabs( pev->movedir.x * (pev->size.x-2) ) + fabs( pev->movedir.y * (pev->size.y-2) ) + fabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
+	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (Vfabs( pev->movedir.x * (pev->size.x-2) ) + Vfabs( pev->movedir.y * (pev->size.y-2) ) + Vfabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
 	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
 	if ( FBitSet (pev->spawnflags, SF_DOOR_START_OPEN) )
 	{	// swap pos1 and pos2, put door at pos2
@@ -432,7 +432,7 @@ void CBaseDoor :: PostSpawn( void )
 		m_vecPosition1 = pev->origin;
 
 	// Subtract 2 from size because the engine expands bboxes by 1 in all directions
-	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (fabs( pev->movedir.x * (pev->size.x-2) ) + fabs( pev->movedir.y * (pev->size.y-2) ) + fabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
+	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (Vfabs( pev->movedir.x * (pev->size.x-2) ) + Vfabs( pev->movedir.y * (pev->size.y-2) ) + Vfabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
 
 	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
 	if ( FBitSet (pev->spawnflags, SF_DOOR_START_OPEN) )
@@ -1218,7 +1218,7 @@ void CMomentaryDoor::Spawn( void )
 	
 	m_vecPosition1	= pev->origin;
 	// Subtract 2 from size because the engine expands bboxes by 1 in all directions making the size too big
-	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (fabs( pev->movedir.x * (pev->size.x-2) ) + fabs( pev->movedir.y * (pev->size.y-2) ) + fabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
+	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (Vfabs( pev->movedir.x * (pev->size.x-2) ) + Vfabs( pev->movedir.y * (pev->size.y-2) ) + Vfabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
 	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
 
 	//LRC: FIXME, move to PostSpawn

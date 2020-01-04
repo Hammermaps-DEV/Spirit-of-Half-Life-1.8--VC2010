@@ -1255,7 +1255,7 @@ void CBasePlayer::SetAnimation( PLAYER_ANIM playerAnim )
 			strcpy( szAnim, "crouch_shoot_" );
 		else
 			strcpy( szAnim, "ref_shoot_" );
-		strcat( szAnim, m_szAnimExtention );
+		strcat_s( szAnim, m_szAnimExtention );
 		animDesired = LookupSequence( szAnim );
 		if (animDesired == -1)
 			animDesired = 0;
@@ -1283,7 +1283,7 @@ void CBasePlayer::SetAnimation( PLAYER_ANIM playerAnim )
 				strcpy( szAnim, "crouch_aim_" );
 			else
 				strcpy( szAnim, "ref_aim_" );
-			strcat( szAnim, m_szAnimExtention );
+			strcat_s( szAnim, m_szAnimExtention );
 			animDesired = LookupSequence( szAnim );
 			if (animDesired == -1)
 				animDesired = 0;
@@ -2226,7 +2226,7 @@ void CBasePlayer::CheckTimeBasedDamage()
 		return;
 
 	// only check for time based damage approx. every 2 seconds
-	if (abs(gpGlobals->time - m_tbdPrev) < 2.0)
+	if (Vfabs(gpGlobals->time - m_tbdPrev) < 2.0)
 		return;
 
 	m_tbdPrev = gpGlobals->time;
@@ -2264,7 +2264,7 @@ void CBasePlayer::CheckTimeBasedDamage()
 				// after the player has been drowning and finally takes a breath
 				if (m_idrowndmg > m_idrownrestored)
 				{
-					int idif = min(m_idrowndmg - m_idrownrestored, 10);
+					int idif = Vmin(m_idrowndmg - m_idrownrestored, 10);
 
 					TakeHealth(idif, DMG_GENERIC);
 					m_idrownrestored += idif;
@@ -2488,7 +2488,7 @@ void CBasePlayer::CheckSuitUpdate()
 
 				char sentence[CBSENTENCENAME_MAX+1];
 				strcpy(sentence, "!");
-				strcat(sentence, gszallsentencenames[isentence]);
+				strcat_s(sentence, gszallsentencenames[isentence]);
 				EMIT_SOUND_SUIT(ENT(pev), sentence);
 			}
 			else
@@ -2860,23 +2860,23 @@ pt_end:
 
 				if ( gun && gun->UseDecrement() )
 				{
-					gun->m_flNextPrimaryAttack		= max( gun->m_flNextPrimaryAttack - gpGlobals->frametime, -1.0 );
-					gun->m_flNextSecondaryAttack	= max( gun->m_flNextSecondaryAttack - gpGlobals->frametime, -0.001 );
+					gun->m_flNextPrimaryAttack		= Vmax( gun->m_flNextPrimaryAttack - gpGlobals->frametime, -1.0 );
+					gun->m_flNextSecondaryAttack	= Vmax( gun->m_flNextSecondaryAttack - gpGlobals->frametime, -0.001 );
 
 					if ( gun->m_flTimeWeaponIdle != 1000 )
 					{
-						gun->m_flTimeWeaponIdle		= max( gun->m_flTimeWeaponIdle - gpGlobals->frametime, -0.001 );
+						gun->m_flTimeWeaponIdle		= Vmax( gun->m_flTimeWeaponIdle - gpGlobals->frametime, -0.001 );
 					}
 
 					if ( gun->pev->fuser1 != 1000 )
 					{
-						gun->pev->fuser1	= max( gun->pev->fuser1 - gpGlobals->frametime, -0.001 );
+						gun->pev->fuser1	= Vmax( gun->pev->fuser1 - gpGlobals->frametime, -0.001 );
 					}
 
 					// Only decrement if not flagged as NO_DECREMENT
 //					if ( gun->m_flPumpTime != 1000 )
 				//	{
-				//		gun->m_flPumpTime	= max( gun->m_flPumpTime - gpGlobals->frametime, -0.001 );
+				//		gun->m_flPumpTime	= Vmax( gun->m_flPumpTime - gpGlobals->frametime, -0.001 );
 				//	}
 
 				}
@@ -4119,7 +4119,7 @@ int CBasePlayer :: GiveAmmo( int iCount, char *szName, int iMax )
 	if ( i < 0 || i >= MAX_AMMO_SLOTS )
 		return -1;
 
-	int iAdd = min( iCount, iMax - m_rgAmmo[i] );
+	int iAdd = Vmin( iCount, iMax - m_rgAmmo[i] );
 	if ( iAdd < 1 )
 		return i;
 
@@ -4231,7 +4231,7 @@ int CBasePlayer::GetAmmoIndex(const char *psz)
 		if ( !CBasePlayerItem::AmmoInfoArray[i].pszName )
 			continue;
 
-		if (stricmp( psz, CBasePlayerItem::AmmoInfoArray[i].pszName ) == 0)
+		if (_stricmp( psz, CBasePlayerItem::AmmoInfoArray[i].pszName ) == 0)
 			return i;
 	}
 
@@ -4254,7 +4254,7 @@ void CBasePlayer::SendAmmoUpdate(void)
 			// send "Ammo" update message
 			MESSAGE_BEGIN( MSG_ONE, gmsgAmmoX, NULL, pev );
 				WRITE_BYTE( i );
-				WRITE_BYTE( max( min( m_rgAmmo[i], 254 ), 0 ) );  // clamp the value to one byte
+				WRITE_BYTE( Vmax( Vmin( m_rgAmmo[i], 254 ), 0 ) );  // clamp the value to one byte
 			MESSAGE_END();
 		}
 	}
@@ -4375,7 +4375,7 @@ void CBasePlayer :: UpdateClientData( void )
 
 	if (pev->health != m_iClientHealth)
 	{
-		int iHealth = max( pev->health, 0 );  // make sure that no negative health values are sent
+		int iHealth = Vmax( pev->health, 0 );  // make sure that no negative health values are sent
 
 		// send "health" update message
 		MESSAGE_BEGIN( MSG_ONE, gmsgHealth, NULL, pev );
@@ -4892,8 +4892,8 @@ Vector CBasePlayer :: AutoaimDeflection( Vector &vecSrc, float flDist, float flD
 		if (DotProduct (dir, gpGlobals->v_forward ) < 0)
 			continue;
 
-		dot = fabs( DotProduct (dir, gpGlobals->v_right ) )
-			+ fabs( DotProduct (dir, gpGlobals->v_up ) ) * 0.5;
+		dot = Vfabs( DotProduct (dir, gpGlobals->v_right ) )
+			+ Vfabs( DotProduct (dir, gpGlobals->v_up ) ) * 0.5;
 
 		// tweek for distance
 		dot *= 1.0 + 0.2 * ((center - vecSrc).Length() / flDist);

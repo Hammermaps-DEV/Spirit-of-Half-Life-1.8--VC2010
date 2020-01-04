@@ -116,8 +116,9 @@ typedef struct hull_s
 
 // double to float warning
 #pragma warning(disable : 4244)
-#define max(a, b)  (((a) > (b)) ? (a) : (b))
-#define min(a, b)  (((a) < (b)) ? (a) : (b))
+#pragma warning(disable : 4996)		// consider using strcpy_s instead
+
+#include "vminmax.h"
 
 // Fake HL2 camera's movement
 #define clamp( val, min, max ) ( ((val) > (max)) ? (max) : ( ((val) < (min)) ? (min) : (val) ) )
@@ -199,7 +200,7 @@ void PM_SortTextures( void )
 	{
 		for ( j = i + 1; j < gcTextures; j++ )
 		{
-			if ( stricmp( grgszTextureName[ i ], grgszTextureName[ j ] ) > 0 )
+			if ( _stricmp( grgszTextureName[ i ], grgszTextureName[ j ] ) > 0 )
 			{
 				// Swap
 				//
@@ -2166,7 +2167,7 @@ void PM_Duck( void )
 				pmove->bInDuck    = true;
 			}
 
-			time = max( 0.0, ( 1.0 - (float)pmove->flDuckTime / 1000.0 ) );
+			time = Vmax( 0.0, ( 1.0 - (float)pmove->flDuckTime / 1000.0 ) );
 			
 			if ( pmove->bInDuck )
 			{
@@ -2788,7 +2789,7 @@ void PM_CheckWaterJump (void)
 	savehull = pmove->usehull;
 	pmove->usehull = 2;
 	tr = pmove->PM_PlayerTrace( vecStart, vecEnd, PM_NORMAL, -1 );
-	if ( tr.fraction < 1.0 && fabs( tr.plane.normal[2] ) < 0.1f )  // Facing a near vertical wall?
+	if ( tr.fraction < 1.0 && Vfabs( tr.plane.normal[2] ) < 0.1f )  // Facing a near vertical wall?
 	{
 		vecStart[2] += pmove->player_maxs[ savehull ][2] - WJ_HEIGHT;
 		VectorMA( vecStart, 24, flatforward, vecEnd );
@@ -2932,7 +2933,7 @@ float PM_CalcRoll (vec3_t angles, vec3_t velocity, float rollangle, float rollsp
     
 	sign = side < 0 ? -1 : 1;
     
-	side = fabs(side);
+	side = Vfabs(side);
     
 	value = rollangle;
     
@@ -2997,7 +2998,7 @@ void PM_CheckParamters( void )
 	maxspeed = pmove->clientmaxspeed; //atof( pmove->PM_Info_ValueForKey( pmove->physinfo, "maxspd" ) );
 	if ( maxspeed != 0.0 )
 	{
-		pmove->maxspeed = min( maxspeed, pmove->maxspeed );
+		pmove->maxspeed = Vmin( maxspeed, pmove->maxspeed );
 	}
 
 	if ( ( spd != 0.0 ) &&

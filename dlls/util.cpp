@@ -341,9 +341,9 @@ DBG_AssertFunction(
 		return;
 	char szOut[512];
 	if (szMessage != NULL)
-		sprintf(szOut, "ASSERT FAILED:\n %s \n(%s@%d)\n%s", szExpr, szFile, szLine, szMessage);
+		sprintf_s(szOut, "ASSERT FAILED:\n %s \n(%s@%d)\n%s", szExpr, szFile, szLine, szMessage);
 	else
-		sprintf(szOut, "ASSERT FAILED:\n %s \n(%s@%d)", szExpr, szFile, szLine);
+		sprintf_s(szOut, "ASSERT FAILED:\n %s \n(%s@%d)", szExpr, szFile, szLine);
 	ALERT(at_debug, szOut);
 	}
 #endif	// DEBUG
@@ -707,7 +707,7 @@ CBaseEntity *UTIL_FollowGroupReference(CBaseEntity *pStartEntity, char* szGroupN
 		{
 			// recursive member-reference
 			// FIXME: we should probably check that i < MAX_ALIASNAME_LEN.
-			strncpy(szBuf,szMemberName,i);
+			strncpy_s(szBuf,szMemberName,i);
 			szBuf[i] = 0;
 			szTail = &(szMemberName[i+1]);
 			szThisMember = szBuf;
@@ -769,7 +769,7 @@ CBaseEntity *UTIL_FollowReference( CBaseEntity *pStartEntity, const char* szName
 		{
 			// yes, it looks like a reference through an info_group...
 			// FIXME: we should probably check that i < MAX_ALIASNAME_LEN.
-			strncpy(szRoot,szName,i);
+			strncpy_s(szRoot,szName,i);
 			szRoot[i] = 0;
 			szMember = (char*)&szName[i+1];
 			//ALERT(at_console,"Following reference- group %s with member %s\n",szRoot,szMember);
@@ -1095,7 +1095,7 @@ void UTIL_HudMessage( CBaseEntity *pEntity, const hudtextparms_t &textparms, con
 		else
 		{
 			char tmp[512];
-			strncpy( tmp, pMessage, 511 );
+			strncpy_s( tmp, pMessage, 511 );
 			tmp[511] = 0;
 			WRITE_STRING( tmp );
 		}
@@ -1175,28 +1175,28 @@ void UTIL_SayTextAll( const char *pText, CBaseEntity *pEntity )
 char *UTIL_dtos1( int d )
 {
 	static char buf[8];
-	sprintf( buf, "%d", d );
+	sprintf_s( buf, "%d", d );
 	return buf;
 }
 
 char *UTIL_dtos2( int d )
 {
 	static char buf[8];
-	sprintf( buf, "%d", d );
+	sprintf_s( buf, "%d", d );
 	return buf;
 }
 
 char *UTIL_dtos3( int d )
 {
 	static char buf[8];
-	sprintf( buf, "%d", d );
+	sprintf_s( buf, "%d", d );
 	return buf;
 }
 
 char *UTIL_dtos4( int d )
 {
 	static char buf[8];
-	sprintf( buf, "%d", d );
+	sprintf_s( buf, "%d", d );
 	return buf;
 }
 
@@ -1409,7 +1409,7 @@ BOOL UTIL_IsMasterTriggered(string_t iszMaster, CBaseEntity *pActivator)
 					{
 						if (szMaster[j] == ')')
 						{
-							strncpy(szBuf, szMaster+i+1, (j-i)-1);
+							strncpy_s(szBuf, szMaster+i+1, (j-i)-1);
 							szBuf[(j-i)-1] = 0;
 							pActivator = UTIL_FindEntityByTargetname( NULL, szBuf );
 							found = true;
@@ -1430,7 +1430,7 @@ BOOL UTIL_IsMasterTriggered(string_t iszMaster, CBaseEntity *pActivator)
 				return TRUE;
 			}
 
-			strncpy(szBuf, szMaster, i);
+			strncpy_s(szBuf, szMaster, i);
 			szBuf[i] = 0;
 			pMaster = UTIL_FindEntityByTargetname( NULL, szBuf );
 		}
@@ -1485,7 +1485,7 @@ void UTIL_BloodStream( const Vector &origin, const Vector &direction, int color,
 		WRITE_COORD( direction.y );
 		WRITE_COORD( direction.z );
 		WRITE_BYTE( color );
-		WRITE_BYTE( min( amount, 255 ) );
+		WRITE_BYTE( Vmin( amount, 255 ) );
 	MESSAGE_END();
 }				
 
@@ -1514,7 +1514,7 @@ void UTIL_BloodDrips( const Vector &origin, const Vector &direction, int color, 
 		WRITE_SHORT( g_sModelIndexBloodSpray );				// initial sprite model
 		WRITE_SHORT( g_sModelIndexBloodDrop );				// droplet sprite models
 		WRITE_BYTE( color );								// color index into host_basepal
-		WRITE_BYTE( min( max( 3, amount / 10 ), 16 ) );		// size
+		WRITE_BYTE( Vmin( Vmax( 3, amount / 10 ), 16 ) );		// size
 	MESSAGE_END();
 }				
 
@@ -1694,7 +1694,7 @@ BOOL UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 )
 	// Both on a team?
 	if ( *pTeamName1 != 0 && *pTeamName2 != 0 )
 	{
-		if ( !stricmp( pTeamName1, pTeamName2 ) )	// Same Team?
+		if ( !_stricmp( pTeamName1, pTeamName2 ) )	// Same Team?
 			return TRUE;
 	}
 
@@ -2400,7 +2400,7 @@ void EntvarsKeyvalue( entvars_t *pev, KeyValueData *pkvd )
 	{
 		pField = &gEntvarsDescription[i];
 
-		if ( !stricmp( pField->fieldName, pkvd->szKeyName ) )
+		if ( !_stricmp( pField->fieldName, pkvd->szKeyName ) )
 		{
 			switch( pField->fieldType )
 			{
@@ -2646,7 +2646,7 @@ int CRestore::ReadField( void *pBaseData, TYPEDESCRIPTION *pFields, int fieldCou
 	{
 		fieldNumber = (i+startField)%fieldCount;
 		pTest = &pFields[ fieldNumber ];
-		if ( !stricmp( pTest->fieldName, pName ) )
+		if ( !_stricmp( pTest->fieldName, pName ) )
 		{
 			if ( !m_global || !(pTest->flags & FTYPEDESC_GLOBAL) )
 			{

@@ -131,7 +131,7 @@ public:
 		address = gEngfuncs.pNetAPI->ValueForKey( info, "address" );
 		//gEngfuncs.Con_Printf( "Connecting to %s\n", address );
 
-		sprintf( sz, "connect %s\n", address );
+		sprintf_s( sz, "connect %s\n", address );
 
 		ClientCmd( sz );
 
@@ -154,7 +154,7 @@ public:
 
 		// Space for buttons
 		height -= YRES(20);
-		height = max( 0, height );
+		height = Vmax( 0, height );
 
 		rowcount = height / CELL_HEIGHT;
 
@@ -195,7 +195,7 @@ public:
 				val = gEngfuncs.pNetAPI->ValueForKey( info, "address" );
 				if ( val )
 				{
-					strncpy( sz, val, 31 );
+					strncpy_s( sz, val, 31 );
 					sz[ 31 ] = '\0';
 					// Server Name;
 					m_pLabel->setText( sz );
@@ -205,7 +205,7 @@ public:
 				val = gEngfuncs.pNetAPI->ValueForKey( info, "hostname" );
 				if ( val )
 				{
-					strncpy( sz, val, 31 );
+					strncpy_s( sz, val, 31 );
 					sz[ 31 ] = '\0';
 					// Server Map;
 					m_pLabel->setText( sz );
@@ -215,7 +215,7 @@ public:
 				val = gEngfuncs.pNetAPI->ValueForKey( info, "map" );
 				if ( val )
 				{
-					strncpy( sz, val, 31 );
+					strncpy_s( sz, val, 31 );
 					sz[ 31 ] = '\0';
 					// Server Name;
 					m_pLabel->setText( sz );
@@ -226,7 +226,7 @@ public:
 				val2 = gEngfuncs.pNetAPI->ValueForKey( info, "max" );
 				if ( val && val2 )
 				{
-					sprintf( sz, "%s/%s", val, val2 );
+					sprintf_s( sz, "%s/%s", val, val2 );
 					sz[ 31 ] = '\0';
 					// Server Map;
 					m_pLabel->setText( sz );
@@ -236,7 +236,7 @@ public:
 				val = gEngfuncs.pNetAPI->ValueForKey( info, "ping" );
 				if ( val )
 				{
-					strncpy( sz, val, 31 );
+					strncpy_s( sz, val, 31 );
 					sz[ 31 ] = '\0';
 					// Server Name;
 					m_pLabel->setText( sz );

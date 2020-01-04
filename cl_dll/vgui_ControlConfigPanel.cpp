@@ -209,4 +209,3 @@ void ControlConfigPanel::GetCVarBind(const char* cvar,char* bind,int bindLen,cha
 void ControlConfigPanel::SetCVarBind(const char* cvar,const char* bind,const char* bindAlt)
 {
 }
-

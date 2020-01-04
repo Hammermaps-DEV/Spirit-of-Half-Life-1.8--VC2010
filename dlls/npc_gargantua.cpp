@@ -1267,7 +1267,7 @@ void CGargantua::RunTask( Task_t *pTask )
 				if ( dir.Length() > 400 )
 					cancel = TRUE;
 			}
-			if ( fabs(angles.y) > 60 )
+			if ( Vfabs(angles.y) > 60 )
 				cancel = TRUE;
 			
 			if ( cancel )
@@ -1403,7 +1403,7 @@ void SpawnExplosion( Vector center, float randomRange, float time, int magnitude
 	center.y += RANDOM_FLOAT( -randomRange, randomRange );
 
 	CBaseEntity *pExplosion = CBaseEntity::Create( "env_explosion", center, g_vecZero, NULL );
-	sprintf( buf, "%3d", magnitude );
+	sprintf_s( buf, "%3d", magnitude );
 	kvd.szKeyName = "iMagnitude";
 	kvd.szValue = buf;
 	pExplosion->KeyValue( &kvd );

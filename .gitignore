@@ -1,0 +1,3 @@
+.vs/*
+cl_dll/debug/*
+dlls/debughl/*

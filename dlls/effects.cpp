@@ -393,12 +393,12 @@ void CBeam::RelinkBeam( void )
 {
 	const Vector &startPos = GetStartPos(), &endPos = GetEndPos();
 
-	pev->mins.x = min( startPos.x, endPos.x );
-	pev->mins.y = min( startPos.y, endPos.y );
-	pev->mins.z = min( startPos.z, endPos.z );
-	pev->maxs.x = max( startPos.x, endPos.x );
-	pev->maxs.y = max( startPos.y, endPos.y );
-	pev->maxs.z = max( startPos.z, endPos.z );
+	pev->mins.x = Vmin( startPos.x, endPos.x );
+	pev->mins.y = Vmin( startPos.y, endPos.y );
+	pev->mins.z = Vmin( startPos.z, endPos.z );
+	pev->maxs.x = Vmax( startPos.x, endPos.x );
+	pev->maxs.y = Vmax( startPos.y, endPos.y );
+	pev->maxs.z = Vmax( startPos.z, endPos.z );
 	pev->mins = pev->mins - pev->origin;
 	pev->maxs = pev->maxs - pev->origin;
 
@@ -411,12 +411,12 @@ void CBeam::SetObjectCollisionBox( void )
 {
 	const Vector &startPos = GetStartPos(), &endPos = GetEndPos();
 
-	pev->absmin.x = min( startPos.x, endPos.x );
-	pev->absmin.y = min( startPos.y, endPos.y );
-	pev->absmin.z = min( startPos.z, endPos.z );
-	pev->absmax.x = max( startPos.x, endPos.x );
-	pev->absmax.y = max( startPos.y, endPos.y );
-	pev->absmax.z = max( startPos.z, endPos.z );
+	pev->absmin.x = Vmin( startPos.x, endPos.x );
+	pev->absmin.y = Vmin( startPos.y, endPos.y );
+	pev->absmin.z = Vmin( startPos.z, endPos.z );
+	pev->absmax.x = Vmax( startPos.x, endPos.x );
+	pev->absmax.y = Vmax( startPos.y, endPos.y );
+	pev->absmax.z = Vmax( startPos.z, endPos.z );
 }
 #endif
 
@@ -3260,7 +3260,7 @@ void CEnvFootsteps::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE
 			if (pev->frags)
 			{
 				char sTemp[4];
-				sprintf(sTemp, "%d", (int)pev->frags);
+				sprintf_s(sTemp, "%d", (int)pev->frags);
 				g_engfuncs.pfnSetPhysicsKeyValue( pActivator->edict(), "stype", sTemp );
 				//pActivator->pev->iFootstepType = pev->frags;
 			}

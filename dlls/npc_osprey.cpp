@@ -727,7 +727,7 @@ void COsprey :: DyingThink( void )
 			// velocity
 			WRITE_COORD( m_velocity.x ); 
 			WRITE_COORD( m_velocity.y );
-			WRITE_COORD( fabs( m_velocity.z ) * 0.25 );
+			WRITE_COORD( Vfabs( m_velocity.z ) * 0.25 );
 
 			// randomization
 			WRITE_BYTE( 40 ); 

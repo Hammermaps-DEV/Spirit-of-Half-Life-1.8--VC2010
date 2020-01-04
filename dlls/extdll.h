@@ -31,6 +31,7 @@
 #pragma warning(disable : 4201)		// nameless struct/union
 #pragma warning(disable : 4514)		// unreferenced inline function removed
 #pragma warning(disable : 4100)		// unreferenced formal parameter
+#pragma warning(disable : 4996)		// consider using strcpy_s instead
 
 // Prevent tons of unused windows definitions
 #ifdef _WIN32
@@ -78,6 +79,7 @@ typedef float vec_t;				// needed before including progdefs.h
 #include "const.h"
 #include "progdefs.h"
 #include "edict.h"
+#include "vminmax.h"
 
 // Shared header describing protocol between engine and DLLs
 #include "eiface.h"

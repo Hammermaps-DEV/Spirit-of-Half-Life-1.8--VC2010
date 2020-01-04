@@ -181,7 +181,7 @@ void CHudServers::ServerResponse( struct net_response_s *response )
 		{
 			szresponse = (char *)response->response;
 			len = strlen( szresponse ) + 100 + 1;
-			sprintf( sz, "%i", (int)( 1000.0 * response->ping ) );
+			sprintf_s( sz, "%i", (int)( 1000.0 * response->ping ) );
 
 			browser = new server_t;
 			browser->remote_address = response->remote_address;
@@ -216,7 +216,7 @@ void CHudServers::PingResponse( struct net_response_s *response )
 	switch ( response->type )
 	{
 	case NETAPI_REQUEST_PING:
-		sprintf( sz, "%.2f", 1000.0 * response->ping );
+		sprintf_s( sz, "%.2f", 1000.0 * response->ping );
 
 		gEngfuncs.Con_Printf( "ping == %s\n", sz );
 		break;
@@ -305,7 +305,7 @@ int	CHudServers::CompareServers( server_t *p1, server_t *p2 )
 
 			if ( n1 && n2 )
 			{
-				if ( stricmp( n1, n2 ) < 0 )
+				if ( _stricmp( n1, n2 ) < 0 )
 					return 1;
 			}
 		}
@@ -596,7 +596,7 @@ int CompareField( CHudServers::server_t *p1, CHudServers::server_t *p2, const ch
 	}
 
 	// String compare
-	return stricmp( sz1, sz2 );
+	return _stricmp( sz1, sz2 );
 }
 
 int CALLBACK ServerListCompareFunc( CHudServers::server_t *p1, CHudServers::server_t *p2, const char *fieldname )
@@ -787,7 +787,7 @@ int CHudServers::LoadMasterAddresses( int maxservers, int *count, netadr_t *padr
 
 		bIgnore = true;
 
-		if ( !stricmp( m_szToken, "Master" ) )
+		if ( !_stricmp( m_szToken, "Master" ) )
 		{
 			nDefaultPort = PORT_MASTER;
 			bIgnore = FALSE;
@@ -815,14 +815,14 @@ int CHudServers::LoadMasterAddresses( int maxservers, int *count, netadr_t *padr
 			if ( !stricmp ( m_szToken, "}" ) )
 				break;
 			
-			sprintf( base, "%s", m_szToken );
+			sprintf_s( base, "%s", m_szToken );
 				
 			pstart = gEngfuncs.COM_ParseFile( pstart, m_szToken );
 			
 			if (strlen(m_szToken) <= 0)
 				break;
 
-			if ( stricmp( m_szToken, ":" ) )
+			if ( _stricmp( m_szToken, ":" ) )
 				break;
 
 			pstart = gEngfuncs.COM_ParseFile( pstart, m_szToken );
@@ -834,7 +834,7 @@ int CHudServers::LoadMasterAddresses( int maxservers, int *count, netadr_t *padr
 			if ( !nPort )
 				nPort = nDefaultPort;
 
-			sprintf( szAdr, "%s:%i", base, nPort );
+			sprintf_s( szAdr, "%s:%i", base, nPort );
 
 			// Can we resolve it any better
 			if ( !NET_API->StringToAdr( szAdr, &adr ) )
@@ -850,7 +850,7 @@ int CHudServers::LoadMasterAddresses( int maxservers, int *count, netadr_t *padr
 finish_master:
 	if ( !nCount )
 	{
-		sprintf( szMaster, VALVE_MASTER_ADDRESS );    // IP:PORT string
+		sprintf_s( szMaster, VALVE_MASTER_ADDRESS );    // IP:PORT string
 
 		// Convert to netadr_t
 		if ( NET_API->StringToAdr ( szMaster, &adr ) )

@@ -147,6 +147,7 @@ public:
 #define POSITION_SHOTGUN			1
 
 //Ammo
+#define MAX_CLIP_SHOTGUN			12
 
 /* Weapon Crossbow # 7 #  */
 #define WEAPON_CROSSBOW				7

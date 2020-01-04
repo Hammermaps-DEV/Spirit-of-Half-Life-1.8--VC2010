@@ -425,11 +425,11 @@ void CTalkMonster :: StartTask( Task_t *pTask )
 
 			if (yaw < 0)
 			{
-				pev->ideal_yaw = min( yaw + 45, 0 ) + pev->angles.y;
+				pev->ideal_yaw = Vmin( yaw + 45, 0 ) + pev->angles.y;
 			}
 			else
 			{
-				pev->ideal_yaw = max( yaw - 45, 0 ) + pev->angles.y;
+				pev->ideal_yaw = Vmax( yaw - 45, 0 ) + pev->angles.y;
 			}
 		}
 		TaskComplete();
@@ -798,8 +798,9 @@ void CTalkMonster :: TalkInit( void )
 	{
 		char szBuf[64];
 		strcpy(szBuf,STRING(m_iszSpeakAs));
-		strcat(szBuf,"_");
+		strcat_s(szBuf,"_");
 		char *szAssign = &(szBuf[strlen(szBuf)]);
+
 
 		//LRC - this is pretty dodgy; test with save/restore.
 		strcpy(szAssign,"ANSWER");
@@ -947,7 +948,7 @@ void CTalkMonster :: Touch( CBaseEntity *pOther )
 			return;
 
 		// Heuristic for determining if the player is pushing me away
-		float speed = fabs(pOther->pev->velocity.x) + fabs(pOther->pev->velocity.y);
+		float speed = Vfabs(pOther->pev->velocity.x) + Vfabs(pOther->pev->velocity.y);
 		if ( speed > 50 )
 		{
 			SetConditions( bits_COND_CLIENT_PUSH );

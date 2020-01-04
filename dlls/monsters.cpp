@@ -1370,7 +1370,7 @@ int CBaseMonster :: CheckLocalMove ( const Vector &vecStart, const Vector &vecEn
 			else
 			{
 				// If we're going toward an entity, and we're almost getting there, it's OK.
-//				if ( pTarget && fabs( flDist - iStep ) < LOCAL_STEP_SIZE )
+//				if ( pTarget && Vfabs( flDist - iStep ) < LOCAL_STEP_SIZE )
 //					fReturn = TRUE;
 //				else
 				iReturn = LOCALMOVE_INVALID;
@@ -1384,7 +1384,7 @@ int CBaseMonster :: CheckLocalMove ( const Vector &vecStart, const Vector &vecEn
 	{
 		// The monster can move to a spot UNDER the target, but not to it. Don't try to triangulate, go directly to the node graph.
 		// UNDONE: Magic # 64 -- this used to be pev->size.z but that won't work for small creatures like the headcrab
-		if ( fabs(vecEnd.z - pev->origin.z) > 64 )
+		if ( Vfabs(vecEnd.z - pev->origin.z) > 64 )
 		{
 			iReturn = LOCALMOVE_INVALID_DONT_TRIANGULATE;
 		}
@@ -1994,7 +1994,7 @@ void CBaseMonster::MoveExecute( CBaseEntity *pTargetEnt, const Vector &vecDir, f
 	while (flTotal > 0.001)
 	{
 		// don't walk more than 16 units or stairs stop working
-		flStep = min( 16.0, flTotal );
+		flStep = Vmin( 16.0, flTotal );
 		UTIL_MoveToOrigin ( ENT(pev), m_Route[ m_iRouteIndex ].vecLocation, flStep, MOVE_NORMAL );
 		flTotal -= flStep;
 	}
@@ -3263,7 +3263,7 @@ Vector CBaseMonster :: ShootAtEnemy( const Vector &shootOrigin )
 //=========================================================
 BOOL CBaseMonster :: FacingIdeal( void )
 {
-	if ( fabs( FlYawDiff() ) <= 0.006 )//!!!BUGBUG - no magic numbers!!!
+	if ( Vfabs( FlYawDiff() ) <= 0.006 )//!!!BUGBUG - no magic numbers!!!
 	{
 		return TRUE;
 	}

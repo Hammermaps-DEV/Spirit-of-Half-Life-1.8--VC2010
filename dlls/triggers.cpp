@@ -1570,7 +1570,7 @@ void CWatcherRatio :: UpdateState(CBaseEntity* pLocus, bool mustTrigger)
 	pev->frags = testVal; // store it for next time
 
 	bool testresult;
-	bool withinTolerance = abs(testVal - cmpVal) <= toleranceVal;
+	bool withinTolerance = Vfabs(testVal - cmpVal) <= toleranceVal;
 	switch( pev->impulse )
 	{
 	case WRC_Equal:
@@ -2903,7 +2903,7 @@ void CTriggerHevCharge :: AnnounceThink ( )
 	if (pct > 0)
 	pct--;
 
-	sprintf( szcharge,"!HEV_%1dP", pct );
+	sprintf_s( szcharge,"!HEV_%1dP", pct );
 	//ALERT(at_debug, "Announce %s\n", szcharge);
 
 	((CBasePlayer*)pPlayer)->SetSuitUpdate(szcharge, FALSE, SUIT_REPEAT_OK);
@@ -3024,7 +3024,7 @@ void CTargetFMODAudio::Use( CBaseEntity *pActivator, CBaseEntity *pCaller,
      }
 
      // issue the play/loop command
-     sprintf(command, "playaudio %s\n", STRING(pev->message));
+     sprintf_s(command, "playaudio %s\n", STRING(pev->message));
 
      CLIENT_COMMAND(pActivator->edict(), command);
 
@@ -3098,8 +3098,8 @@ void PlayCDTrack( int iTrack, int iSong)
 	{
 		char string [ 64 ];
 
-		if(iSong) sprintf( string, "playaudio %s\n", STRING(iSong) );
-		else	  sprintf( string, "cd play %3d\n", iTrack );
+		if(iSong) sprintf_s( string, "playaudio %s\n", STRING(iSong) );
+		else	  sprintf_s( string, "cd play %3d\n", iTrack );
 
 		CLIENT_COMMAND ( pClient, string);
 	}
@@ -5760,7 +5760,7 @@ void CTriggerCommand::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 
 	if (pev->netname)
 	{
-		sprintf( szCommand, "%s\n", STRING(pev->netname) );
+		sprintf_s( szCommand, "%s\n", STRING(pev->netname) );
 
 		// trigger_command really needs to be able to use " marks, and map tools can't handle those in entity values.
 		// so we convert backtick-quotes into " quotes.
@@ -5825,13 +5825,13 @@ void CTriggerChangeCVar::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE
 	{
 		if (pev->spawnflags & SF_CVAR_ACTIVE)
 		{
-			sprintf( szCommand, "%s \"%s\"\n",  STRING(pev->netname), m_szStoredString );
+			sprintf_s( szCommand, "%s \"%s\"\n",  STRING(pev->netname), m_szStoredString );
 			pev->spawnflags &= ~SF_CVAR_ACTIVE;
 		}
 		else
 		{
-			strncpy(m_szStoredString, CVAR_GET_STRING(STRING(pev->netname)), 256);
-			sprintf( szCommand, "%s \"%s\"\n", STRING(pev->netname), STRING(pev->message) );
+			strncpy_s(m_szStoredString, CVAR_GET_STRING(STRING(pev->netname)), 256);
+			sprintf_s( szCommand, "%s \"%s\"\n", STRING(pev->netname), STRING(pev->message) );
 			pev->spawnflags |= SF_CVAR_ACTIVE;
 
 			if (pev->armorvalue >= 0)
@@ -5849,7 +5849,7 @@ void CTriggerChangeCVar::Think( void )
 
 	if (pev->spawnflags & SF_CVAR_ACTIVE)
 	{
-		sprintf( szCommand, "%s %s\n", STRING(pev->netname), m_szStoredString );
+		sprintf_s( szCommand, "%s %s\n", STRING(pev->netname), m_szStoredString );
 		SERVER_COMMAND( szCommand );
 		pev->spawnflags &= ~SF_CVAR_ACTIVE;
 	}

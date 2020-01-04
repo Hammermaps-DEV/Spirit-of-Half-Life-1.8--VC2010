@@ -300,7 +300,7 @@ int CInfoGroup::GetMember( const char* szMemberName )
 	{
 		static char szBuffer[128];
 		strcpy(szBuffer, STRING(m_iszDefaultMember));
-		strcat(szBuffer, szMemberName);
+		strcat_s(szBuffer, szMemberName);
 		return MAKE_STRING(szBuffer);
 		// this is a messy way to do it... but currently, only one
 		// GetMember gets performed at a time, so it works.

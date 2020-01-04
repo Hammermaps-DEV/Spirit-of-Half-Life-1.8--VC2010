@@ -335,7 +335,7 @@ void CRpg::Reload( void )
 #endif
 
 	if ( m_iClip == 0 )
-		iResult = DefaultReload( RPG_MAX_CLIP, RPG_RELOAD, 2 );
+		iResult = DefaultReload(MAX_CLIP_RPG, RPG_RELOAD, 2 );
 	
 	if ( iResult )
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10, 15 );
@@ -612,14 +612,14 @@ class CRpgAmmo : public CBasePlayerAmmo
 #endif
 		{
 			// hand out more ammo per rocket in multiplayer.
-			iGive = AMMO_RPGCLIP_GIVE * 2;
+			iGive = RPG_DEFAULT_GIVE * 2;
 		}
 		else
 		{
-			iGive = AMMO_RPGCLIP_GIVE;
+			iGive = RPG_DEFAULT_GIVE;
 		}
 
-		if (pOther->GiveAmmo( iGive, "rockets", ROCKET_MAX_CARRY ) != -1)
+		if (pOther->GiveAmmo( iGive, "rockets", MAX_CARRY_ROCKET) != -1)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return TRUE;
@@ -628,5 +628,3 @@ class CRpgAmmo : public CBasePlayerAmmo
 	}
 };
 LINK_ENTITY_TO_CLASS( ammo_rpgclip, CRpgAmmo );
-
-#endif

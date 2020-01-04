@@ -584,7 +584,7 @@ void CHud :: VidInit( void )
 				if ( p->iRes == m_iRes )
 				{
 					char sz[256];
-					sprintf(sz, "sprites/%s.spr", p->szSprite);
+					sprintf_s(sz, "sprites/%s.spr", p->szSprite);
 					m_rghSprites[index] = SPR_Load(sz);
 					m_rgrcRects[index] = p->rc;
 					strncpy( &m_rgszSpriteNames[index * MAX_SPRITE_NAME_LENGTH], p->szName, MAX_SPRITE_NAME_LENGTH );
@@ -607,7 +607,7 @@ void CHud :: VidInit( void )
 			if ( p->iRes == m_iRes )
 			{
 				char sz[256];
-				sprintf( sz, "sprites/%s.spr", p->szSprite );
+				sprintf_s( sz, "sprites/%s.spr", p->szSprite );
 				m_rghSprites[index] = SPR_Load(sz);
 				index++;
 			}
@@ -721,7 +721,7 @@ int HUD_IsGame( const char *game )
 	if ( gamedir && gamedir[0] )
 	{
 		COM_FileBase( gamedir, gd );
-		if ( !stricmp( gd, game ) )
+		if ( !_stricmp( gd, game ) )
 			return 1;
 	}
 	return 0;

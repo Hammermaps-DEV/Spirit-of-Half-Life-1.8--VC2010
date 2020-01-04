@@ -410,7 +410,7 @@ float CLeech::ObstacleDistance( CBaseEntity *pTarget )
 		}
 		else
 		{
-			if ( fabs(m_height - pev->origin.z) > 10 )
+			if ( Vfabs(m_height - pev->origin.z) > 10 )
 				return tr.flFraction;
 		}
 	}

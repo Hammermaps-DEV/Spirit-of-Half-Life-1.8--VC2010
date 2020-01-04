@@ -77,7 +77,7 @@ void CHud::Think(void)
 	// think about default fov
 	if ( m_iFOV == 0 )
 	{  // only let players adjust up in fov,  and only if they are not overriden by something else
-		m_iFOV = max( default_fov->value, 90 );  
+		m_iFOV = Vmax( default_fov->value, 90 );  
 	}
 }
 
@@ -285,7 +285,7 @@ int CHud :: Redraw( float flTime, int intermission )
 		if (m_hsprCursor == 0)
 		{
 			char sz[256];
-			sprintf( sz, "sprites/cursor.spr" );
+			sprintf_s( sz, "sprites/cursor.spr" );
 			m_hsprCursor = SPR_Load( sz );
 		}
 
@@ -326,7 +326,7 @@ int CHud :: DrawHudString(int xpos, int ypos, int iMaxX, char *szIt, int r, int 
 int CHud :: DrawHudNumberString( int xpos, int ypos, int iMinX, int iNumber, int r, int g, int b )
 {
 	char szString[32];
-	sprintf( szString, "%d", iNumber );
+	sprintf_s( szString, "%d", iNumber );
 	return DrawHudStringReverse( xpos, ypos, iMinX, szString, r, g, b );
 
 }

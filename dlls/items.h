@@ -23,15 +23,17 @@
 #define ITEM_SECURITY		4
 #define ITEM_BATTERY 		5
 #define ITEM_LONGJUMP		6
-#define ITEM_FLARE		7
-#define ITEM_CAMERA		8
+#define ITEM_FLARE			7
+#define ITEM_CAMERA			8
 
+/*
 #define ITEM_SLOT1		9
 #define ITEM_SLOT1		10
 #define ITEM_SLOT1		11
 #define ITEM_SLOT1		12
 #define ITEM_SLOT1		13
 #define ITEM_SLOT1		14
+*/
 #define ITEM_SLOT1		15
 #define ITEM_SLOT8		16
 #define ITEM_SLOT9		17

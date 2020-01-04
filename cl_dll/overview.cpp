@@ -17,6 +17,7 @@
 #include "studio_util.h"
 
 #pragma warning(disable: 4244)
+#pragma warning(disable : 4996)		// consider using strcpy_s instead
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -59,7 +60,7 @@ int CHudOverview::Draw(float flTime)
 	float v0[3]={0,0,0}, v1[3]={64,64,0};
 	gEngfuncs.Overview_WorldToScreen(v0, &x1, &y1);
 	gEngfuncs.Overview_WorldToScreen(v1, &x2, &y2);
-	float scale = abs(x2 - x1);
+	float scale = Vfabs(x2 - x1);
 
 	// loop through all the players and draw them on the map
 	for (int i = 1; i < MAX_PLAYERS; i++)
@@ -140,7 +141,7 @@ int CHudOverview::Draw(float flTime)
 
 			// draw the players name and health underneath
 			char string[256];
-			sprintf(string, "%s (%i%%)", g_PlayerInfoList[i].name, pl->curstate.health);
+			sprintf_s(string, "%s (%i%%)", g_PlayerInfoList[i].name, pl->curstate.health);
 			DrawConsoleString(x, y + (1.1 * scale), string);
 		}
 	}

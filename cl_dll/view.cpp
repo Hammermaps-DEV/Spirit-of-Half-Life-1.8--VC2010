@@ -212,8 +212,8 @@ float V_CalcBob ( struct ref_params_s *pparams )
 
 	bob = sqrt( vel[0] * vel[0] + vel[1] * vel[1] ) * cl_bob->value;
 	bob = bob * 0.3 + bob * 0.7 * sin(cycle);
-	bob = min( bob, 4 );
-	bob = max( bob, -7 );
+	bob = Vmin( bob, 4 );
+	bob = Vmax( bob, -7 );
 	return bob;
 	
 }
@@ -235,7 +235,7 @@ float V_CalcRoll (vec3_t angles, vec3_t velocity, float rollangle, float rollspe
     
 	side = DotProduct (velocity, right);
     sign = side < 0 ? -1 : 1;
-    side = fabs( side );
+    side = Vfabs( side );
     
 	value = rollangle;
     if (side < rollspeed)
@@ -305,7 +305,7 @@ void V_DriftPitch ( struct ref_params_s *pparams )
 	// don't count small mouse motion
 	if (pd.nodrift)
 	{
-		if ( fabs( pparams->cmd->forwardmove ) < cl_forwardspeed->value )
+		if ( Vfabs( pparams->cmd->forwardmove ) < cl_forwardspeed->value )
 			pd.driftmove = 0;
 		else
 			pd.driftmove += pparams->frametime;
@@ -816,7 +816,7 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 			if ( dt > 0.0 )
 			{
 				frac = ( t - ViewInterp.OriginTime[ foundidx & ORIGIN_MASK] ) / dt;
-				frac = min( 1.0, frac );
+				frac = Vmin( 1.0, frac );
 				VectorSubtract( ViewInterp.Origins[ ( foundidx + 1 ) & ORIGIN_MASK ], ViewInterp.Origins[ foundidx & ORIGIN_MASK ], delta );
 				VectorMA( ViewInterp.Origins[ foundidx & ORIGIN_MASK ], frac, delta, neworg );
 
@@ -953,7 +953,7 @@ void V_SmoothInterpolateAngles( float * startAngle, float * endAngle, float * fi
 			d += 360.0f;
 		}
 
-		absd = fabs(d);
+		absd = Vfabs(d);
 
 		if ( absd > 0.01f )
 		{
@@ -1180,7 +1180,7 @@ float MaxAngleBetweenAngles(  float * a1, float * a2 )
 			d += 360;
 		}
 
-		d = fabs(d);
+		d = Vfabs(d);
 
 		if ( d > maxd )
 			maxd=d;
@@ -1819,7 +1819,7 @@ void V_DropPunchAngle ( float frametime, float *ev_punchangle )
 	
 	len = VectorNormalize ( ev_punchangle );
 	len -= (10.0 + len * 0.5) * frametime;
-	len = max( len, 0.0 );
+	len = Vmax( len, 0.0 );
 	VectorScale ( ev_punchangle, len, ev_punchangle );
 }
 
