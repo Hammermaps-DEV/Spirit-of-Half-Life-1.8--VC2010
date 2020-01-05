@@ -10,7 +10,7 @@ int CMP3::Initialize()
 	char fmodlib[256];
 	
 	m_iIsPlaying = 0;
-	sprintf( fmodlib, "%s/fmod.dll", gEngfuncs.pfnGetGameDirectory());
+	sprintf_s( fmodlib, "%s/fmod.dll", gEngfuncs.pfnGetGameDirectory());
 	// replace forward slashes with backslashes
 	for( int i=0; i < 256; i++ )
 		if( fmodlib[i] == '/' ) fmodlib[i] = '\\';
@@ -88,7 +88,7 @@ int CMP3::PlayMP3( const char *pszSong )
 
 	char song[256];
 
-	sprintf( song, "%s/%s", gEngfuncs.pfnGetGameDirectory(), pszSong);
+	sprintf_s( song, "%s/%s", gEngfuncs.pfnGetGameDirectory(), pszSong);
 
 	//gEngfuncs.Con_Printf("Using fmod.dll version %f\n",VER());
 

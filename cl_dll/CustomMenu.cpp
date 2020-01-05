@@ -106,16 +106,16 @@ CCustomMenu::CCustomMenu(int iTrans, int iRemoveMe, int x,int y,int wide,int tal
 		ActionSignal *pASignal = new CMenuHandler_StringCommandClassSelect( sTFClassSelection[i], true );
 
 		// Class button
-		sprintf(sz, "%s", CHudTextMessage::BufferedLocaliseTextString( sLocalisedClasses[i] ) );
+		sprintf_s(sz, "%s", CHudTextMessage::BufferedLocaliseTextString( sLocalisedClasses[i] ) );
 		m_pButtons[i] = new ClassButton( i, sz, CUSTOMMENU_TOPLEFT_BUTTON_X, iYPos, CUSTOMMENU_BUTTON_SIZE_X, CUSTOMMENU_BUTTON_SIZE_Y, true);
 		// RandomPC uses '0'
 		if ( i >= 1 && i <= 9 )
 		{
-			sprintf(sz,"%d",i);
+			sprintf_s(sz,"%d",i);
 		}
 		else
 		{
-			sprintf(sz,"0");
+			sprintf_s(sz,"0");
 		}
 		m_pButtons[i]->setBoundKey( sz[0] );
 		m_pButtons[i]->setContentAlignment( vgui::Label::a_west );
@@ -138,7 +138,7 @@ CCustomMenu::CCustomMenu(int iTrans, int iRemoveMe, int x,int y,int wide,int tal
 		}
 
 		// Create the Class Name Label
-		sprintf(sz, "#Title_%s", sTFClassSelection[i]);
+		sprintf_s(sz, "#Title_%s", sTFClassSelection[i]);
 		char* localName=CHudTextMessage::BufferedLocaliseTextString( sz );
 		Label *pNameLabel = new Label( "", textOffs, CUSTOMMENU_WINDOW_NAME_Y );
 		pNameLabel->setFont( pSchemes->getFont(hTitleScheme) ); 
@@ -158,11 +158,11 @@ CCustomMenu::CCustomMenu(int iTrans, int iRemoveMe, int x,int y,int wide,int tal
 			{
 				if ( team == 1 )
 				{
-					sprintf( sz, "%sred", sTFClassSelection[i] );
+					sprintf_s( sz, "%sred", sTFClassSelection[i] );
 				}
 				else
 				{
-					sprintf( sz, "%sblue", sTFClassSelection[i] );
+					sprintf_s( sz, "%sblue", sTFClassSelection[i] );
 				}
 
 				m_pClassImages[team][i] = new CImageLabel( sz, 0, 0, CUSTOMMENU_WINDOW_TEXT_X, CUSTOMMENU_WINDOW_TEXT_Y );
@@ -192,7 +192,7 @@ CCustomMenu::CCustomMenu(int iTrans, int iRemoveMe, int x,int y,int wide,int tal
 		m_pPlayers[i]->setFont( pSchemes->getFont(hClassWindowText) );
 
 		// Open up the Class Briefing File
-		sprintf(sz, "classes/short_%s.txt", sTFClassSelection[i]);
+		sprintf_s(sz, "classes/short_%s.txt", sTFClassSelection[i]);
 		char *cText = "Class Description not available.";
 		char *pfile = (char *)gEngfuncs.COM_LoadFile( sz, 5, NULL );
 		if (pfile)
@@ -313,7 +313,7 @@ void CCustomMenu::Update()
 		}
 
 		char sz[256]; 
-		sprintf(sz, m_sPlayersOnTeamString, iTotal);
+		sprintf_s(sz, m_sPlayersOnTeamString, iTotal);
 		m_pPlayers[i]->setText( sz );
 
 		// Set the text color to the teamcolor

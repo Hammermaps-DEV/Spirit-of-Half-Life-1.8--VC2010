@@ -53,7 +53,7 @@ bool TryParseVectorComponentwise( CBaseEntity *pLocus, const char *szText, Vecto
 			// Ah, it's a vector.
 			char szComponentName[128];
 
-			strncpy(szComponentName,&szText[nextComponentNameStart],i);
+			strncpy_s(szComponentName,&szText[nextComponentNameStart],i);
 			szComponentName[i-nextComponentNameStart] = 0;
 
 			if ( !strcmp(szComponentName, "..") )
@@ -385,7 +385,7 @@ bool TryCalcLocus_Number( CBaseEntity *pLocus, const char *szText, float* OUTres
 		{
 			// found a '..': it's a random value from a range
 			char szComponentName[128];
-			strncpy(szComponentName,szText,i);
+			strncpy_s(szComponentName,szText,i);
 			szComponentName[i] = 0;
 
 			float A,B;
@@ -1039,27 +1039,27 @@ bool CCalcNumFromVec::CalcNumber( CBaseEntity *pLocus, float* OUTresult)
 		}
 	case 6: // Min X
 		if (!gotB) return false;
-		*OUTresult = min(vecA.x, vecB.x);
+		*OUTresult = Vmin(vecA.x, vecB.x);
 		return true;
 	case 7: // Max X
 		if (!gotB) return false;
-		*OUTresult = max(vecA.x, vecB.x);
+		*OUTresult = Vmax(vecA.x, vecB.x);
 		return true;
 	case 8: // Min Y
 		if (!gotB) return false;
-		*OUTresult = min(vecA.y, vecB.y);
+		*OUTresult = Vmin(vecA.y, vecB.y);
 		return true;
 	case 9: // Max Y
 		if (!gotB) return false;
-		*OUTresult = max(vecA.y, vecB.y);
+		*OUTresult = Vmax(vecA.y, vecB.y);
 		return true;
 	case 10: // Min Z
 		if (!gotB) return false;
-		*OUTresult = min(vecA.z, vecB.z);
+		*OUTresult = Vmin(vecA.z, vecB.z);
 		return true;
 	case 11: // Max Z
 		if (!gotB) return false;
-		*OUTresult = max(vecA.z, vecB.z);
+		*OUTresult = Vmax(vecA.z, vecB.z);
 		return true;
 	case 20: // Component in B
 		{

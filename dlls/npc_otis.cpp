@@ -301,12 +301,15 @@ void COtis :: StartTask( Task_t *pTask )
 {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 
+	/*
 	switch ( pTask->iTask )
 	{
 		default: 
 			CTalkMonster::StartTask( pTask );
-		break;
 	}
+	*/
+
+	CTalkMonster::StartTask(pTask);
 }
 
 void COtis :: RunTask( Task_t *pTask )
@@ -366,7 +369,7 @@ void COtis :: AlertSound( void )
 			{
 				char szBuf[32];
 				strcpy(szBuf,STRING(m_iszSpeakAs));
-				strcat(szBuf,"_ATTACK");
+				strcat_s(szBuf,"_ATTACK");
 				PlaySentence( szBuf, RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE );
 			}
 			else
@@ -667,7 +670,7 @@ int COtis :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 				{
 					char szBuf[32];
 					strcpy(szBuf,STRING(m_iszSpeakAs));
-					strcat(szBuf,"_MAD");
+					strcat_s(szBuf,"_MAD");
 					PlaySentence( szBuf, 4, VOL_NORM, ATTN_NORM );
 				}
 				else
@@ -685,7 +688,7 @@ int COtis :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 				{
 					char szBuf[32];
 					strcpy(szBuf,STRING(m_iszSpeakAs));
-					strcat(szBuf,"_SHOT");
+					strcat_s(szBuf,"_SHOT");
 					PlaySentence( szBuf, 4, VOL_NORM, ATTN_NORM );
 				}
 				else
@@ -701,7 +704,7 @@ int COtis :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 			{
 				char szBuf[32];
 				strcpy(szBuf,STRING(m_iszSpeakAs));
-				strcat(szBuf,"_SHOT");
+				strcat_s(szBuf,"_SHOT");
 				PlaySentence( szBuf, 4, VOL_NORM, ATTN_NORM );
 			}
 			else
@@ -854,7 +857,7 @@ Schedule_t *COtis :: GetSchedule ( void )
 		{
 			char szBuf[32];
 			strcpy(szBuf,STRING(m_iszSpeakAs));
-			strcat(szBuf,"_KILL");
+			strcat_s(szBuf,"_KILL");
 			PlaySentence( szBuf, 4, VOL_NORM, ATTN_NORM );
 		}
 		else

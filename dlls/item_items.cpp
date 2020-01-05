@@ -263,7 +263,7 @@ class CItemBattery : public CItem
 				pPlayer->pev->armorvalue += pev->armorvalue;
 			else
 				pPlayer->pev->armorvalue += gSkillData.batteryCapacity;
-			pPlayer->pev->armorvalue = min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+			pPlayer->pev->armorvalue = Vmin(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
 
 			if (pev->noise)
 				EMIT_SOUND( pPlayer->edict(), CHAN_ITEM, STRING(pev->noise), 1, ATTN_NORM ); //LRC
@@ -282,7 +282,7 @@ class CItemBattery : public CItem
 			if (pct > 0)
 				pct--;
 		
-			sprintf( szcharge,"!HEV_%1dP", pct );
+			sprintf_s( szcharge,"!HEV_%1dP", pct );
 			
 			//EMIT_SOUND_SUIT(ENT(pev), szcharge);
 			pPlayer->SetSuitUpdate(szcharge, FALSE, SUIT_NEXT_IN_30SEC);

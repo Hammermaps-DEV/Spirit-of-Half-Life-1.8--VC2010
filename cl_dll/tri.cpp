@@ -38,7 +38,7 @@ int UseTexture(HL_HSPRITE &hsprSpr, char * str)
 	if (hsprSpr == 0)
 	{
 		char sz[256];
-		sprintf( sz, str );
+		sprintf_s( sz, str );
 		hsprSpr = SPR_Load( sz );
 	}
 
@@ -68,7 +68,7 @@ CShinySurface::CShinySurface( float fScale, float fAlpha, float fMinX, float fMa
 	m_fMaxX = fMaxX; m_fMaxY = fMaxY;
 	m_fZ = fZ;
 	m_hsprSprite = 0;
-	sprintf( m_szSprite, szSprite );
+	sprintf_s( m_szSprite, szSprite );
 	m_pNext = NULL;
 }
 
@@ -163,8 +163,8 @@ void Draw_Triangles( void )
 	if (gHUD.m_hsprCursor == 0)
 	{
 		char sz[256];
-//LRCT		sprintf( sz, "sprites/cursor.spr" );
-		sprintf( sz, "sprites/bubble.spr" ); //LRCT
+//LRCT		sprintf_s( sz, "sprites/cursor.spr" );
+		sprintf_s( sz, "sprites/bubble.spr" ); //LRCT
 		gHUD.m_hsprCursor = SPR_Load( sz );
 	}
 

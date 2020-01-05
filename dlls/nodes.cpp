@@ -384,7 +384,7 @@ int	CGraph :: FindNearestLink ( const Vector &vecTestPoint, int *piNearestLink, 
 			}
 			else
 			{// point inside line
-				flDistToLine = fabs( DotProduct ( vec2TestPoint - vec2Spot2, vec2Normal ) );
+				flDistToLine = Vfabs( DotProduct ( vec2TestPoint - vec2Spot2, vec2Normal ) );
 				fCurrentAlongLine = TRUE;
 			}
 
@@ -788,12 +788,12 @@ void inline CalcBounds(int &Lower, int &Upper, int Goal, int Best)
     int Temp = 2*Goal - Best;
     if (Best > Goal)
     {
-        Lower = max(0, Temp);
+        Lower = Vmax(0, Temp);
         Upper = Best;
     }
     else
     {
-        Upper = min(255, Temp);
+        Upper = Vmin(255, Temp);
         Lower = Best;
     }
 }
@@ -946,7 +946,7 @@ int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes )
         }
     }
 
-    for (i = max(m_minY,halfY+1); i <= m_maxY; i++)
+    for (i = Vmax(m_minY,halfY+1); i <= m_maxY; i++)
     {
         for (j = m_RangeStart[1][i]; j <= m_RangeEnd[1][i]; j++)
         {
@@ -962,7 +962,7 @@ int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes )
         }
     }
 
-    for (i = min(m_maxZ,halfZ); i >= m_minZ; i--)
+    for (i = Vmin(m_maxZ,halfZ); i >= m_minZ; i--)
     {
         for (j = m_RangeStart[2][i]; j <= m_RangeEnd[2][i]; j++)
         {
@@ -978,7 +978,7 @@ int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes )
         }
     }
 
-    for (i = max(m_minX,halfX+1); i <= m_maxX; i++)
+    for (i = Vmax(m_minX,halfX+1); i <= m_maxX; i++)
     {
         for (j = m_RangeStart[0][i]; j <= m_RangeEnd[0][i]; j++)
         {
@@ -995,7 +995,7 @@ int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes )
         }
     }
 
-    for (i = min(m_maxY,halfY); i >= m_minY; i--)
+    for (i = Vmin(m_maxY,halfY); i >= m_minY; i--)
     {
         for (j = m_RangeStart[1][i]; j <= m_RangeEnd[1][i]; j++)
         {
@@ -1011,7 +1011,7 @@ int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes )
         }
     }
 
-    for (i = max(m_minZ,halfZ+1); i <= m_maxZ; i++)
+    for (i = Vmax(m_minZ,halfZ+1); i <= m_maxZ; i++)
     {
         for (j = m_RangeStart[2][i]; j <= m_RangeEnd[2][i]; j++)
         {
@@ -1149,7 +1149,6 @@ int CGraph :: LinkVisibleNodes ( CLink *pLinkPool, FILE *file, int *piBadNode )
 	// number back.
 	*piBadNode = 0;
 
-
 	if ( m_cNodes <= 0 )
 	{
 		ALERT ( at_aiconsole, "No Nodes!\n" );
@@ -1241,11 +1240,10 @@ int CGraph :: LinkVisibleNodes ( CLink *pLinkPool, FILE *file, int *piBadNode )
 								 g_pBodyQueueHead,//!!!HACKHACK no real ent to supply here, using a global we don't care about
 								 &tr );
 
-				
-// there is a solid_bsp ent in the way of these two nodes, so we must record several things about in order to keep
-// track of it in the pathfinding code, as well as through save and restore of the node graph. ANY data that is manipulated 
-// as part of the process of adding a LINKENT to a connection here must also be done in CGraph::SetGraphPointers, where reloaded
-// graphs are prepared for use.
+				// there is a solid_bsp ent in the way of these two nodes, so we must record several things about in order to keep
+				// track of it in the pathfinding code, as well as through save and restore of the node graph. ANY data that is manipulated 
+				// as part of the process of adding a LINKENT to a connection here must also be done in CGraph::SetGraphPointers, where reloaded
+				// graphs are prepared for use.
 				if ( tr.pHit == pTraceEnt && !FClassnameIs( tr.pHit, "worldspawn" ) )
 				{
 					// get a pointer
@@ -1277,7 +1275,7 @@ int CGraph :: LinkVisibleNodes ( CLink *pLinkPool, FILE *file, int *piBadNode )
 					fprintf ( file, "  Entity on connection: %s, name: %s  Model: %s", STRING( VARS( pTraceEnt )->classname ), STRING ( VARS( pTraceEnt )->targetname ), STRING ( VARS(tr.pHit)->model ) );
 				}
 				
-				fprintf ( file, "\n", j );
+				fprintf ( file, "\n" );
 			}
 
 			pLinkPool [ cTotalLinks ].m_iDestNode = j;
@@ -1649,14 +1647,14 @@ void CTestHull :: BuildNodeGraph( void )
 
 	// make sure directories have been made
 	GET_GAME_DIR( szNrpFilename );
-	strcat( szNrpFilename, "/maps" );
+	strcat_s( szNrpFilename, "/maps" );
 	CreateDirectory( szNrpFilename, NULL );
-	strcat( szNrpFilename, "/graphs" );
+	strcat_s( szNrpFilename, "/graphs" );
 	CreateDirectory( szNrpFilename, NULL );
 
-	strcat( szNrpFilename, "/" );
-	strcat( szNrpFilename, STRING( gpGlobals->mapname ) );
-	strcat( szNrpFilename, ".nrp" );
+	strcat_s( szNrpFilename, "/" );
+	strcat_s( szNrpFilename, STRING( gpGlobals->mapname ) );
+	strcat_s( szNrpFilename, ".nrp" );
 
 	file = fopen ( szNrpFilename, "w+" );
 
@@ -1886,17 +1884,17 @@ void CTestHull :: BuildNodeGraph( void )
 						switch ( hull )
 						{
 						case NODE_SMALL_HULL:	// if this hull can't fit, nothing can, so drop the connection
-							fprintf ( file, "NODE_SMALL_HULL step %f\n", step );
+							fprintf ( file, "NODE_SMALL_HULL step %f\n", (double)step );
 							pTempPool[ pSrcNode->m_iFirstLink + j ].m_afLinkInfo &= ~(bits_LINK_SMALL_HULL | bits_LINK_HUMAN_HULL | bits_LINK_LARGE_HULL);
 							fSkipRemainingHulls = TRUE;// don't bother checking larger hulls
 							break;
 						case NODE_HUMAN_HULL:
-							fprintf ( file, "NODE_HUMAN_HULL step %f\n", step );
+							fprintf ( file, "NODE_HUMAN_HULL step %f\n", (double)step );
 							pTempPool[ pSrcNode->m_iFirstLink + j ].m_afLinkInfo &= ~(bits_LINK_HUMAN_HULL | bits_LINK_LARGE_HULL);
 							fSkipRemainingHulls = TRUE;// don't bother checking larger hulls
 							break;
 						case NODE_LARGE_HULL:
-							fprintf ( file, "NODE_LARGE_HULL step %f\n", step );
+							fprintf ( file, "NODE_LARGE_HULL step %f\n", (double)step );
 							pTempPool[ pSrcNode->m_iFirstLink + j ].m_afLinkInfo &= ~bits_LINK_LARGE_HULL;
 							break;
 						}
@@ -2321,14 +2319,14 @@ int CGraph :: FLoadGraph ( char *szMapName )
 	// make sure the directories have been made
 	char	szDirName[MAX_PATH];
 	GET_GAME_DIR( szDirName );
-	strcat( szDirName, "/maps" );
+	strcat_s( szDirName, "/maps" );
 	CreateDirectory( szDirName, NULL );
-	strcat( szDirName, "/graphs" );
+	strcat_s( szDirName, "/graphs" );
 	CreateDirectory( szDirName, NULL );
 
 	strcpy ( szFilename, "maps/graphs/" );
 	strcat ( szFilename, szMapName );
-	strcat( szFilename, ".nod" );
+	strcat_s( szFilename, ".nod" );
 
 	pMemFile = aMemFile = LOAD_FILE_FOR_ME(szFilename, &length);
 
@@ -2499,14 +2497,14 @@ int CGraph :: FSaveGraph ( char *szMapName )
 
 	// make sure directories have been made
 	GET_GAME_DIR( szFilename );
-	strcat( szFilename, "/maps" );
+	strcat_s( szFilename, "/maps" );
 	CreateDirectory( szFilename, NULL );
-	strcat( szFilename, "/graphs" );
+	strcat_s( szFilename, "/graphs" );
 	CreateDirectory( szFilename, NULL );
 
-	strcat( szFilename, "/" );
-	strcat( szFilename, szMapName );
-	strcat( szFilename, ".nod" );
+	strcat_s( szFilename, "/" );
+	strcat_s( szFilename, szMapName );
+	strcat_s( szFilename, ".nod" );
 
 	file = fopen ( szFilename, "wb" );
 
@@ -3425,7 +3423,7 @@ void CGraph :: TestRoutingTables( void )
 								ALERT(at_aiconsole, "No link.\n");
 							}
 						}
-						if (fabs(flDistance1 - flDistance2) > 0.10)
+						if (Vfabs(flDistance1 - flDistance2) > 0.10)
 						{
 #else
 						if (cPathSize1 != cPathSize2 || memcmp(pMyPath, pMyPath2, sizeof(int)*cPathSize1) != 0)

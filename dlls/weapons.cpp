@@ -228,7 +228,7 @@ void AddAmmoNameToAmmoRegistry( const char *szAmmoname )
 		if ( !CBasePlayerItem::AmmoInfoArray[i].pszName)
 			continue;
 
-		if ( stricmp( CBasePlayerItem::AmmoInfoArray[i].pszName, szAmmoname ) == 0 )
+		if ( _stricmp( CBasePlayerItem::AmmoInfoArray[i].pszName, szAmmoname ) == 0 )
 			return; // ammo already in registry, just quite
 	}
 
@@ -618,7 +618,7 @@ void CBasePlayerItem::DefaultTouch( CBaseEntity *pOther )
 			else if (strncmp(weapon_name, "item_", 5) == 0)
 				i = 5;
 
-			sprintf(sample, "!%s", weapon_name + i);
+			sprintf_s(sample, "!%s", weapon_name + i);
 			pPlayer->SetSuitUpdate(sample, FALSE, SUIT_NEXT_IN_30SEC);
 		}
 	}
@@ -653,7 +653,7 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 	if ((m_fInReload) && ( m_pPlayer->m_flNextAttack <= UTIL_WeaponTimeBase() ) )
 	{
 		// complete the reload. 
-		int j = min( iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);	
+		int j = Vmin( iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);	
 
 		// Add them to the clip
 		m_iClip += j;
@@ -912,7 +912,7 @@ BOOL CBasePlayerWeapon :: AddPrimaryAmmo( int iCount, char *szName, int iMaxClip
 	else if (m_iClip == 0)
 	{
 		int i;
-		i = min( m_iClip + iCount, iMaxClip ) - m_iClip;
+		i = Vmin( m_iClip + iCount, iMaxClip ) - m_iClip;
 		m_iClip += i;
 		iIdAmmo = m_pPlayer->GiveAmmo( iCount - i, szName, iMaxCarry );
 	}
@@ -1018,7 +1018,7 @@ BOOL CBasePlayerWeapon :: DefaultReload( int iClipSize, int iAnim, float fDelay,
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return FALSE;
 
-	int j = min(iClipSize - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);	
+	int j = Vmin(iClipSize - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);	
 
 	if (j == 0)
 		return FALSE;
@@ -1477,12 +1477,12 @@ int CWeaponBox::GiveAmmo( int iCount, char *szName, int iMax, int *pIndex/* = NU
 
 	for (i = 1; i < MAX_AMMO_SLOTS && !FStringNull( m_rgiszAmmo[i] ); i++)
 	{
-		if (stricmp( szName, STRING( m_rgiszAmmo[i])) == 0)
+		if (_stricmp( szName, STRING( m_rgiszAmmo[i])) == 0)
 		{
 			if (pIndex)
 				*pIndex = i;
 
-			int iAdd = min( iCount, iMax - m_rgAmmo[i]);
+			int iAdd = Vmin( iCount, iMax - m_rgAmmo[i]);
 			if (iCount == 0 || iAdd > 0)
 			{
 				m_rgAmmo[i] += iAdd;

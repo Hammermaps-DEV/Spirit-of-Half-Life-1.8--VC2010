@@ -26,6 +26,7 @@
 #define	ROLL	2 
 
 #pragma warning(disable : 4244)
+#pragma warning(disable : 4996)		// consider using strcpy_s instead
 
 vec3_t vec3_origin = {0,0,0};
 

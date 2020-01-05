@@ -167,7 +167,7 @@ int LookupSequence( void *pmodel, const char *label )
 
 	for (int i = 0; i < pstudiohdr->numseq; i++)
 	{
-		if (stricmp( pseqdesc[i].label, label ) == 0)
+		if (_stricmp( pseqdesc[i].label, label ) == 0)
 			return i;
 	}
 
@@ -543,7 +543,7 @@ int GetBoneCount( void *pmodel )
 }
 
 #ifndef min
-#define min(a,b)            (((a) < (b)) ? (a) : (b))
+#define Vmin(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
 //LRC
@@ -562,7 +562,7 @@ void SetBones( void *pmodel, float (*data)[3], int datasize)
 
 //	ALERT(at_console, "List begins:\n");
 	int j;
-	int limit = min(pstudiohdr->numbones, datasize);
+	int limit = Vmin(pstudiohdr->numbones, datasize);
 	// go through the bones
 	for (int i = 0; i < limit; i++, pbone++)
 	{

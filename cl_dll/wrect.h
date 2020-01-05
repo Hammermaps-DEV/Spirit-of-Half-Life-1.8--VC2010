@@ -5,6 +5,8 @@
 // $NoKeywords: $
 //=============================================================================
 
+#pragma warning(disable : 4996)		// consider using strcpy_s instead
+
 #if !defined( WRECTH )
 #define WRECTH
 

@@ -11,3 +11,7 @@ General Changelog for Spirit of Half-Life 1.8 Alpha 1 (Microsoft Visual C++ 2010
 [CHANGE]:	Color from Islave Zap Beam Lightflash 
 [ADD]:		New Movestep effect
 [ADD]:		Sun Flare effect
+
+############### "Source Code Version: 2" ###############
+
+[FIX]: 		Update Code for VC++ 2017

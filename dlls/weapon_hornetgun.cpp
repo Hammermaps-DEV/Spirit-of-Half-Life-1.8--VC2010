@@ -79,7 +79,7 @@ int CHgun::AddToPlayer( CBasePlayer *pPlayer )
 		if ( g_pGameRules->IsMultiplayer() )
 		{
 			// in multiplayer, all hivehands come full. 
-			pPlayer->m_rgAmmo[ PrimaryAmmoIndex() ] = HORNET_MAX_CARRY;
+			pPlayer->m_rgAmmo[ PrimaryAmmoIndex() ] = MAX_CARRY_HORNET;
 		}
 #endif
 
@@ -260,10 +260,10 @@ void CHgun::SecondaryAttack( void )
 
 void CHgun::Reload( void )
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= HORNET_MAX_CARRY)
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= MAX_CARRY_HORNET)
 		return;
 
-	while (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] < HORNET_MAX_CARRY && m_flRechargeTime < gpGlobals->time)
+	while (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] < MAX_CARRY_HORNET && m_flRechargeTime < gpGlobals->time)
 	{
 		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]++;
 		m_flRechargeTime += 0.5;

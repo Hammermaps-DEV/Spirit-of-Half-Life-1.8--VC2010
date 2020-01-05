@@ -96,7 +96,7 @@ CHalfLifeMultiplay :: CHalfLifeMultiplay()
 			char szCommand[256];
 			
 			ALERT( at_debug, "Executing dedicated server config file\n" );
-			sprintf( szCommand, "exec %s\n", servercfgfile );
+			sprintf_s( szCommand, "exec %s\n", servercfgfile );
 			SERVER_COMMAND( szCommand );
 		}
 	}
@@ -110,7 +110,7 @@ CHalfLifeMultiplay :: CHalfLifeMultiplay()
 			char szCommand[256];
 			
 			ALERT( at_debug, "Executing listen server config file\n" );
-			sprintf( szCommand, "exec %s\n", lservercfgfile );
+			sprintf_s( szCommand, "exec %s\n", lservercfgfile );
 			SERVER_COMMAND( szCommand );
 		}
 	}
@@ -575,7 +575,7 @@ void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
 	{
 		pPlayer->GiveNamedItem( "weapon_crowbar" );
 		pPlayer->GiveNamedItem( "weapon_9mmhandgun" );
-		pPlayer->GiveAmmo( 68, "9mm", _9MM_MAX_CARRY );// 4 full reloads
+		pPlayer->GiveAmmo( 68, "9mm", MAX_CARRY_9MM);// 4 full reloads
 	}
 }
 
@@ -871,9 +871,9 @@ void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, 
 	{
 		strcpy ( szText, STRING( pKiller->netname ) );
 
-		strcat( szText, " : " );
-		strcat( szText, killer_weapon_name );
-		strcat( szText, " : " );
+		strcat_s( szText, " : " );
+		strcat_s( szText, killer_weapon_name );
+		strcat_s( szText, " : " );
 
 		strcat ( szText, STRING( pVictim->pev->netname ) );
 		strcat ( szText, "\n" );
@@ -1395,15 +1395,15 @@ int ReloadMapCycleFile( char *filename, mapcycle_t *cycle )
 					if ( s && s[0] )
 					{
 						item->minplayers = atoi( s );
-						item->minplayers = max( item->minplayers, 0 );
-						item->minplayers = min( item->minplayers, gpGlobals->maxClients );
+						item->minplayers = Vmax( item->minplayers, 0 );
+						item->minplayers = Vmin( item->minplayers, gpGlobals->maxClients );
 					}
 					s = g_engfuncs.pfnInfoKeyValue( szBuffer, "maxplayers" );
 					if ( s && s[0] )
 					{
 						item->maxplayers = atoi( s );
-						item->maxplayers = max( item->maxplayers, 0 );
-						item->maxplayers = min( item->maxplayers, gpGlobals->maxClients );
+						item->maxplayers = Vmax( item->maxplayers, 0 );
+						item->maxplayers = Vmin( item->maxplayers, gpGlobals->maxClients );
 					}
 
 					// Remove keys
@@ -1569,7 +1569,7 @@ void CHalfLifeMultiplay :: ChangeLevel( void )
 	curplayers = CountPlayers();
 
 	// Has the map cycle filename changed?
-	if ( stricmp( mapcfile, szPreviousMapCycleFile ) )
+	if ( _stricmp( mapcfile, szPreviousMapCycleFile ) )
 	{
 		strcpy( szPreviousMapCycleFile, mapcfile );
 
@@ -1699,7 +1699,7 @@ void CHalfLifeMultiplay :: SendMOTDToClient( edict_t *client )
 		}
 		else
 		{
-			strncpy( chunk, pFileList, MAX_MOTD_CHUNK );
+			strncpy_s( chunk, pFileList, MAX_MOTD_CHUNK );
 			chunk[MAX_MOTD_CHUNK] = 0;		// strncpy doesn't always append the null terminator
 		}
 

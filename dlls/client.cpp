@@ -108,7 +108,7 @@ void ClientDisconnect( edict_t *pEntity )
 		return;
 
 	char text[256];
-	sprintf( text, "- %s has left the game\n", STRING(pEntity->v.netname) );
+	sprintf_s( text, "- %s has left the game\n", STRING(pEntity->v.netname) );
 	MESSAGE_BEGIN( MSG_ALL, gmsgSayText, NULL );
 		WRITE_BYTE( ENTINDEX(pEntity) );
 		WRITE_STRING( text );
@@ -236,7 +236,7 @@ void Host_Say( edict_t *pEntity, int teamonly )
 	if ( player->m_flNextChatTime > gpGlobals->time )
 		 return;
 
-	if ( !stricmp( pcmd, cpSay) || !stricmp( pcmd, cpSayTeam ) )
+	if ( !_stricmp( pcmd, cpSay) || !_stricmp( pcmd, cpSayTeam ) )
 	{
 		if ( CMD_ARGC() >= 2 )
 		{
@@ -252,12 +252,12 @@ void Host_Say( edict_t *pEntity, int teamonly )
 	{
 		if ( CMD_ARGC() >= 2 )
 		{
-			sprintf( szTemp, "%s %s", ( char * )pcmd, (char *)CMD_ARGS() );
+			sprintf_s( szTemp, "%s %s", ( char * )pcmd, (char *)CMD_ARGS() );
 		}
 		else
 		{
 			// Just a one word command, use the first word...sigh
-			sprintf( szTemp, "%s", ( char * )pcmd );
+			sprintf_s( szTemp, "%s", ( char * )pcmd );
 		}
 		p = szTemp;
 	}
@@ -284,16 +284,16 @@ void Host_Say( edict_t *pEntity, int teamonly )
 
 // turn on color set 2  (color on,  no sound)
 	if ( teamonly )
-		sprintf( text, "%c(TEAM) %s: ", 2, STRING( pEntity->v.netname ) );
+		sprintf_s( text, "%c(TEAM) %s: ", 2, STRING( pEntity->v.netname ) );
 	else
-		sprintf( text, "%c%s: ", 2, STRING( pEntity->v.netname ) );
+		sprintf_s( text, "%c%s: ", 2, STRING( pEntity->v.netname ) );
 
 	j = sizeof(text) - 2 - strlen(text);  // -2 for /n and null terminator
 	if ( (int)strlen(p) > j )
 		p[j] = 0;
 
-	strcat( text, p );
-	strcat( text, "\n" );
+	strcat_s( text, p );
+	strcat_s( text, "\n" );
 
 
 	player->m_flNextChatTime = gpGlobals->time + CHAT_INTERVAL;
@@ -577,7 +577,7 @@ void ClientCommand( edict_t *pEntity )
 
 		// check the length of the command (prevents crash)
 		// max total length is 192 ...and we're adding a string below ("Unknown command: %s\n")
-		strncpy( command, pcmd, 127 );
+		strncpy_s( command, pcmd, 127 );
 		command[127] = '\0';
 
 		// tell the user they entered an unknown command
@@ -606,7 +606,7 @@ void ClientUserInfoChanged( edict_t *pEntity, char *infobuffer )
 	{
 		char sName[256];
 		char *pName = g_engfuncs.pfnInfoKeyValue( infobuffer, "name" );
-		strncpy( sName, pName, sizeof(sName) - 1 );
+		strncpy_s( sName, pName, sizeof(sName) - 1 );
 		sName[ sizeof(sName) - 1 ] = '\0';
 
 		// First parse the name and remove any %'s
@@ -621,7 +621,7 @@ void ClientUserInfoChanged( edict_t *pEntity, char *infobuffer )
 		g_engfuncs.pfnSetClientKeyValue( ENTINDEX(pEntity), infobuffer, "name", sName );
 
 		char text[256];
-		sprintf( text, "* %s changed name to %s\n", STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue( infobuffer, "name" ) );
+		sprintf_s( text, "* %s changed name to %s\n", STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue( infobuffer, "name" ) );
 		MESSAGE_BEGIN( MSG_ALL, gmsgSayText, NULL );
 			WRITE_BYTE( ENTINDEX(pEntity) );
 			WRITE_STRING( text );
@@ -1622,12 +1622,12 @@ int GetWeaponData( struct edict_s *player, struct weapon_data_s *info )
 						item->m_iId						= II.iId;
 						item->m_iClip					= gun->m_iClip;
 
-						item->m_flTimeWeaponIdle		= max( gun->m_flTimeWeaponIdle, -0.001 );
-						item->m_flNextPrimaryAttack		= max( gun->m_flNextPrimaryAttack, -0.001 );
-						item->m_flNextSecondaryAttack	= max( gun->m_flNextSecondaryAttack, -0.001 );
+						item->m_flTimeWeaponIdle		= Vmax( gun->m_flTimeWeaponIdle, -0.001 );
+						item->m_flNextPrimaryAttack		= Vmax( gun->m_flNextPrimaryAttack, -0.001 );
+						item->m_flNextSecondaryAttack	= Vmax( gun->m_flNextSecondaryAttack, -0.001 );
 						item->m_fInReload				= gun->m_fInReload;
 						item->m_fInSpecialReload		= gun->m_fInSpecialReload;
-						item->fuser1					= max( gun->pev->fuser1, -0.001 );
+						item->fuser1					= Vmax( gun->pev->fuser1, -0.001 );
 						item->fuser2					= gun->m_flStartThrow;
 						item->fuser3					= gun->m_flReleaseThrow;
 						item->iuser1					= gun->m_chargeReady;
@@ -1635,7 +1635,7 @@ int GetWeaponData( struct edict_s *player, struct weapon_data_s *info )
 						item->iuser3					= gun->m_fireState;
 
 
-//						item->m_flPumpTime				= max( gun->m_flPumpTime, -0.001 );
+//						item->m_flPumpTime				= Vmax( gun->m_flPumpTime, -0.001 );
 					}
 				}
 				pPlayerItem = pPlayerItem->m_pNext;

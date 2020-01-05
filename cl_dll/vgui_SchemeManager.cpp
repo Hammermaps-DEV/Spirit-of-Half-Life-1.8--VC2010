@@ -127,7 +127,7 @@ static byte *LoadFileByResolution( const char *filePrefix, int xRes, const char 
 
 		// try load
 		char fname[256];
-		sprintf( fname, "%s%d%s", filePrefix, g_ResArray[resNum], filePostfix );
+		sprintf_s( fname, "%s%d%s", filePrefix, g_ResArray[resNum], filePostfix );
 		pFile = gEngfuncs.COM_LoadFile( fname, 5, NULL );
 
 		if ( pFile )
@@ -205,12 +205,12 @@ CSchemeManager::CSchemeManager( int xRes, int yRes )
 		static const int tokenSize = 64;
 		char paramName[tokenSize], paramValue[tokenSize];
 
-		strncpy( paramName, token, tokenSize );
+		strncpy_s( paramName, token, tokenSize );
 		paramName[tokenSize-1] = 0; // ensure null termination
 
 		// get the '=' character
 		pFile = gEngfuncs.COM_ParseFile( pFile, token );
-		if ( stricmp( token, "=" ) )
+		if ( _stricmp( token, "=" ) )
 		{
 			if ( currentScheme < 0 )
 			{
@@ -225,11 +225,11 @@ CSchemeManager::CSchemeManager( int xRes, int yRes )
 
 		// get paramValue
 		pFile = gEngfuncs.COM_ParseFile( pFile, token );
-		strncpy( paramValue, token, tokenSize );
+		strncpy_s( paramValue, token, tokenSize );
 		paramValue[tokenSize-1] = 0; // ensure null termination
 		
 		// is this a new scheme?
-		if ( !stricmp(paramName, "SchemeName") )
+		if ( !_stricmp(paramName, "SchemeName") )
 		{
 			// setup the defaults for the current scheme
 			if ( pScheme )
@@ -278,7 +278,7 @@ CSchemeManager::CSchemeManager( int xRes, int yRes )
 			pScheme = &tmpSchemes[currentScheme];
 			hasFgColor = hasBgColor = hasArmedFgColor = hasArmedBgColor = hasMouseDownFgColor = hasMouseDownBgColor = false;
 
-			strncpy( pScheme->schemeName, paramValue, CScheme::SCHEME_NAME_LENGTH );
+			strncpy_s( pScheme->schemeName, paramValue, CScheme::SCHEME_NAME_LENGTH );
 			pScheme->schemeName[CScheme::SCHEME_NAME_LENGTH-1] = '\0'; // ensure null termination of string
 		}
 
@@ -289,50 +289,50 @@ CSchemeManager::CSchemeManager( int xRes, int yRes )
 		}
 
 		// pull the data out into the scheme
-		if ( !stricmp(paramName, "FontName") )
+		if ( !_stricmp(paramName, "FontName") )
 		{
-			strncpy( pScheme->fontName, paramValue, CScheme::FONT_NAME_LENGTH );
+			strncpy_s( pScheme->fontName, paramValue, CScheme::FONT_NAME_LENGTH );
 			pScheme->fontName[CScheme::FONT_NAME_LENGTH-1] = 0;
 		}
-		else if ( !stricmp(paramName, "FontSize") )
+		else if ( !_stricmp(paramName, "FontSize") )
 		{
 			pScheme->fontSize = atoi( paramValue );
 		}
-		else if ( !stricmp(paramName, "FontWeight") )
+		else if ( !_stricmp(paramName, "FontWeight") )
 		{
 			pScheme->fontWeight = atoi( paramValue );
 		}
-		else if ( !stricmp(paramName, "FgColor") )
+		else if ( !_stricmp(paramName, "FgColor") )
 		{
 			ParseRGBAFromString( pScheme->fgColor, paramValue );
 			hasFgColor = true;
 		}
-		else if ( !stricmp(paramName, "BgColor") )
+		else if ( !_stricmp(paramName, "BgColor") )
 		{
 			ParseRGBAFromString( pScheme->bgColor, paramValue );
 			hasBgColor = true;
 		}
-		else if ( !stricmp(paramName, "FgColorArmed") )
+		else if ( !_stricmp(paramName, "FgColorArmed") )
 		{
 			ParseRGBAFromString( pScheme->armedFgColor, paramValue );
 			hasArmedFgColor = true;
 		}	
-		else if ( !stricmp(paramName, "BgColorArmed") )
+		else if ( !_stricmp(paramName, "BgColorArmed") )
 		{
 			ParseRGBAFromString( pScheme->armedBgColor, paramValue );
 			hasArmedBgColor = true;
 		}
-		else if ( !stricmp(paramName, "FgColorMousedown") )
+		else if ( !_stricmp(paramName, "FgColorMousedown") )
 		{
 			ParseRGBAFromString( pScheme->mousedownFgColor, paramValue );
 			hasMouseDownFgColor = true;
 		}
-		else if ( !stricmp(paramName, "BgColorMousedown") )
+		else if ( !_stricmp(paramName, "BgColorMousedown") )
 		{
 			ParseRGBAFromString( pScheme->mousedownBgColor, paramValue );
 			hasMouseDownBgColor = true;
 		}
-		else if ( !stricmp(paramName, "BorderColor") )
+		else if ( !_stricmp(paramName, "BorderColor") )
 		{
 			ParseRGBAFromString( pScheme->borderColor, paramValue );
 			hasMouseDownBgColor = true;
@@ -377,7 +377,7 @@ buildDefaultFont:
 		for ( int j = 0; j < i; j++ )
 		{
 			// check if the font name, size, and weight are the same
-			if ( !stricmp(m_pSchemeList[i].fontName, m_pSchemeList[j].fontName)  
+			if ( !_stricmp(m_pSchemeList[i].fontName, m_pSchemeList[j].fontName)  
 				&& m_pSchemeList[i].fontSize == m_pSchemeList[j].fontSize
 				&& m_pSchemeList[i].fontWeight == m_pSchemeList[j].fontWeight )
 			{
@@ -395,7 +395,7 @@ buildDefaultFont:
 
 			if(g_CV_BitmapFonts && g_CV_BitmapFonts->value)
 			{
-				sprintf(fontFilename, "gfx\\vgui\\fonts\\%d_%s.tga", m_xRes, m_pSchemeList[i].schemeName);
+				sprintf_s(fontFilename, "gfx\\vgui\\fonts\\%d_%s.tga", m_xRes, m_pSchemeList[i].schemeName);
 				pFontData = gEngfuncs.COM_LoadFile( fontFilename, 5, &fontFileLength );
 				if(!pFontData)
 					gEngfuncs.Con_Printf("Missing bitmap font: %s\n", fontFilename);
@@ -446,7 +446,7 @@ SchemeHandle_t CSchemeManager::getSchemeHandle( const char *schemeName )
 	// iterate through the list
 	for ( int i = 0; i < m_iNumSchemes; i++ )
 	{
-		if ( !stricmp(schemeName, m_pSchemeList[i].schemeName) )
+		if ( !_stricmp(schemeName, m_pSchemeList[i].schemeName) )
 			return i;
 	}
 

@@ -475,7 +475,7 @@ void CBaseTurret::EyeOff( )
 	{
 		if (m_eyeBrightness > 0)
 		{
-			m_eyeBrightness = max( 0, m_eyeBrightness - 30 );
+			m_eyeBrightness = Vmax( 0, m_eyeBrightness - 30 );
 			m_pEyeGlow->SetBrightness( m_eyeBrightness );
 		}
 	}
@@ -1099,7 +1099,7 @@ int CBaseTurret::MoveTurret(void)
 	if (m_vecCurAngles.y != m_vecGoalAngles.y)
 	{
 		float flDir = m_vecGoalAngles.y > m_vecCurAngles.y ? 1 : -1 ;
-		float flDist = fabs(m_vecGoalAngles.y - m_vecCurAngles.y);
+		float flDist = Vfabs(m_vecGoalAngles.y - m_vecCurAngles.y);
 		
 		if (flDist > 180)
 		{

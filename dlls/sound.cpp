@@ -429,14 +429,14 @@ void CAmbientGeneric :: RampThink( void )
 		if (m_dpv.lfofrac < 0)
 		{
 			m_dpv.lfofrac = 0;
-			m_dpv.lforate = abs(m_dpv.lforate);
+			m_dpv.lforate = Vfabs(m_dpv.lforate);
 			pos = 0;
 		}
 		else if (pos > 255)
 		{
 			pos = 255;
 			m_dpv.lfofrac = (255 << 8);
-			m_dpv.lforate = -abs(m_dpv.lforate);
+			m_dpv.lforate = -Vfabs(m_dpv.lforate);
 		}
 
 		switch(m_dpv.lfotype)
@@ -577,7 +577,7 @@ void CAmbientGeneric :: InitModulationParms(void)
 	m_dpv.volfrac = m_dpv.vol << 8;
 
 	m_dpv.lfofrac = 0;
-	m_dpv.lforate = abs(m_dpv.lforate);
+	m_dpv.lforate = Vfabs(m_dpv.lforate);
 
 	m_dpv.cspincount = 1;
 	
@@ -1281,7 +1281,7 @@ int USENTENCEG_PickSequential(int isentenceg, char *szfound, int ipick, int fres
 
 	strcpy(szfound, "!");
 	strcat(szfound, szgroupname);
-	sprintf(sznum, "%d", ipick);
+	sprintf_s(sznum, "%d", ipick);
 	strcat(szfound, sznum);
 	
 	if (ipick >= count)
@@ -1343,7 +1343,7 @@ int USENTENCEG_Pick(int isentenceg, char *szfound)
 		{
 			strcpy(szfound, "!");
 			strcat(szfound, szgroupname);
-			sprintf(sznum, "%d", ipick);
+			sprintf_s(sznum, "%d", ipick);
 			strcat(szfound, sznum);
 			return ipick;
 		}
@@ -1466,9 +1466,9 @@ void SENTENCEG_Stop(edict_t *entity, int isentenceg, int ipick)
 		return;
 	
 	strcpy(buffer, "!");
-	strcat(buffer, rgsentenceg[isentenceg].szgroupname);
-	sprintf(sznum, "%d", ipick);
-	strcat(buffer, sznum);
+	strcat_s(buffer, rgsentenceg[isentenceg].szgroupname);
+	sprintf_s(sznum, "%d", ipick);
+	strcat_s(buffer, sznum);
 
 	STOP_SOUND(entity, CHAN_VOICE, buffer);
 }
@@ -1608,12 +1608,12 @@ int SENTENCEG_Lookup(const char *sample, char *sentencenum)
 	// this is a sentence name; lookup sentence number
 	// and give to engine as string.
 	for (i = 0; i < gcallsentences; i++)
-		if (!stricmp(gszallsentencenames[i], sample+1))
+		if (!_stricmp(gszallsentencenames[i], sample+1))
 		{
 			if (sentencenum)
 			{
 				strcpy(sentencenum, "!");
-				sprintf(sznum, "%d", i);
+				sprintf_s(sznum, "%d", i);
 				strcat(sentencenum, sznum);
 			}
 			return i;

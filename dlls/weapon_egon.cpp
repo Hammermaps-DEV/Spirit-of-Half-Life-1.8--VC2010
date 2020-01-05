@@ -401,9 +401,9 @@ void CEgon::UpdateEffect( const Vector &startPoint, const Vector &endPoint, floa
 	m_pBeam->SetWidth( 40 - (timeBlend*20) );
 
 	if ( m_fireMode == FIRE_WIDE )
-		m_pBeam->SetColor( 30 + (25*timeBlend), 30 + (30*timeBlend), 64 + 80*fabs(sin(gpGlobals->time*10)) );
+		m_pBeam->SetColor( 30 + (25*timeBlend), 30 + (30*timeBlend), 64 + 80*Vfabs(sin(gpGlobals->time*10)) );
 	else
-		m_pBeam->SetColor( 60 + (25*timeBlend), 120 + (30*timeBlend), 64 + 80*fabs(sin(gpGlobals->time*10)) );
+		m_pBeam->SetColor( 60 + (25*timeBlend), 120 + (30*timeBlend), 64 + 80*Vfabs(sin(gpGlobals->time*10)) );
 
 
 //	UTIL_SetOrigin( m_pSprite->pev, endPoint );
@@ -560,7 +560,7 @@ class CEgonAmmo : public CBasePlayerAmmo
 	}
 	BOOL AddAmmo( CBaseEntity *pOther ) 
 	{ 
-		if (pOther->GiveAmmo( AMMO_URANIUMBOX_GIVE, "uranium", URANIUM_MAX_CARRY ) != -1)
+		if (pOther->GiveAmmo( AMMO_URANIUMBOX_GIVE, "uranium", MAX_CARRY_URANIUM) != -1)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return TRUE;

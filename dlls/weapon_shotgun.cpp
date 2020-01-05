@@ -99,7 +99,7 @@ int CShotgun::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = MAX_CARRY_BUCKSHOT;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
-	p->iMaxClip = SHOTGUN_MAX_CLIP;
+	p->iMaxClip = MAX_CLIP_SHOTGUN;
 	p->iSlot = SLOT_SHOTGUN;
 	p->iPosition = POSITION_SHOTGUN;
 	p->iFlags = 0;
@@ -301,7 +301,7 @@ void CShotgun::SecondaryAttack( void )
 
 void CShotgun::Reload( void )
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == SHOTGUN_MAX_CLIP)
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == MAX_CLIP_SHOTGUN)
 		return;
 
 	// don't reload until recoil is done
@@ -423,7 +423,7 @@ class CShotgunAmmo : public CBasePlayerAmmo
 	}
 	BOOL AddAmmo( CBaseEntity *pOther ) 
 	{ 
-		if (pOther->GiveAmmo( AMMO_BUCKSHOTBOX_GIVE, "buckshot", BUCKSHOT_MAX_CARRY ) != -1)
+		if (pOther->GiveAmmo( AMMO_BUCKSHOTBOX_GIVE, "buckshot", MAX_CARRY_BUCKSHOT) != -1)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return TRUE;

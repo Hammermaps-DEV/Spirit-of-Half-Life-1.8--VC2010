@@ -103,10 +103,10 @@ int CHudSayText :: Draw( float flTime )
 		return 1;
 
 	// make sure the scrolltime is within reasonable bounds,  to guard against the clock being reset
-	flScrollTime = min( flScrollTime, flTime + m_HUD_saytext_time->value );
+	flScrollTime = Vmin( flScrollTime, flTime + m_HUD_saytext_time->value );
 
 	// make sure the scrolltime is within reasonable bounds,  to guard against the clock being reset
-	flScrollTime = min( flScrollTime, flTime + m_HUD_saytext_time->value );
+	flScrollTime = Vmin( flScrollTime, flTime + m_HUD_saytext_time->value );
 
 	if ( flScrollTime <= flTime )
 	{
@@ -132,8 +132,8 @@ int CHudSayText :: Draw( float flTime )
 				static char buf[MAX_PLAYER_NAME_LENGTH+32];
 
 				// draw the first x characters in the player color
-				strncpy( buf, g_szLineBuffer[i], min(g_iNameLengths[i], MAX_PLAYER_NAME_LENGTH+32) );
-				buf[ min(g_iNameLengths[i], MAX_PLAYER_NAME_LENGTH+31) ] = 0;
+				strncpy_s( buf, g_szLineBuffer[i], Vmin(g_iNameLengths[i], MAX_PLAYER_NAME_LENGTH+32) );
+				buf[ Vmin(g_iNameLengths[i], MAX_PLAYER_NAME_LENGTH+31) ] = 0;
 				gEngfuncs.pfnDrawSetTextColor( g_pflNameColors[i][0], g_pflNameColors[i][1], g_pflNameColors[i][2] );
 				int x = DrawConsoleString( LINE_START, y, buf );
 
@@ -208,7 +208,7 @@ void CHudSayText :: SayTextPrint( const char *pszBuf, int iBufSize, int clientIn
 		}
 	}
 
-	strncpy( g_szLineBuffer[i], pszBuf, max(iBufSize -1, MAX_CHARS_PER_LINE-1) );
+	strncpy_s( g_szLineBuffer[i], pszBuf, Vmax(iBufSize -1, MAX_CHARS_PER_LINE-1) );
 
 	// make sure the text fits in one line
 	EnsureTextFitsInOneLineAndWrapIfHaveTo( i );
@@ -301,14 +301,14 @@ void CHudSayText :: EnsureTextFitsInOneLineAndWrapIfHaveTo( int line )
 					int remaininglen = strlen(last_break);
 
 					if ( (linelen - remaininglen) <= MAX_CHARS_PER_LINE )
-						strcat( g_szLineBuffer[j], last_break );
+						strcat_s( g_szLineBuffer[j], last_break );
 				}
 				else
 				{
 					if ( (strlen(g_szLineBuffer[j]) - strlen(last_break) - 2) < MAX_CHARS_PER_LINE )
 					{
-						strcat( g_szLineBuffer[j], " " );
-						strcat( g_szLineBuffer[j], last_break );
+						strcat_s( g_szLineBuffer[j], " " );
+						strcat_s( g_szLineBuffer[j], last_break );
 					}
 				}
 

@@ -137,7 +137,7 @@ inline bool LoadProgram(CGprogram* pDest, CGprofile profile, const char* szFile)
 {
      const char* szGameDir = gEngfuncs.pfnGetGameDirectory();
      char file[512];
-     sprintf(file, "%s/%s", szGameDir, szFile);
+     sprintf_s(file, "%s/%s", szGameDir, szFile);
 
      *pDest = cgCreateProgramFromFile(g_cgContext, CG_SOURCE, file, profile, "main", 0);
      if (!(*pDest)) {

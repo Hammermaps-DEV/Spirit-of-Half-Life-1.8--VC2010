@@ -65,9 +65,9 @@ void CBreakable::KeyValue( KeyValueData* pkvd )
 	// UNDONE_WC: explicitly ignoring these fields, but they shouldn't be in the map file!
 	if (FStrEq(pkvd->szKeyName, "explosion"))
 	{
-		if (!stricmp(pkvd->szValue, "directed"))
+		if (!_stricmp(pkvd->szValue, "directed"))
 			m_Explosion = expDirected;
-		else if (!stricmp(pkvd->szValue, "random"))
+		else if (!_stricmp(pkvd->szValue, "random"))
 			m_Explosion = expRandom;
 		else
 			m_Explosion = expRandom;
@@ -631,7 +631,7 @@ pev->solid = SOLID_BSP;
 
 void CBreakable::RespawnFadeThink ( void )
 {
-	int newamt = min( pev->renderamt + 50, m_iInitialRenderAmt);
+	int newamt = Vmin( pev->renderamt + 50, m_iInitialRenderAmt);
 //	ALERT(at_debug, "FadeThink: %d changed to %d\n",pev->renderamt,newamt);
 	pev->renderamt = newamt;
 	if (pev->renderamt < m_iInitialRenderAmt)
@@ -773,7 +773,7 @@ void CBreakable::Die( void )
 	// The more negative pev->health, the louder
 	// the sound should be.
 
-	fvol = RANDOM_FLOAT(0.85, 1.0) + (abs(pev->health) / 100.0);
+	fvol = RANDOM_FLOAT(0.85, 1.0) + (Vfabs(pev->health) / 100.0);
 
 	if (fvol > 1.0)
 		fvol = 1.0;

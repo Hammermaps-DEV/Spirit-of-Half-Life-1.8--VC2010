@@ -206,10 +206,10 @@ char* GetVGUITGAName(const char *pszName)
 		i = 320;
 	else
 		i = 640;
-	sprintf(sz, pszName, i);
+	sprintf_s(sz, pszName, i);
 
 	gamedir = gEngfuncs.pfnGetGameDirectory();
-	sprintf(gd, "%s/gfx/vgui/%s.tga",gamedir,sz);
+	sprintf_s(gd, "%s/gfx/vgui/%s.tga",gamedir,sz);
 
 	return gd;
 }
@@ -740,7 +740,7 @@ try
 			}
 
 			// token should already be the bound key, or the custom name
-			strncpy( cCustom, token, 32 );
+			strncpy_s( cCustom, token, 32 );
 			cCustom[31] = '\0';
 
 			// See if it's a custom button
@@ -756,7 +756,7 @@ try
 			{
 				// Get the mapname
 				pfile = gEngfuncs.COM_ParseFile(pfile, token);
-				strncpy( szMap, token, MAX_MAPNAME );
+				strncpy_s( szMap, token, MAX_MAPNAME );
 				szMap[MAX_MAPNAME-1] = '\0';
 
 				// Get the next token
@@ -794,12 +794,12 @@ try
 			}
 
 			// Get the button bound key
-			strncpy( cBoundKey, token, 32 );
+			strncpy_s( cBoundKey, token, 32 );
 			cText[31] = '\0';
 
 			// Get the button text
 			pfile = gEngfuncs.COM_ParseFile(pfile, token);
-			strncpy( cText, token, 32 );
+			strncpy_s( cText, token, 32 );
 			cText[31] = '\0';
 
 			// save off the last button text we've come across (for error reporting)
@@ -807,7 +807,7 @@ try
 
 			// Get the button command
 			pfile = gEngfuncs.COM_ParseFile(pfile, token);
-			strncpy( cCommand, token, cCommandLength );
+			strncpy_s( cCommand, token, cCommandLength );
 			cCommand[cCommandLength - 1] = '\0';
 
 			iButtonY = (BUTTON_SIZE_Y-1) * m_pCurrentCommandMenu->GetNumButtons();
@@ -941,7 +941,7 @@ CCommandMenu *TeamFortressViewport::CreateDisguiseSubmenu( CommandButton *pButto
 		CommandButton *pDisguiseButton = new CommandButton( CHudTextMessage::BufferedLocaliseTextString( sLocalisedClasses[i] ), 0, BUTTON_SIZE_Y, CMENU_SIZE_X, BUTTON_SIZE_Y );
 		
 		char sz[256]; 
-		sprintf(sz, "%s %d", commandText, i );
+		sprintf_s(sz, "%s %d", commandText, i );
 		pDisguiseButton->addActionSignal(new CMenuHandler_StringCommand(sz));
 		
 		pMenu->AddButton( pDisguiseButton );
@@ -977,7 +977,7 @@ CommandButton *TeamFortressViewport::CreateCustomButton( char *pButtonText, char
 		for (int i = 0; i < 4; i++)
 		{
 			char sz[256]; 
-			sprintf(sz, "jointeam %d", i+1);
+			sprintf_s(sz, "jointeam %d", i+1);
 			m_pTeamButtons[i] = new TeamButton(i+1, "teamname", 0, BUTTON_SIZE_Y, CMENU_SIZE_X, BUTTON_SIZE_Y);
 			m_pTeamButtons[i]->addActionSignal(new CMenuHandler_StringCommandWatch( sz ));
 			pMenu->AddButton( m_pTeamButtons[i] ); 
@@ -1019,7 +1019,7 @@ CommandButton *TeamFortressViewport::CreateCustomButton( char *pButtonText, char
 			CHudTextMessage::LocaliseTextString( sLocalisedInventory[i], sz, 256 );
 			InventoryButton *pInventoryButton = new InventoryButton( i ,sz, 0, BUTTON_SIZE_Y, CMENU_SIZE_X, BUTTON_SIZE_Y, false);
 
-			sprintf(sz, "%s", sInventorySelection[i]);
+			sprintf_s(sz, "%s", sInventorySelection[i]);
 			pInventoryButton->addActionSignal(new CMenuHandler_StringCommand(sz));
 			pMenu->AddButton( pInventoryButton );
 		
@@ -1046,7 +1046,7 @@ CommandButton *TeamFortressViewport::CreateCustomButton( char *pButtonText, char
 			CHudTextMessage::LocaliseTextString( sLocalisedClasses[i], sz, 256 );
 			ClassButton *pClassButton = new ClassButton( i, sz, 0, BUTTON_SIZE_Y, CMENU_SIZE_X, BUTTON_SIZE_Y, false);
 
-			sprintf(sz, "%s", sTFClassSelection[i]);
+			sprintf_s(sz, "%s", sTFClassSelection[i]);
 			pClassButton->addActionSignal(new CMenuHandler_StringCommandClassSelect(sz));
 			pMenu->AddButton( pClassButton );
 		}
@@ -1134,7 +1134,7 @@ CommandButton *TeamFortressViewport::CreateCustomButton( char *pButtonText, char
 			m_pDisguiseButtons[i]->setParentMenu( pDisguiseMenu );
 
 			char sz[256]; 
-			sprintf( sz, "disguise %d", i );
+			sprintf_s( sz, "disguise %d", i );
 			CreateDisguiseSubmenu( m_pDisguiseButtons[i], pDisguiseMenu, sz, iYOffset, CMENU_SIZE_X - 1 );
 		}
 	}
@@ -1473,11 +1473,11 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 			gHUD.m_TextMessage.MsgFunc_TextMsg( NULL, strlen( tempString ) + 1, tempString );
 		}
 		
-		sprintf(bottomText,"#Spec_Mode%d", g_iUser1 );
-		sprintf(helpString2,"#Spec_Mode%d", g_iUser1 );
+		sprintf_s(bottomText,"#Spec_Mode%d", g_iUser1 );
+		sprintf_s(helpString2,"#Spec_Mode%d", g_iUser1 );
 
 		if ( gEngfuncs.IsSpectateOnly() )
-			strcat(helpString2, " - HLTV");
+			strcat_s(helpString2, " - HLTV");
 
 		// check if we're locked onto a target, show the player's name
 		if ( (g_iUser2 > 0) && (g_iUser2 <= gEngfuncs.GetMaxClients()) && (g_iUser1 != OBS_ROAMING) )
@@ -1517,7 +1517,7 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 		if ( gHUD.m_Spectator.m_autoDirector->value )
 		{
 			char tempString[128];
-			sprintf(tempString, "#Spec_Auto %s", helpString2);
+			sprintf_s(tempString, "#Spec_Auto %s", helpString2);
 			strcpy( helpString2, tempString );
 		}
 
@@ -1630,7 +1630,7 @@ CMenuPanel* TeamFortressViewport::CreateTextWindow( int iTextToShow )
 		if (!m_szServerName || !m_szServerName[0])
 			strcpy( cTitle, "Half-Life" );
 		else
-			strncpy( cTitle, m_szServerName, MAX_TITLE_LENGTH );
+			strncpy_s( cTitle, m_szServerName, MAX_TITLE_LENGTH );
 		cTitle[MAX_TITLE_LENGTH-1] = 0;
 		cText = m_szMOTD;
 	}
@@ -1640,8 +1640,8 @@ CMenuPanel* TeamFortressViewport::CreateTextWindow( int iTextToShow )
 		if (m_sMapName && m_sMapName[0])
 		{
 			strcpy( sz, "maps/");
-			strcat( sz, m_sMapName );
-			strcat( sz, ".txt" );
+			strcat_s( sz, m_sMapName );
+			strcat_s( sz, ".txt" );
 		}
 		else
 		{
@@ -1652,7 +1652,7 @@ CMenuPanel* TeamFortressViewport::CreateTextWindow( int iTextToShow )
 			strcpy( sz, level );
 			char *ch = strchr( sz, '.' );
 			*ch = '\0';
-			strcat( sz, ".txt" );
+			strcat_s( sz, ".txt" );
 
 			// pull out the map name
 			strcpy( m_sMapName, level );
@@ -1677,7 +1677,7 @@ CMenuPanel* TeamFortressViewport::CreateTextWindow( int iTextToShow )
 
 		cText = pfile;
 
-		strncpy( cTitle, m_sMapName, MAX_TITLE_LENGTH );
+		strncpy_s( cTitle, m_sMapName, MAX_TITLE_LENGTH );
 		cTitle[MAX_TITLE_LENGTH-1] = 0;
 	}
 	else if ( iTextToShow == SHOW_CLASSDESC )
@@ -1710,11 +1710,11 @@ CMenuPanel* TeamFortressViewport::CreateTextWindow( int iTextToShow )
 
 		if ( g_iPlayerClass == PC_CIVILIAN )
 		{
-			sprintf(sz, "classes/long_civilian.txt");
+			sprintf_s(sz, "classes/long_civilian.txt");
 		}
 		else
 		{
-			sprintf(sz, "classes/long_%s.txt", sTFClassSelection[ g_iPlayerClass ]);
+			sprintf_s(sz, "classes/long_%s.txt", sTFClassSelection[ g_iPlayerClass ]);
 		}
 		char *pfile = (char*)gEngfuncs.COM_LoadFile( sz, 5, NULL );
 		if (pfile)
@@ -2286,7 +2286,7 @@ int TeamFortressViewport::MsgFunc_VGUIMenu(const char *pszName, int iSize, void 
 	// Map briefing includes the name of the map (because it's sent down before the client knows what map it is)
 	if (iMenu == MENU_MAPBRIEFING)
 	{
-		strncpy( m_sMapName, READ_STRING(), sizeof(m_sMapName) );
+		strncpy_s( m_sMapName, READ_STRING(), sizeof(m_sMapName) );
 		m_sMapName[ sizeof(m_sMapName) - 1 ] = '\0';
 	}
 
@@ -2344,7 +2344,7 @@ int TeamFortressViewport::MsgFunc_ServerName( const char *pszName, int iSize, vo
 {
 	BEGIN_READ( pbuf, iSize );
 
-	strncpy( m_szServerName, READ_STRING(), MAX_SERVERNAME_LENGTH );
+	strncpy_s( m_szServerName, READ_STRING(), MAX_SERVERNAME_LENGTH );
 
 	return 1;
 }
@@ -2389,7 +2389,7 @@ int TeamFortressViewport::MsgFunc_TeamScore( const char *pszName, int iSize, voi
 	// find the team matching the name
 	for (  i = 1; i <= m_pScoreBoard->m_iNumTeams; i++ )
 	{
-		if ( !stricmp( TeamName, g_TeamInfo[i].name ) )
+		if ( !_stricmp( TeamName, g_TeamInfo[i].name ) )
 			break;
 	}
 
@@ -2419,7 +2419,7 @@ int TeamFortressViewport::MsgFunc_TeamInfo( const char *pszName, int iSize, void
 	if ( cl > 0 && cl <= MAX_PLAYERS )
 	{  
 		// set the players team
-		strncpy( g_PlayerExtraInfo[cl].teamname, READ_STRING(), MAX_TEAM_NAME );
+		strncpy_s( g_PlayerExtraInfo[cl].teamname, READ_STRING(), MAX_TEAM_NAME );
 	}
 
 	// rebuild the list of teams

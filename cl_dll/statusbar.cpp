@@ -141,7 +141,7 @@ void CHudStatusBar :: ParseStatusString( int line_num )
 							GetPlayerInfo( indexval, &g_PlayerInfoList[indexval] );
 							if ( g_PlayerInfoList[indexval].name != NULL )
 							{
-								strncpy( szRepString, g_PlayerInfoList[indexval].name, MAX_PLAYER_NAME_LENGTH );
+								strncpy_s( szRepString, g_PlayerInfoList[indexval].name, MAX_PLAYER_NAME_LENGTH );
 								m_pflNameColors[line_num] = GetClientColor( indexval );
 							}
 							else
@@ -151,7 +151,7 @@ void CHudStatusBar :: ParseStatusString( int line_num )
 
 							break;
 						case 'i':  // number
-							sprintf( szRepString, "%d", indexval );
+							sprintf_s( szRepString, "%d", indexval );
 							break;
 						default:
 							szRepString[0] = 0;
@@ -198,7 +198,7 @@ int CHudStatusBar :: Draw( float fTime )
 		// let user set status ID bar centering
 		if ( (i == STATUSBAR_ID_LINE) && CVAR_GET_FLOAT("hud_centerid") )
 		{
-			x = max( 0, max(2, (ScreenWidth - TextWidth)) / 2 );
+			x = Vmax( 0, Vmax(2, (ScreenWidth - TextWidth)) / 2 );
 			y = (ScreenHeight / 2) + (TextHeight*CVAR_GET_FLOAT("hud_centerid"));
 		}
 
@@ -232,8 +232,8 @@ int CHudStatusBar :: MsgFunc_StatusText( const char *pszName, int iSize, void *p
 	if ( line < 0 || line >= MAX_STATUSBAR_LINES )
 		return 1;
 
-	strncpy( m_szStatusText[line], READ_STRING(), MAX_STATUSTEXT_LENGTH );
-	m_szStatusText[line][MAX_STATUSTEXT_LENGTH-1] = 0;  // ensure it's null terminated ( strncpy() won't null terminate if read string too long)
+	strncpy_s( m_szStatusText[line], READ_STRING(), MAX_STATUSTEXT_LENGTH );
+	m_szStatusText[line][MAX_STATUSTEXT_LENGTH-1] = 0;  // ensure it's null terminated ( strncpy_s() won't null terminate if read string too long)
 
 	if ( m_szStatusText[0] == 0 )
 		m_iFlags &= ~HUD_ACTIVE;

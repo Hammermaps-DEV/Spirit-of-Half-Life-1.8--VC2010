@@ -1490,7 +1490,7 @@ Schedule_t *CBaseMonster :: GetSchedule ( void )
 
 			if ( HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE) )
 			{
-				if ( fabs( FlYawDiff() ) < (1.0 - m_flFieldOfView) * 60 ) // roughly in the correct direction
+				if ( Vfabs( FlYawDiff() ) < (1.0 - m_flFieldOfView) * 60 ) // roughly in the correct direction
 				{
 					return GetScheduleOfType( SCHED_TAKE_COVER_FROM_ORIGIN );
 				}

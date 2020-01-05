@@ -577,14 +577,14 @@ protected:
 public:
 	CMenuHandler_StringCommand( char *pszCommand )
 	{
-		strncpy( m_pszCommand, pszCommand, MAX_COMMAND_SIZE);
+		strncpy_s( m_pszCommand, pszCommand, MAX_COMMAND_SIZE);
 		m_pszCommand[MAX_COMMAND_SIZE-1] = '\0';
 		m_iCloseVGUIMenu = false;
 	}
 
 	CMenuHandler_StringCommand( char *pszCommand, int iClose )
 	{
-		strncpy( m_pszCommand, pszCommand, MAX_COMMAND_SIZE);
+		strncpy_s( m_pszCommand, pszCommand, MAX_COMMAND_SIZE);
 		m_pszCommand[MAX_COMMAND_SIZE-1] = '\0';
 		m_iCloseVGUIMenu = true;
 	}
@@ -1125,7 +1125,7 @@ private:
 public:
 	MapButton( const char *pMapName, const char* text,int x,int y,int wide,int tall ) : CommandButton( text,x,y,wide,tall)
 	{
-		sprintf( m_szMapName, "maps/%s.bsp", pMapName );
+		sprintf_s( m_szMapName, "maps/%s.bsp", pMapName );
 	}
 
 	/* sprintf example */
@@ -1135,7 +1135,7 @@ int main ()
 {
   char buffer [50];
   int n, a=5, b=3;
-  n=sprintf (buffer, "%d plus %d is %d", a, b, a+b);
+  n=sprintf_s(buffer, "%d plus %d is %d", a, b, a+b);
   printf ("[%s] is a %d char long string\n",buffer,n);
   return 0;
 }

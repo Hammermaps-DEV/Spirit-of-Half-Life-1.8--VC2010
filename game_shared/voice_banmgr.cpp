@@ -9,10 +9,10 @@
 #include <stdio.h>
 #include "voice_banmgr.h"
 
+#pragma warning(disable : 4996)
 
 #define BANMGR_FILEVERSION	1
 char const *g_pBanMgrFilename = "voice_ban.dt";
-
 
 
 // Hash a player ID to a byte.
@@ -39,13 +39,12 @@ CVoiceBanMgr::~CVoiceBanMgr()
 	Term();
 }
 
-
 bool CVoiceBanMgr::Init(char const *pGameDir)
 {
 	Term();
 
 	char filename[512];
-	_snprintf(filename, sizeof(filename), "%s/%s", pGameDir, g_pBanMgrFilename);
+	snprintf(filename, sizeof(filename), "%s/%s", pGameDir, g_pBanMgrFilename);
 
 	// Load in the squelch file.
 	FILE *fp = fopen(filename, "rb");
@@ -96,7 +95,7 @@ void CVoiceBanMgr::SaveState(char const *pGameDir)
 {
 	// Save the file out.
 	char filename[512];
-	_snprintf(filename, sizeof(filename), "%s/%s", pGameDir, g_pBanMgrFilename);
+	snprintf(filename, sizeof(filename), "%s/%s", pGameDir, g_pBanMgrFilename);
 
 	FILE *fp = fopen(filename, "wb");
 	if(fp)
