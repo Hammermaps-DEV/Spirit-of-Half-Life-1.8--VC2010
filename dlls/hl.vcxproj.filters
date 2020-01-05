@@ -345,6 +345,9 @@
     <ClCompile Include="CTriggerPlayerFreeze.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CRecruit.cpp">
+      <Filter>Source Files\monsters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="activity.h">
