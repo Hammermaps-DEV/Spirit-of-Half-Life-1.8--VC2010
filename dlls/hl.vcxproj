@@ -230,6 +230,7 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CTriggerPlayerFreeze.cpp" />
     <ClCompile Include="npc_aflock.cpp" />
     <ClCompile Include="npc_agrunt.cpp" />
     <ClCompile Include="AI_BaseNPC_Schedule.cpp" />
