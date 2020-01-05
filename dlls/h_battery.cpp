@@ -111,7 +111,7 @@ void CRecharge::Precache()
 void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 { 
 	// if it's not a player, ignore
-	if (!FClassnameIs(pActivator->pev, "player"))
+	if (!pActivator->IsPlayer())
 		return;
 
 	// if there is no juice left, turn it off
@@ -125,7 +125,7 @@ void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 	}
 
 	// if the player doesn't have the suit, or there is no juice left, make the deny noise
-	if ((m_iJuice <= 0) || (!(pActivator->pev->weapons & (1<<WEAPON_SUIT))))
+	if ((m_iJuice <= 0) || (!(pActivator->pev->weapons & (1<<WEAPON_SUIT))) || (pActivator->pev->armorvalue == 100))
 	{
 		if (m_flSoundTime <= gpGlobals->time)
 		{

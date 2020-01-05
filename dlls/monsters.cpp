@@ -2150,8 +2150,9 @@ void CBaseMonster :: StartMonster ( void )
 	// Spread think times so that they don't all happen at the same time (Carmack)
 	SetThink(&CBaseMonster :: CallMonsterThink );
 	AbsoluteNextThink( m_fNextThink + RANDOM_FLOAT(0.1, 0.4) ); // spread think times.
-	
-	if ( !FStringNull(pev->targetname) )// wait until triggered
+
+	// Vit_amiN: fixed -- now it doesn't touch any scripted_sequence target
+	if (!FStringNull(pev->targetname) && !m_pCine)// wait until triggered
 	{
 		SetState( MONSTERSTATE_IDLE );
 		// UNDONE: Some scripted sequence monsters don't have an idle?

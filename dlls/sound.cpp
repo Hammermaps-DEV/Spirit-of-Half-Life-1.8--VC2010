@@ -1343,7 +1343,7 @@ int USENTENCEG_Pick(int isentenceg, char *szfound)
 		{
 			strcpy(szfound, "!");
 			strcat(szfound, szgroupname);
-			sprintf_s(sznum, "%d", ipick);
+			sprintf(sznum, "%d", ipick);
 			strcat(szfound, sznum);
 			return ipick;
 		}
@@ -1523,9 +1523,9 @@ void SENTENCEG_Init()
 		if (!buffer[j])
 			continue;
 
-		if (gcallsentences > CVOXFILESENTENCEMAX)
+		if (gcallsentences >= CVOXFILESENTENCEMAX)
 		{
-			ALERT (at_error, "Too many sentences in sentences.txt!\n");
+			ALERT(at_error, "Too many sentences in sentences.txt! >%d\n", gcallsentences);
 			break;
 		}
 
