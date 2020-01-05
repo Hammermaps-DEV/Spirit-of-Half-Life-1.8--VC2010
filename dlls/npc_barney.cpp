@@ -539,7 +539,7 @@ void CBarney :: TalkInit()
 	m_szFriends[0] = "monster_barney";
 	m_szFriends[1] = "monster_scientist";
 	m_szFriends[2] = "monster_sitting_scientist";
-	m_szFriends[3] = "monster_otis";
+	//m_szFriends[3] = "monster_otis";
 
 	if (!m_iszSpeakAs)
 	{

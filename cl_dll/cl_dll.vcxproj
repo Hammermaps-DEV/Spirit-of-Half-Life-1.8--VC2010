@@ -63,7 +63,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <DebugInformationFormat>None</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\dlls;..\common;..\common\cg\cg.lib;..\common\cg\cgGL.lib;..\pm_shared;..\engine;..\utils\vgui\include;..\game_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\dlls;..\common;..\pm_shared;..\engine;..\utils\vgui\include;..\game_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;CLIENT_DLL;CLIENT_WEAPONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
       <BrowseInformation>true</BrowseInformation>
@@ -94,7 +94,7 @@
       <SubSystem>Windows</SubSystem>
       <OutputFile>.\Debug\client.dll</OutputFile>
       <ImportLibrary>.\Debug\client.lib</ImportLibrary>
-      <AdditionalDependencies>../common/cg/cg.lib;../common/cg/cgGL.lib;odbc32.lib;odbccp32.lib;winmm.lib;../utils/vgui/lib/win32_vc6/vgui.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;winmm.lib;../utils/vgui/lib/win32_vc6/vgui.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -141,12 +141,13 @@
       <SubSystem>Windows</SubSystem>
       <OutputFile>.\Release\client.dll</OutputFile>
       <ImportLibrary>.\Release\client.lib</ImportLibrary>
-      <AdditionalDependencies>winmm.lib;../utils/vgui/lib/win32_vc6/vgui.lib;wsock32.lib;opengl32.lib;../common/cg/cg.lib;../common/cg/cgGL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;../utils/vgui/lib/win32_vc6/vgui.lib;wsock32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
-      <Command>copy $(TargetDir)client.dll "F:\Steam\steamapps\hammermaps771\half-life\Spirit18\cl_dlls\client1.5a4.dll"  
-copy $(TargetDir)client.dll "F:\Steam\steamapps\hammermaps771\half-life\Spirit18\cl_dlls\client.dll"</Command>
-      <Outputs>F:\Steam\steamapps\hammermaps771\half-life\Spirit18\cl_dlls\client1.5a4.dll;F:\Steam\steamapps\hammermaps771\half-life\Spirit18\cl_dlls\client.dll;%(Outputs)</Outputs>
+      <Command>
+      </Command>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -190,7 +191,6 @@ copy $(TargetDir)client.dll "F:\Steam\steamapps\hammermaps771\half-life\Spirit18
     <ClCompile Include="flashlight.cpp" />
     <ClCompile Include="GameStudioModelRenderer.cpp" />
     <ClCompile Include="geiger.cpp" />
-    <ClCompile Include="glow.cpp" />
     <ClCompile Include="health.cpp" />
     <ClCompile Include="hud.cpp" />
     <ClCompile Include="hud_msg.cpp" />

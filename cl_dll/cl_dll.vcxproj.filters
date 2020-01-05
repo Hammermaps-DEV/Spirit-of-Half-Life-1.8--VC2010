@@ -97,9 +97,6 @@
     <ClCompile Include="geiger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="glow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="health.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

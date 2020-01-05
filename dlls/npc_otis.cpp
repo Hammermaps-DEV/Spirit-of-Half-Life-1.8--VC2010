@@ -23,7 +23,6 @@
 #include	"talkmonster.h"
 #include	"schedule.h"
 #include	"defaultai.h"
-#include	"scripted.h"
 #include	"weapons.h"
 #include	"soundent.h"
 
@@ -118,7 +117,7 @@ class COtis : public CTalkMonster
 // monster-specific schedule types
 //=========================================================
 
-LINK_ENTITY_TO_CLASS( monster_barney, COtis );
+//LINK_ENTITY_TO_CLASS( monster_barney, COtis );
 
 TYPEDESCRIPTION	COtis::m_SaveData[] = 
 {
@@ -582,7 +581,7 @@ void COtis :: TalkInit()
 	m_szFriends[0] = "monster_barney";
 	m_szFriends[1] = "monster_scientist";
 	m_szFriends[2] = "monster_sitting_scientist";
-	m_szFriends[3] = "monster_otis";
+	//m_szFriends[3] = "monster_otis";
 
 	if (!m_iszSpeakAs)
 	{
@@ -977,7 +976,7 @@ void CDeadOtis::KeyValue( KeyValueData *pkvd )
 		CBaseMonster::KeyValue( pkvd );
 }
 
-LINK_ENTITY_TO_CLASS( monster_otis_dead, CDeadOtis );
+//LINK_ENTITY_TO_CLASS( monster_otis_dead, CDeadOtis );
 
 //=========================================================
 // ********** DeadBarney SPAWN **********

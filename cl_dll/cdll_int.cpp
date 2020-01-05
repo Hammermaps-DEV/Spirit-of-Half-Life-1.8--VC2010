@@ -54,11 +54,6 @@ void IN_Commands( void );
 Called when the DLL is first loaded.
 ==========================
 */
-
-// SCREEN GLOW FragBait0
-extern void InitScreenGlow(); // FragBait0 - Glow Effect
-extern void RenderScreenGlow(); // FragBait0 - Glow Effect
-
 extern "C"
 {
 int		DLLEXPORT Initialize( cl_enginefunc_t *pEnginefuncs, int iVersion );
@@ -178,8 +173,6 @@ int DLLEXPORT HUD_VidInit( void )
 
 	VGui_Startup();
 
-	if (CVAR_GET_FLOAT("r_glow") != 0)	 //check the cvar for the glow is on.//AJH Modified to include glow mode (1&2)
-	InitScreenGlow(); // glow effect --FragBait0
 	return 1;
 }
 
@@ -212,9 +205,6 @@ redraw the HUD.
 
 int DLLEXPORT HUD_Redraw( float time, int intermission )
 {
-	if (CVAR_GET_FLOAT("r_glow") != 0)	 //check the cvar for the glow is on.//AJH Modified to include glow mode (1&2)
-		RenderScreenGlow(); // glow effect --FragBait0
-
 	gHUD.Redraw( time, intermission );
 
 	return 1;

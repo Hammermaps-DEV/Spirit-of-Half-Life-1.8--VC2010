@@ -1,3 +1,6 @@
 .vs/*
 cl_dll/debug/*
 dlls/debughl/*
+cl_dll/Release/*
+dlls/Releasehl/*
+dlls/Debug/*
