@@ -90,7 +90,7 @@ public:
 	CUSTOM_SCHEDULES;
 };
 
-//LINK_ENTITY_TO_CLASS( monster_barney, CBarney );
+LINK_ENTITY_TO_CLASS( monster_barney, CBarney );
 
 TYPEDESCRIPTION	CBarney::m_SaveData[] = 
 {

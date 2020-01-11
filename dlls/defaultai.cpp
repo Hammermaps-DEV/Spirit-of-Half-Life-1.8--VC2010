@@ -1039,6 +1039,7 @@ Schedule_t *CBaseMonster::m_scheduleList[] =
 	slRunToScript,
 	slWaitScript,
 	slFaceScript,
+	slTeleportToScript,
 	slCower,
 	slTakeCoverFromOrigin,
 	slTakeCoverFromBestSound,
