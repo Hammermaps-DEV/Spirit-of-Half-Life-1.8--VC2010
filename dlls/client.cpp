@@ -1633,9 +1633,6 @@ int GetWeaponData( struct edict_s *player, struct weapon_data_s *info )
 						item->iuser1					= gun->m_chargeReady;
 						item->iuser2					= gun->m_fInAttack;
 						item->iuser3					= gun->m_fireState;
-
-
-//						item->m_flPumpTime				= Vmax( gun->m_flPumpTime, -0.001 );
 					}
 				}
 				pPlayerItem = pPlayerItem->m_pNext;

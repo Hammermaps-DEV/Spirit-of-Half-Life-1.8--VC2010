@@ -994,13 +994,6 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 		to->client.vuser4[1]				= player.m_rgAmmo[ pCurrent->m_iPrimaryAmmoType ];
 		to->client.vuser4[2]				= player.m_rgAmmo[ pCurrent->m_iSecondaryAmmoType ];
 
-/*		if ( pto->m_flPumpTime != -9999 )
-		{
-			pto->m_flPumpTime -= cmd->msec / 1000.0;
-			if ( pto->m_flPumpTime < -0.001 )
-				pto->m_flPumpTime = -0.001;
-		}*/
-
 		if ( pto->m_fNextAimBonus < -1.0 )
 		{
 			pto->m_fNextAimBonus = -1.0;

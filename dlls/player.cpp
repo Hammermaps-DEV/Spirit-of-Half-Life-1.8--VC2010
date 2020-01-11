@@ -2872,13 +2872,6 @@ pt_end:
 					{
 						gun->pev->fuser1	= Vmax( gun->pev->fuser1 - gpGlobals->frametime, -0.001 );
 					}
-
-					// Only decrement if not flagged as NO_DECREMENT
-//					if ( gun->m_flPumpTime != 1000 )
-				//	{
-				//		gun->m_flPumpTime	= Vmax( gun->m_flPumpTime - gpGlobals->frametime, -0.001 );
-				//	}
-
 				}
 
 				pPlayerItem = pPlayerItem->m_pNext;
