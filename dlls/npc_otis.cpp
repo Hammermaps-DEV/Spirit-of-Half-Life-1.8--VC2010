@@ -26,6 +26,7 @@
 #include	"weapons.h"
 #include	"soundent.h"
 
+/*
 extern DLL_GLOBAL int g_iSkillLevel;
 
 //=========================================================
@@ -298,16 +299,6 @@ IMPLEMENT_CUSTOM_SCHEDULES( COtis, CTalkMonster );
 
 void COtis :: StartTask( Task_t *pTask )
 {
-	m_iTaskStatus = TASKSTATUS_RUNNING;
-
-	/*
-	switch ( pTask->iTask )
-	{
-		default: 
-			CTalkMonster::StartTask( pTask );
-	}
-	*/
-
 	CTalkMonster::StartTask(pTask);
 }
 
@@ -1001,3 +992,4 @@ void CDeadOtis :: Spawn( )
 
 	MonsterInitDead();
 }
+*/

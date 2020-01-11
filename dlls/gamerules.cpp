@@ -147,7 +147,7 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.barneyHealth = GetSkillCvar( "sk_barney_health");
 
 	// Otis
-	gSkillData.otisHealth = GetSkillCvar( "sk_otis_health");
+	//gSkillData.otisHealth = GetSkillCvar( "sk_otis_health");
 
 	// Big Momma
 	gSkillData.bigmommaHealthFactor = GetSkillCvar( "sk_bigmomma_health_factor" );
