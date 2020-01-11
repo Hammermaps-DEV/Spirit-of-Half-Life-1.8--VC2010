@@ -23,11 +23,11 @@
 #include "rain.h"
 
 //LRC - the fogging fog
-FogSettings g_fog;
-FogSettings g_fogPreFade;
-FogSettings g_fogPostFade;
-float g_fFogFadeDuration;
-float g_fFogFadeFraction;
+vec3_t FogColor;
+float g_fStartDist;
+float g_fEndDist;
+int g_iFinalEndDist;   //for fading
+float g_fFadeDuration; //negative = fading out
 
 #define MAX_CLIENTS 32
 
@@ -59,11 +59,10 @@ int CHud :: MsgFunc_ResetHUD(const char *pszName, int iSize, void *pbuf )
 	// reset concussion effect
 	m_iConcussionEffect = 0;
 
-/*	//LRC - reset fog
+	//LRC - reset fog
 	g_fStartDist = 0;
 	g_fEndDist = 0;
-	numMirrors = 0;
-*/
+	
 	//Lensflare
 	m_Lensflare.SunEnabled = FALSE;
 
@@ -79,13 +78,12 @@ void CHud :: MsgFunc_ViewMode( const char *pszName, int iSize, void *pbuf )
 
 void CHud :: MsgFunc_InitHUD( const char *pszName, int iSize, void *pbuf )
 {
-//	CONPRINT("MSG:InitHUD");
+	//	CONPRINT("MSG:InitHUD");
 	//LRC - clear the fog
-	g_fog.startDist = -1;
-	g_fog.endDist = -1;
-	g_fog.fogColor[0] = -1;
-	g_fog.fogColor[1] = -1;
-	g_fog.fogColor[2] = -1;
+	g_fStartDist = 0;
+	g_fEndDist = 0;
+	
+	
 	//LRC 1.8 - clear view clamps
 	g_clampMinPitch = -90;
 	g_clampMaxPitch = 90;
@@ -106,6 +104,7 @@ void CHud :: MsgFunc_InitHUD( const char *pszName, int iSize, void *pbuf )
 	{
 		if ( pList->p )
 			pList->p->InitHUDData();
+		
 		pList = pList->pNext;
 	}
 
@@ -113,51 +112,32 @@ void CHud :: MsgFunc_InitHUD( const char *pszName, int iSize, void *pbuf )
 	pBeam = pBeam2 = NULL;
 }
 
-//LRC
-void CHud :: MsgFunc_SetFog( const char *pszName, int iSize, void *pbuf )
+int CHud::MsgFunc_SetFog(const char *pszName, int iSize, void *pbuf)
 {
-//	CONPRINT("MSG:SetFog");
-	BEGIN_READ( pbuf, iSize );
+	BEGIN_READ(pbuf, iSize);
+	FogColor.x = TransformColor(READ_BYTE());
+	FogColor.y = TransformColor(READ_BYTE());
+	FogColor.z = TransformColor(READ_BYTE());
 
-	for ( int i = 0; i < 3; i++ )
+	//CONPRINT("fog color %f, %f, %f\n", FogColor.x, FogColor.y, FogColor.z );
+	g_fFadeDuration = READ_SHORT();
+	g_fStartDist = READ_SHORT();
+
+	if (g_fFadeDuration > 0)
 	{
-		g_fogPostFade.fogColor[i] = READ_BYTE();
-
-		if ( g_fog.fogColor[i] >= 0 )
-			g_fogPreFade.fogColor[i] = g_fog.fogColor[i];
-		else
-			g_fogPreFade.fogColor[i] = g_fogPostFade.fogColor[i];
+		g_iFinalEndDist = READ_SHORT();
+		g_fEndDist = FOG_LIMIT;
 	}
-
-	g_fFogFadeDuration = READ_SHORT();
-
-	g_fogPostFade.startDist = READ_SHORT();
-	if ( g_fog.startDist >= 0 )
-		g_fogPreFade.startDist = g_fog.startDist;
+	else if (g_fFadeDuration < 0)
+	{
+		g_iFinalEndDist = g_fEndDist = READ_SHORT();
+	}
 	else
-		g_fogPreFade.startDist = g_fogPostFade.startDist;
-
-	g_fogPostFade.endDist = READ_SHORT();
-	if ( g_fog.endDist >= 0 )
-		g_fogPreFade.endDist = g_fog.endDist;
-	else
-		g_fogPreFade.endDist = g_fogPostFade.endDist;
-
-	if ( g_fFogFadeDuration < 0 )
 	{
-		g_fFogFadeDuration *= -1;
-		g_fogPostFade.startDist = FOG_LIMIT;
-		g_fogPostFade.endDist = FOG_LIMIT;
+		g_fEndDist = READ_SHORT();
 	}
-	else if ( g_fFogFadeDuration == 0 )
-	{
-		g_fog.endDist = g_fogPostFade.endDist;
-		for ( int i = 0; i < 3; i++ )
-		{
-			g_fogPreFade.fogColor[i] = g_fog.fogColor[i];
-		}
-	}
-	g_fFogFadeFraction = 0;
+
+	return 1;
 }
 
 //LRC
