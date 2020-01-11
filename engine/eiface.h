@@ -430,7 +430,7 @@ typedef struct
 #define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
 #endif
 
-typedef struct
+struct DLL_FUNCTIONS
 {
 	// Initialize/shutdown the game (one-time call after loading of game .dll )
 	void (*pfnGameInit)(void);
@@ -520,9 +520,9 @@ typedef struct
 	// Most games right now should return 0, until client-side weapon prediction code is written
 	//  and tested for them.
 	int (*pfnAllowLagCompensation)(void);
-} DLL_FUNCTIONS;
+};
 
-extern DLL_FUNCTIONS gEntityInterface;
+extern DLL_FUNCTIONS gFunctionTable;
 
 // Current version.
 #define NEW_DLL_FUNCTIONS_VERSION	1
