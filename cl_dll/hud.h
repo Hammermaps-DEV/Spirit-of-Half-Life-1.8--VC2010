@@ -48,7 +48,7 @@ enum
 };
 
 typedef struct {
-	unsigned char r,g,b,a;
+	unsigned char r, g, b, a;
 } RGBA;
 
 typedef struct cvar_s cvar_t;
@@ -71,12 +71,12 @@ public:
 	int   m_type;
 	int	  m_iFlags; // active, moving,
 	virtual		~CHudBase() {}
-	virtual int Init( void ) {return 0;}
-	virtual int VidInit( void ) {return 0;}
-	virtual int Draw(float flTime) {return 0;}
-	virtual void Think(void) {return;}
-	virtual void Reset(void) {return;}
-	virtual void InitHUDData( void ) {}		// called every time a server is connected to
+	virtual int Init(void) { return 0; }
+	virtual int VidInit(void) { return 0; }
+	virtual int Draw(float flTime) { return 0; }
+	virtual void Think(void) { return; }
+	virtual void Reset(void) { return; }
+	virtual void InitHUDData(void) {}		// called every time a server is connected to
 
 };
 
@@ -97,11 +97,11 @@ struct HUDLIST {
 //
 //-----------------------------------------------------
 //
-class CHudAmmo: public CHudBase
+class CHudAmmo : public CHudBase
 {
 public:
-	int Init( void );
-	int VidInit( void );
+	int Init(void);
+	int VidInit(void);
 	int Draw(float flTime);
 	void Think(void);
 	void Reset(void);
@@ -109,25 +109,25 @@ public:
 	int MsgFunc_CurWeapon(const char *pszName, int iSize, void *pbuf);
 	int MsgFunc_WeaponList(const char *pszName, int iSize, void *pbuf);
 	int MsgFunc_AmmoX(const char *pszName, int iSize, void *pbuf);
-	int MsgFunc_AmmoPickup( const char *pszName, int iSize, void *pbuf );
-	int MsgFunc_WeapPickup( const char *pszName, int iSize, void *pbuf );
-	int MsgFunc_ItemPickup( const char *pszName, int iSize, void *pbuf );
-	int MsgFunc_HideWeapon( const char *pszName, int iSize, void *pbuf );
+	int MsgFunc_AmmoPickup(const char *pszName, int iSize, void *pbuf);
+	int MsgFunc_WeapPickup(const char *pszName, int iSize, void *pbuf);
+	int MsgFunc_ItemPickup(const char *pszName, int iSize, void *pbuf);
+	int MsgFunc_HideWeapon(const char *pszName, int iSize, void *pbuf);
 
-	void SlotInput( int iSlot );
-	void _cdecl UserCmd_Slot1( void );
-	void _cdecl UserCmd_Slot2( void );
-	void _cdecl UserCmd_Slot3( void );
-	void _cdecl UserCmd_Slot4( void );
-	void _cdecl UserCmd_Slot5( void );
-	void _cdecl UserCmd_Slot6( void );
-	void _cdecl UserCmd_Slot7( void );
-	void _cdecl UserCmd_Slot8( void );
-	void _cdecl UserCmd_Slot9( void );
-	void _cdecl UserCmd_Slot10( void );
-	void _cdecl UserCmd_Close( void );
-	void _cdecl UserCmd_NextWeapon( void );
-	void _cdecl UserCmd_PrevWeapon( void );
+	void SlotInput(int iSlot);
+	void _cdecl UserCmd_Slot1(void);
+	void _cdecl UserCmd_Slot2(void);
+	void _cdecl UserCmd_Slot3(void);
+	void _cdecl UserCmd_Slot4(void);
+	void _cdecl UserCmd_Slot5(void);
+	void _cdecl UserCmd_Slot6(void);
+	void _cdecl UserCmd_Slot7(void);
+	void _cdecl UserCmd_Slot8(void);
+	void _cdecl UserCmd_Slot9(void);
+	void _cdecl UserCmd_Slot10(void);
+	void _cdecl UserCmd_Close(void);
+	void _cdecl UserCmd_NextWeapon(void);
+	void _cdecl UserCmd_PrevWeapon(void);
 
 private:
 	float m_fFade;
@@ -142,16 +142,16 @@ private:
 //-----------------------------------------------------
 //
 
-class CHudAmmoSecondary: public CHudBase
+class CHudAmmoSecondary : public CHudBase
 {
 public:
-	int Init( void );
-	int VidInit( void );
-	void Reset( void );
+	int Init(void);
+	int VidInit(void);
+	void Reset(void);
 	int Draw(float flTime);
 
-	int MsgFunc_SecAmmoVal( const char *pszName, int iSize, void *pbuf );
-	int MsgFunc_SecAmmoIcon( const char *pszName, int iSize, void *pbuf );
+	int MsgFunc_SecAmmoVal(const char *pszName, int iSize, void *pbuf);
+	int MsgFunc_SecAmmoIcon(const char *pszName, int iSize, void *pbuf);
 
 private:
 	enum {
@@ -173,11 +173,11 @@ private:
 //
 //-----------------------------------------------------
 //
-class CHudGeiger: public CHudBase
+class CHudGeiger : public CHudBase
 {
 public:
-	int Init( void );
-	int VidInit( void );
+	int Init(void);
+	int VidInit(void);
 	int Draw(float flTime);
 	int MsgFunc_Geiger(const char *pszName, int iSize, void *pbuf);
 
@@ -189,59 +189,59 @@ private:
 //
 //-----------------------------------------------------
 //
-class CHudLensflare: public CHudBase
+class CHudLensflare : public CHudBase
 {
-	public:
-		int Init( void );
-		int VidInit( void );
-		int Draw(float flTime);
-		int MsgFunc_Lensflare(const char *pszName, int iSize, void *pbuf);
-    
-		int SunEnabled;
-    
-	private:
-		int Sunanglex;
-		int Sunangley;
-    
-		int Sunadd[5];
-    
-		float flPlayerBlend;
-		float flPlayerBlend2;
-		float flPlayerBlend3;
-		float flPlayerBlend4;
-		float flPlayerBlend5;
-		float flPlayerBlend6;
-    
-		float Screenmx;
-		float Screenmy;
-    
-		float multi[10];
-    
-		int scale[10];
-    
-		int red[10];
-		int green[10];
-		int blue[10];
-    
-		char text[10];
-		float Lensx[10];
-		float Lensy[10];
-    
-		float Suncoordx;
-		float Suncoordy;
-    
-		float Sundistx;
-		float Sundisty;
+public:
+	int Init(void);
+	int VidInit(void);
+	int Draw(float flTime);
+	int MsgFunc_Lensflare(const char *pszName, int iSize, void *pbuf);
+
+	int SunEnabled;
+
+private:
+	int Sunanglex;
+	int Sunangley;
+
+	int Sunadd[5];
+
+	float flPlayerBlend;
+	float flPlayerBlend2;
+	float flPlayerBlend3;
+	float flPlayerBlend4;
+	float flPlayerBlend5;
+	float flPlayerBlend6;
+
+	float Screenmx;
+	float Screenmy;
+
+	float multi[10];
+
+	int scale[10];
+
+	int red[10];
+	int green[10];
+	int blue[10];
+
+	char text[10];
+	float Lensx[10];
+	float Lensy[10];
+
+	float Suncoordx;
+	float Suncoordy;
+
+	float Sundistx;
+	float Sundisty;
 };
 
 //
 //-----------------------------------------------------
 //
-class CHudTrain: public CHudBase
+class CHudTrain : public CHudBase
 {
 public:
-	int Init( void );
-	int VidInit( void );
+	int Init(void);
+	int VidInit(void);
 	int Draw(float flTime);
 	int MsgFunc_Train(const char *pszName, int iSize, void *pbuf);
 
@@ -281,14 +281,14 @@ protected:
 class CHudStatusBar : public CHudBase
 {
 public:
-	int Init( void );
-	int VidInit( void );
-	int Draw( float flTime );
-	void Reset( void );
-	void ParseStatusString( int line_num );
+	int Init(void);
+	int VidInit(void);
+	int Draw(float flTime);
+	void Reset(void);
+	void ParseStatusString(int line_num);
 
-	int MsgFunc_StatusText( const char *pszName, int iSize, void *pbuf );
-	int MsgFunc_StatusValue( const char *pszName, int iSize, void *pbuf );
+	int MsgFunc_StatusText(const char *pszName, int iSize, void *pbuf);
+	int MsgFunc_StatusValue(const char *pszName, int iSize, void *pbuf);
 
 protected:
 	enum {
@@ -330,10 +330,10 @@ struct team_info_t
 	int teamnumber;
 };
 
-extern hud_player_info_t	g_PlayerInfoList[MAX_PLAYERS+1];	   // player info from the engine
-extern extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS+1];   // additional player info sent directly to the client dll
-extern team_info_t			g_TeamInfo[MAX_TEAMS+1];
-extern int					g_IsSpectator[MAX_PLAYERS+1];
+extern hud_player_info_t	g_PlayerInfoList[MAX_PLAYERS + 1];	   // player info from the engine
+extern extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS + 1];   // additional player info sent directly to the client dll
+extern team_info_t			g_TeamInfo[MAX_TEAMS + 1];
+extern int					g_IsSpectator[MAX_PLAYERS + 1];
 
 
 //
@@ -342,11 +342,11 @@ extern int					g_IsSpectator[MAX_PLAYERS+1];
 class CHudDeathNotice : public CHudBase
 {
 public:
-	int Init( void );
-	void InitHUDData( void );
-	int VidInit( void );
-	int Draw( float flTime );
-	int MsgFunc_DeathMsg( const char *pszName, int iSize, void *pbuf );
+	int Init(void);
+	void InitHUDData(void);
+	int VidInit(void);
+	int Draw(float flTime);
+	int MsgFunc_DeathMsg(const char *pszName, int iSize, void *pbuf);
 
 private:
 	int m_HUD_d_skull;  // sprite index of skull icon
@@ -358,14 +358,14 @@ private:
 class CHudMenu : public CHudBase
 {
 public:
-	int Init( void );
-	void InitHUDData( void );
-	int VidInit( void );
-	void Reset( void );
-	int Draw( float flTime );
-	int MsgFunc_ShowMenu( const char *pszName, int iSize, void *pbuf );
+	int Init(void);
+	void InitHUDData(void);
+	int VidInit(void);
+	void Reset(void);
+	int Draw(float flTime);
+	int MsgFunc_ShowMenu(const char *pszName, int iSize, void *pbuf);
 
-	void SelectMenuItem( int menu_item );
+	void SelectMenuItem(int menu_item);
 
 	int m_fMenuDisplayed;
 	int m_bitsValidSlots;
@@ -379,14 +379,14 @@ public:
 class CHudSayText : public CHudBase
 {
 public:
-	int Init( void );
-	void InitHUDData( void );
-	int VidInit( void );
-	int Draw( float flTime );
-	int MsgFunc_SayText( const char *pszName, int iSize, void *pbuf );
-	void SayTextPrint( const char *pszBuf, int iBufSize, int clientIndex = -1 );
-	void EnsureTextFitsInOneLineAndWrapIfHaveTo( int line );
-friend class CHudSpectator;
+	int Init(void);
+	void InitHUDData(void);
+	int VidInit(void);
+	int Draw(float flTime);
+	int MsgFunc_SayText(const char *pszName, int iSize, void *pbuf);
+	void SayTextPrint(const char *pszBuf, int iBufSize, int clientIndex = -1);
+	void EnsureTextFitsInOneLineAndWrapIfHaveTo(int line);
+	friend class CHudSpectator;
 
 private:
 
@@ -397,13 +397,13 @@ private:
 //
 //-----------------------------------------------------
 //
-class CHudBattery: public CHudBase
+class CHudBattery : public CHudBase
 {
 public:
-	int Init( void );
-	int VidInit( void );
+	int Init(void);
+	int VidInit(void);
 	int Draw(float flTime);
-	int MsgFunc_Battery(const char *pszName,  int iSize, void *pbuf );
+	int MsgFunc_Battery(const char *pszName, int iSize, void *pbuf);
 
 private:
 	HL_HSPRITE m_hSprite1;
@@ -419,15 +419,15 @@ private:
 //
 //-----------------------------------------------------
 //
-class CHudFlashlight: public CHudBase
+class CHudFlashlight : public CHudBase
 {
 public:
-	int Init( void );
-	int VidInit( void );
+	int Init(void);
+	int VidInit(void);
 	int Draw(float flTime);
-	void Reset( void );
-	int MsgFunc_Flashlight(const char *pszName,  int iSize, void *pbuf );
-	int MsgFunc_FlashBat(const char *pszName,  int iSize, void *pbuf );
+	void Reset(void);
+	int MsgFunc_Flashlight(const char *pszName, int iSize, void *pbuf);
+	int MsgFunc_FlashBat(const char *pszName, int iSize, void *pbuf);
 
 private:
 	HL_HSPRITE m_hSprite1;
@@ -447,13 +447,13 @@ private:
 //-----------------------------------------------------
 //
 // (LRC) -- 30/08/02 November235: Particles to Order
-class CHudParticle: public CHudBase
+class CHudParticle : public CHudBase
 {
 public:
 	int Init(void);
 	int VidInit(void);
 	int Draw(float flTime);
-	int MsgFunc_Particle(const char *pszName, int iSize, void *pbuf );
+	int MsgFunc_Particle(const char *pszName, int iSize, void *pbuf);
 };
 
 //
@@ -481,13 +481,13 @@ struct message_parms_t
 //-----------------------------------------------------
 //
 
-class CHudTextMessage: public CHudBase
+class CHudTextMessage : public CHudBase
 {
 public:
-	int Init( void );
-	static char *LocaliseTextString( const char *msg, char *dst_buffer, int buffer_size );
-	static char *BufferedLocaliseTextString( const char *msg );
-	char *LookupString( const char *msg_name, int *msg_dest = NULL );
+	int Init(void);
+	static char *LocaliseTextString(const char *msg, char *dst_buffer, int buffer_size);
+	static char *BufferedLocaliseTextString(const char *msg);
+	char *LookupString(const char *msg_name, int *msg_dest = NULL);
 	int MsgFunc_TextMsg(const char *pszName, int iSize, void *pbuf);
 };
 
@@ -495,25 +495,25 @@ public:
 //-----------------------------------------------------
 //
 
-class CHudMessage: public CHudBase
+class CHudMessage : public CHudBase
 {
 public:
-	int Init( void );
-	int VidInit( void );
+	int Init(void);
+	int VidInit(void);
 	int Draw(float flTime);
 	int MsgFunc_HudText(const char *pszName, int iSize, void *pbuf);
 	int MsgFunc_GameTitle(const char *pszName, int iSize, void *pbuf);
 
-	float FadeBlend( float fadein, float fadeout, float hold, float localTime );
-	int	XPosition( float x, int width, int lineWidth );
-	int YPosition( float y, int height );
+	float FadeBlend(float fadein, float fadeout, float hold, float localTime);
+	int	XPosition(float x, int width, int lineWidth);
+	int YPosition(float y, int height);
 
-	void MessageAdd( const char *pName, float time );
-	void MessageAdd(client_textmessage_t * newMessage );
-	void MessageDrawScan( client_textmessage_t *pMessage, float time );
-	void MessageScanStart( void );
-	void MessageScanNextChar( void );
-	void Reset( void );
+	void MessageAdd(const char *pName, float time);
+	void MessageAdd(client_textmessage_t * newMessage);
+	void MessageDrawScan(client_textmessage_t *pMessage, float time);
+	void MessageScanStart(void);
+	void MessageScanNextChar(void);
+	void Reset(void);
 
 private:
 	client_textmessage_t		*m_pMessages[maxHUDMessages];
@@ -531,12 +531,12 @@ private:
 //
 #define MAX_SPRITE_NAME_LENGTH	24
 
-class CHudStatusIcons: public CHudBase
+class CHudStatusIcons : public CHudBase
 {
 public:
-	int Init( void );
-	int VidInit( void );
-	void Reset( void );
+	int Init(void);
+	int VidInit(void);
+	void Reset(void);
 	int Draw(float flTime);
 	int MsgFunc_StatusIcon(const char *pszName, int iSize, void *pbuf);
 
@@ -548,8 +548,8 @@ public:
 
 	//had to make these public so CHud could access them (to enable concussion icon)
 	//could use a friend declaration instead...
-	void EnableIcon( char *pszIconName, unsigned char red, unsigned char green, unsigned char blue );
-	void DisableIcon( char *pszIconName );
+	void EnableIcon(char *pszIconName, unsigned char red, unsigned char green, unsigned char blue);
+	void DisableIcon(char *pszIconName);
 
 private:
 
@@ -583,7 +583,7 @@ class CShinySurface
 public:
 	CShinySurface *m_pNext;
 
-	CShinySurface( float fScale, float fAlpha, float fMinX, float fMaxX, float fMinY, float fMaxY, float fZ, char *szSprite);
+	CShinySurface(float fScale, float fAlpha, float fMinX, float fMaxX, float fMinY, float fMaxY, float fZ, char *szSprite);
 	~CShinySurface();
 
 	// draw the surface as seen from the given position
@@ -645,10 +645,10 @@ public:
 	int m_iCameraMode;//G-Cont. clipping thirdperson camera
 
 	int m_iFontHeight;
-	int DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b );
-	int DrawHudString(int x, int y, int iMaxX, char *szString, int r, int g, int b );
-	int DrawHudStringReverse( int xpos, int ypos, int iMinX, char *szString, int r, int g, int b );
-	int DrawHudNumberString( int xpos, int ypos, int iMinX, int iNumber, int r, int g, int b );
+	int DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b);
+	int DrawHudString(int x, int y, int iMaxX, char *szString, int r, int g, int b);
+	int DrawHudStringReverse(int xpos, int ypos, int iMinX, char *szString, int r, int g, int b);
+	int DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, int r, int g, int b);
 	int GetNumWidth(int iNumber, int iFlags);
 	int viewEntityIndex; // for trigger_viewset
 	int viewFlags;
@@ -666,17 +666,17 @@ private:
 
 	struct cvar_s *default_fov;
 public:
-	HL_HSPRITE GetSprite( int index )
+	HL_HSPRITE GetSprite(int index)
 	{
 		return (index < 0) ? 0 : m_rghSprites[index];
 	}
 
-	wrect_t& GetSpriteRect( int index )
+	wrect_t& GetSpriteRect(int index)
 	{
 		return m_rgrcRects[index];
 	}
 
-	int GetSpriteIndex( const char *SpriteName );	// gets a sprite index, for use in the m_rghSprites[] array
+	int GetSpriteIndex(const char *SpriteName);	// gets a sprite index, for use in the m_rghSprites[] array
 
 	CHudAmmo		m_Ammo;
 	CHudHealth		m_Health;
@@ -696,34 +696,34 @@ public:
 	CHudParticle	m_Particle; // (LRC) -- 30/08/02 November235: Particles to Order
 	CHudLensflare   m_Lensflare;
 
-	void Init( void );
-	void VidInit( void );
+	void Init(void);
+	void VidInit(void);
 	void Think(void);
-	int Redraw( float flTime, int intermission );
-	int UpdateClientData( client_data_t *cdata, float time );
+	int Redraw(float flTime, int intermission);
+	int UpdateClientData(client_data_t *cdata, float time);
 
 	CHud() : m_iSpriteCount(0), m_pHudList(NULL), m_pShinySurface(NULL) {}
 	~CHud();			// destructor, frees allocated memory
 
 	// user messages
-	int _cdecl MsgFunc_Damage(const char *pszName, int iSize, void *pbuf );
-	int _cdecl MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf );
-	int _cdecl MsgFunc_Logo(const char *pszName,  int iSize, void *pbuf);
-	int _cdecl MsgFunc_ResetHUD(const char *pszName,  int iSize, void *pbuf);
-	void _cdecl MsgFunc_InitHUD( const char *pszName, int iSize, void *pbuf );
-	void _cdecl MsgFunc_ViewMode( const char *pszName, int iSize, void *pbuf );
-	int _cdecl MsgFunc_SetFOV(const char *pszName,  int iSize, void *pbuf);
-	int  _cdecl MsgFunc_Concuss( const char *pszName, int iSize, void *pbuf );
-	int  _cdecl MsgFunc_RainData( const char *pszName, int iSize, void *pbuf ); 		//G-Cont
-	int  _cdecl MsgFunc_PlayMP3( const char *pszName, int iSize, void *pbuf );		//KILLAR
-	int _cdecl MsgFunc_HUDColor(const char *pszName,  int iSize, void *pbuf);		//LRC
-	void _cdecl MsgFunc_SetFog( const char *pszName, int iSize, void *pbuf );		//LRC
-	void _cdecl MsgFunc_KeyedDLight( const char *pszName, int iSize, void *pbuf );		//LRC
-	void _cdecl MsgFunc_SetSky( const char *pszName, int iSize, void *pbuf );		//LRC
-	int  _cdecl MsgFunc_CamData( const char *pszName, int iSize, void *pbuf );		//G-Cont
-	void _cdecl MsgFunc_AddShine( const char *pszName, int iSize, void *pbuf );    		//LRC
-	int  _cdecl MsgFunc_Inventory( const char *pszName, int iSize, void *pbuf );	//AJH
-	void _cdecl MsgFunc_ClampView( const char *pszName, int iSize, void *pbuf );	//LRC 1.8
+	int _cdecl  MsgFunc_Damage(const char *pszName, int iSize, void *pbuf);
+	int _cdecl  MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf);
+	int _cdecl  MsgFunc_Logo(const char *pszName, int iSize, void *pbuf);
+	int _cdecl  MsgFunc_ResetHUD(const char *pszName, int iSize, void *pbuf);
+	void _cdecl MsgFunc_InitHUD(const char *pszName, int iSize, void *pbuf);
+	void _cdecl MsgFunc_ViewMode(const char *pszName, int iSize, void *pbuf);
+	int _cdecl  MsgFunc_SetFOV(const char *pszName, int iSize, void *pbuf);
+	int  _cdecl MsgFunc_Concuss(const char *pszName, int iSize, void *pbuf);
+	int  _cdecl MsgFunc_RainData(const char *pszName, int iSize, void *pbuf); 		//G-Cont
+	int  _cdecl MsgFunc_PlayMP3(const char *pszName, int iSize, void *pbuf);		//KILLAR
+	int _cdecl  MsgFunc_HUDColor(const char *pszName, int iSize, void *pbuf);		//LRC
+	int _cdecl  MsgFunc_SetFog(const char *pszName, int iSize, void *pbuf);
+	void _cdecl MsgFunc_KeyedDLight(const char *pszName, int iSize, void *pbuf);		//LRC
+	void _cdecl MsgFunc_SetSky(const char *pszName, int iSize, void *pbuf);		//LRC
+	int  _cdecl MsgFunc_CamData(const char *pszName, int iSize, void *pbuf);		//G-Cont
+	void _cdecl MsgFunc_AddShine(const char *pszName, int iSize, void *pbuf);    		//LRC
+	int  _cdecl MsgFunc_Inventory(const char *pszName, int iSize, void *pbuf);	//AJH
+	void _cdecl MsgFunc_ClampView(const char *pszName, int iSize, void *pbuf);	//LRC 1.8
 
 	// Screen information
 	SCREENINFO	m_scrinfo;
@@ -753,15 +753,3 @@ extern int g_iInventory[MAX_ITEMS];	//AJH Inventory system
 extern int g_iUser1;
 extern int g_iUser2;
 extern int g_iUser3;
-
-struct FogSettings
-{
-	float fogColor[3];
-	float startDist;
-	float endDist;
-};
-extern FogSettings g_fog;
-extern FogSettings g_fogPreFade;
-extern FogSettings g_fogPostFade;
-extern float g_fFogFadeDuration;
-extern float g_fFogFadeFraction;

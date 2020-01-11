@@ -487,8 +487,6 @@ V_CalcRefdef
 
 ==================
 */
-extern void RenderFog( void ); //LRC
-extern void ClearToFogColor( void ); //LRC
 
 void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 {
@@ -742,7 +740,6 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	V_DropPunchAngle ( pparams->frametime, (float *)&ev_punchangle );
 
 	// smooth out stair step ups
-#if 1
 	if ( !pparams->smoothing && pparams->onground && pparams->simorg[2] - oldz > 0)
 	{
 		float steptime;
@@ -764,22 +761,19 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	{
 		oldz = pparams->simorg[2];
 	}
-#endif
 
+	static float lastorg[3];
+	vec3_t delta;
+
+	VectorSubtract(pparams->simorg, lastorg, delta);
+
+	if (Length(delta) != 0.0)
 	{
-		static float lastorg[3];
-		vec3_t delta;
+		VectorCopy(pparams->simorg, ViewInterp.Origins[ViewInterp.CurrentOrigin & ORIGIN_MASK]);
+		ViewInterp.OriginTime[ViewInterp.CurrentOrigin & ORIGIN_MASK] = pparams->time;
+		ViewInterp.CurrentOrigin++;
 
-		VectorSubtract( pparams->simorg, lastorg, delta );
-
-		if ( Length( delta ) != 0.0 )
-		{
-			VectorCopy( pparams->simorg, ViewInterp.Origins[ ViewInterp.CurrentOrigin & ORIGIN_MASK ] );
-			ViewInterp.OriginTime[ ViewInterp.CurrentOrigin & ORIGIN_MASK ] = pparams->time;
-			ViewInterp.CurrentOrigin++;
-
-			VectorCopy( pparams->simorg, lastorg );
-		}
+		VectorCopy(pparams->simorg, lastorg);
 	}
 
 	// Smooth out whole view in multiplayer when on trains, lifts
@@ -857,18 +851,6 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	lasttime = pparams->time;
 
 	v_origin = pparams->vieworg;
-
-	//LRC 1.8 - clear to the fog color (if any) on the first pass
-	if ( pparams->nextView == 0 )
-	{
-		ClearToFogColor();
-	}
-
-	//LRC 1.8 - no fog in the env_sky
-	if ( gHUD.m_iSkyMode != SKY_ON_DRAWING )
-	{
-		RenderFog();
-	}
 
 	if (gHUD.viewFlags & 1 && gHUD.m_iSkyMode == SKY_OFF) // custom view active (trigger_viewset) //AJH (added skymode check and copied function to above)
 	{
