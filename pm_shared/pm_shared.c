@@ -122,8 +122,8 @@ typedef struct hull_s
 
 // Fake HL2 camera's movement
 #define clamp( val, min, max ) ( ((val) > (max)) ? (max) : ( ((val) < (min)) ? (min) : (val) ) )
-#define PUNCH_DAMPING		6.0f
-#define PUNCH_SPRING_CONSTANT	65.0f
+#define PUNCH_DAMPING		3.0f
+#define PUNCH_SPRING_CONSTANT	35.0f
 
 // up / down
 #define	PITCH	0
