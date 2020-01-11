@@ -17,5 +17,5 @@ General Changelog for Spirit of Half-Life 1.8 Alpha 1 (Microsoft Visual C++ 2010
 [FIX]: 		Update Code for VC++ 2017
 [REMOVE]: Realtime Glow, does not work correctly (Windows 10).
 [Fix]:		Correctly work for env_fog.
-[FIX]:    Correction of the model events (TWHL Tower 2)
+[FIX]:    Correction of the model events (TWHL Tower 2) [Weapons]
 [FIX]:    Shotgun reload event.  
