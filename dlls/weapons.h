@@ -433,7 +433,7 @@ public:
 
 	virtual CBasePlayerItem *GetWeaponPtr( void ) { return (CBasePlayerItem *)this; };
 
-	float m_flPumpTime;
+	float	m_flPumpTime;
 	int		m_fInSpecialReload;									// Are we in the middle of a reload for the shotguns
 	float	m_flNextPrimaryAttack;								// soonest time ItemPostFrame will call PrimaryAttack
 	float	m_flNextSecondaryAttack;							// soonest time ItemPostFrame will call SecondaryAttack
@@ -659,6 +659,7 @@ public:
 	void SecondaryAttack( void );
 	int SecondaryAmmoIndex( void );
 	BOOL Deploy( void );
+	void Holster(int skiplocal /* = 0 */);
 	void Reload( void );
 	void WeaponIdle( void );
 	float m_flNextAnimTime;
@@ -732,10 +733,12 @@ public:
 	BOOL Deploy( );
 	void Holster( int skiplocal = 0 );
 	void Reload( void );
+	void Charge(bool m_BeginAttack);
 	void WeaponIdle( void );
 	int m_fInReload;
 	float m_flNextReload;
 	int m_iShell;
+	float m_flTimeWeaponIdleLock;
 
 	virtual BOOL UseDecrement( void )
 	{ 
