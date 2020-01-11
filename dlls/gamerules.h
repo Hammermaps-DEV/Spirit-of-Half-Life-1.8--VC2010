@@ -17,7 +17,7 @@
 //=========================================================
 
 //LRC
-#define GAME_NAME "Spirit of Half-Life 1.8 alpha1"
+#define GAME_NAME "SOHL 1.8 - TWHL Tower 2"
 
 //#include "weapons.h"
 //#include "items.h"
