@@ -857,6 +857,12 @@ int CBaseMonster :: TakeHealth (float flHealth, int bitsDamageType)
 	return CBaseEntity::TakeHealth(flHealth, bitsDamageType);
 }
 
+int CBaseMonster::TakeArmor(float flArmor)
+{
+	if (!pev->takedamage) return 0;
+	return CBaseEntity::TakeArmor(flArmor);
+}
+
 /*
 ============
 TakeDamage

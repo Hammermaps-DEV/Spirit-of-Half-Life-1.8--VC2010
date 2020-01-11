@@ -42,6 +42,7 @@ void EMIT_SOUND_DYN(edict_t *entity, int channel, const char *sample, float volu
 
 // CBaseEntity Stubs
 int CBaseEntity :: TakeHealth( float flHealth, int bitsDamageType ) { return 1; }
+int CBaseEntity::TakeArmor(float flArmor) { return 1; }
 int CBaseEntity :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType ) { return 1; }
 CBaseEntity *CBaseEntity::GetNextTarget( void ) { return NULL; }
 int CBaseEntity::Save( CSave &save ) { return 1; }
@@ -60,6 +61,8 @@ void CBaseEntity::InitMoveWith( void ) { } //LRC
 void CBaseEntity::SetNextThink( float delay, BOOL correctSpeed ) { }//LRC
 void CBaseEntity::AbsoluteNextThink( float time, BOOL correctSpeed ) { }//LRC
 void CBaseEntity::ThinkCorrection( ) { }//LRC
+void CBaseEntity::SetParent(int m_iNewParent, int m_iAttachment) { } //g-cont. two version of SetParent. from xash 0.4
+void CBaseEntity::SetParent(CBaseEntity* pParent, int m_iAttachment) { } //g-cont. dynamiclly link parents
 
 // CBaseDelay Stubs
 void CBaseDelay :: KeyValue( struct KeyValueData_s * ) { }
@@ -219,6 +222,7 @@ void CBaseMonster::CorpseFallThink( void ) { }
 void CBaseMonster :: MonsterInitDead( void ) { }
 BOOL CBaseMonster :: BBoxFlat ( void ) { return TRUE; }
 BOOL CBaseMonster :: GetEnemy ( void ) { return FALSE; }
+int CBaseMonster::TakeArmor(float flArmor) { return 1; }
 void CBaseMonster :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) { }
 CBaseEntity* CBaseMonster :: DropItem ( char *pszItemName, const Vector &vecPos, const Vector &vecAng ) { return NULL; }
 BOOL CBaseMonster :: ShouldFadeOnDeath( void ) { return FALSE; }
@@ -257,6 +261,7 @@ void CBasePlayer::PlayerDeathThink(void) { }
 void CBasePlayer::StartDeathCam( void ) { }
 void CBasePlayer::StartObserver( Vector vecPosition, Vector vecViewAngle ) { }
 void CBasePlayer::PlayerUse ( void ) { }
+int CBasePlayer::TakeArmor(float flArmor) { return 1; }
 void CBasePlayer::Jump() { }
 void CBasePlayer::Duck( ) { }
 int  CBasePlayer::Classify ( void ) { return 0; }

@@ -29,10 +29,9 @@
 #define SF_DOOR_FORCETOUCHABLE		1024 //LRC- Opens when touched, even though it's named and/or "use only"
 //LRC - clashes with 'not in deathmatch'. Replaced with 'Target mode' and 'On/Off Mode' fields.
 //#define SF_DOOR_SYNCHED				2048 //LRC- sends USE_ON/OFF when it starts to open/close (instead of sending
-										 // USE_TOGGLE when fully open/closed); also responds to USE_ON and USE_OFF
-										 // 'correctly'.
+// USE_TOGGLE when fully open/closed); also responds to USE_ON and USE_OFF
+// 'correctly'.
 #define SF_DOOR_SILENT				0x80000000
-
 
 
 #endif		//DOORS_H

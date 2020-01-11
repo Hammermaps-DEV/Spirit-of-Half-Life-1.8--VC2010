@@ -19,7 +19,8 @@
 #include "player.h"
 #include "gamerules.h"
 
-enum python_e {
+enum python_e
+{
 	PYTHON_IDLE1,
 	PYTHON_FIDGET,
 	PYTHON_FIRE1,
@@ -33,7 +34,7 @@ enum python_e {
 LINK_ENTITY_TO_CLASS(weapon_python, CPython);
 LINK_ENTITY_TO_CLASS(weapon_357, CPython);
 
-int CPython::GetItemInfo(ItemInfo *p)
+int CPython::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "357";
@@ -50,7 +51,7 @@ int CPython::GetItemInfo(ItemInfo *p)
 	return 1;
 }
 
-int CPython::AddToPlayer(CBasePlayer *pPlayer)
+int CPython::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
@@ -71,7 +72,7 @@ void CPython::Spawn()
 
 	m_iDefaultAmmo = DEFAULT_GIVE_PYTHON;
 
-	FallInit();// get ready to fall down.
+	FallInit(); // get ready to fall down.
 }
 
 void CPython::Precache()
@@ -112,7 +113,7 @@ BOOL CPython::Deploy()
 
 void CPython::Holster(int skiplocal /* = 0 */)
 {
-	m_fInReload = FALSE;// cancel any reload in progress.
+	m_fInReload = FALSE; // cancel any reload in progress.
 
 	if (m_fInZoom)
 	{
@@ -138,7 +139,7 @@ void CPython::SecondaryAttack()
 	if (m_pPlayer->pev->fov != 0)
 	{
 		m_fInZoom = FALSE;
-		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 0;  // 0 means reset to default fov
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 0; // 0 means reset to default fov
 	}
 	else if (m_pPlayer->pev->fov != 40)
 	{
@@ -179,20 +180,20 @@ void CPython::PrimaryAttack()
 
 	m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 
-#ifndef CLIENT_DLL 
+#ifndef CLIENT_DLL
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 	WRITE_BYTE(TE_DLIGHT);
 	WRITE_COORD(pev->origin.x); // origin
 	WRITE_COORD(pev->origin.y);
 	WRITE_COORD(pev->origin.z);
-	WRITE_BYTE(16);     // radius
-	WRITE_BYTE(255);    // R
-	WRITE_BYTE(255);    // G
-	WRITE_BYTE(180);    // B
-	WRITE_BYTE(0);      // life * 10
-	WRITE_BYTE(0);      // decay
+	WRITE_BYTE(16); // radius
+	WRITE_BYTE(255); // R
+	WRITE_BYTE(255); // G
+	WRITE_BYTE(180); // B
+	WRITE_BYTE(0); // life * 10
+	WRITE_BYTE(0); // decay
 	MESSAGE_END();
-#endif 
+#endif
 
 	// player "shoot" animation
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
@@ -204,7 +205,8 @@ void CPython::PrimaryAttack()
 	Vector vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
 
 	Vector vecDir;
-	vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_1DEGREES, 8192, BULLET_PLAYER_357, 0, 0, m_pPlayer->pev, m_pPlayer->random_seed);
+	vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_1DEGREES, 8192, BULLET_PLAYER_357, 0, 0,
+	                                      m_pPlayer->pev, m_pPlayer->random_seed);
 
 	int flags;
 #if defined( CLIENT_WEAPONS )
@@ -213,7 +215,8 @@ void CPython::PrimaryAttack()
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFirePython, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, 0, 0, 0, 0);
+	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFirePython, 0.0, (float*)&g_vecZero, (float*)&g_vecZero,
+	                    vecDir.x, vecDir.y, 0, 0, 0, 0);
 
 	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		// HEV suit - indicate out of ammo condition
@@ -231,7 +234,7 @@ void CPython::Reload()
 	if (m_pPlayer->pev->fov != 0)
 	{
 		m_fInZoom = FALSE;
-		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 0;  // 0 means reset to default fov
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 0; // 0 means reset to default fov
 	}
 
 	int bUseScope = FALSE;
@@ -311,7 +314,7 @@ class CPythonAmmo : public CBasePlayerAmmo
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	BOOL AddAmmo(CBaseEntity *pOther)
+	BOOL AddAmmo(CBaseEntity* pOther)
 	{
 		if (pOther->GiveAmmo(AMMO_357BOX_GIVE, "357", MAX_CARRY_357) != -1)
 		{

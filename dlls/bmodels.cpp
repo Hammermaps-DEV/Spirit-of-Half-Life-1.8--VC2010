@@ -1012,8 +1012,7 @@ void CPendulum :: PendulumUse( CBaseEntity *pActivator, CBaseEntity *pCaller, US
 
 void CPendulum :: StopThink( void )
 {
-	UTIL_SetAngles(this, m_start); //LRC
-	//pev->angles = m_start;
+	UTIL_AssignAngles(this, m_start); //LRC
 	pev->speed = 0;
 	DontThink();
 	UTIL_SetAvelocity(this, g_vecZero); //LRC
@@ -1063,13 +1062,11 @@ void CPendulum :: SwingThink( void )
 		m_dampSpeed -= m_damp * m_dampSpeed * dt;
 		if ( m_dampSpeed < 30.0 )
 		{
-			UTIL_SetAngles(this, m_center); //LRC
-			//pev->angles = m_center;
+			UTIL_AssignAngles(this, m_center); //LRC
 			pev->speed = 0;
 			ALERT(at_debug, "**CANCELLING pendulum think!\n");
 			DontThink();
 			UTIL_SetAvelocity(this, g_vecZero); //LRC
-			//pev->avelocity = g_vecZero;
 		}
 		else if ( pev->speed > m_dampSpeed )
 			pev->speed = m_dampSpeed;

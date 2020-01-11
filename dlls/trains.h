@@ -58,38 +58,38 @@
 class CPathTrack : public CPointEntity
 {
 public:
-	void		Spawn( void );
-	void		Activate( void );
-	void		KeyValue( KeyValueData* pkvd);
-	
-	void		SetPrevious( CPathTrack *pprevious );
-	void		Link( void );
-	void		Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void Spawn(void);
+	void Activate(void);
+	void KeyValue(KeyValueData* pkvd);
 
-	CPathTrack	*ValidPath( CPathTrack *ppath, int testFlag );		// Returns ppath if enabled, NULL otherwise
-	void		Project( CPathTrack *pstart, CPathTrack *pend, Vector *origin, float dist );
+	void SetPrevious(CPathTrack* pprevious);
+	void Link(void);
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-	static CPathTrack *Instance( edict_t *pent );
+	CPathTrack* ValidPath(CPathTrack* ppath, int testFlag); // Returns ppath if enabled, NULL otherwise
+	void Project(CPathTrack* pstart, CPathTrack* pend, Vector* origin, float dist);
 
-	CPathTrack	*LookAhead( Vector *origin, float dist, int move );
-	CPathTrack	*Nearest( Vector origin );
+	static CPathTrack* Instance(edict_t* pent);
 
-	CPathTrack	*GetNext( void );
-	CPathTrack	*GetPrevious( void );
+	CPathTrack* LookAhead(Vector* origin, float dist, int move);
+	CPathTrack* Nearest(Vector origin);
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
-	
-	static	TYPEDESCRIPTION m_SaveData[];
+	CPathTrack* GetNext(void);
+	CPathTrack* GetPrevious(void);
+
+	virtual int Save(CSave& save);
+	virtual int Restore(CRestore& restore);
+
+	static TYPEDESCRIPTION m_SaveData[];
 #if PATH_SPARKLE_DEBUG
 	void EXPORT Sparkle(void);
 #endif
 
-	float		m_length;
-	string_t	m_altName;
-	CPathTrack	*m_pnext;
-	CPathTrack	*m_pprevious;
-	CPathTrack	*m_paltpath;
+	float m_length;
+	string_t m_altName;
+	CPathTrack* m_pnext;
+	CPathTrack* m_pprevious;
+	CPathTrack* m_paltpath;
 };
 
 class CTrainSequence;
@@ -97,65 +97,69 @@ class CTrainSequence;
 class CFuncTrackTrain : public CBaseEntity
 {
 public:
-	void Spawn( void );
-	void Precache( void );
+	void Spawn(void);
+	void Precache(void);
 
-	void Blocked( CBaseEntity *pOther );
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void KeyValue( KeyValueData* pkvd );
+	void Blocked(CBaseEntity* pOther);
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void KeyValue(KeyValueData* pkvd);
 
 	//LRC
-	void StartSequence(CTrainSequence *pSequence);
-	void StopSequence( );
-	CTrainSequence *m_pSequence;
+	void StartSequence(CTrainSequence* pSequence);
+	void StopSequence();
+	CTrainSequence* m_pSequence;
 
-	void DesiredAction( void ); //LRC - used to be called Next!
+	void DesiredAction(void); //LRC - used to be called Next!
 
-//	void EXPORT Next( void );
-	void EXPORT PostponeNext( void );
-	void EXPORT Find( void );
-	void EXPORT NearestPath( void );
-	void EXPORT DeadEnd( void );
+	//	void EXPORT Next( void );
+	void EXPORT PostponeNext(void);
+	void EXPORT Find(void);
+	void EXPORT NearestPath(void);
+	void EXPORT DeadEnd(void);
 
-	void		NextThink( float thinkTime, BOOL alwaysThink );
+	void NextThink(float thinkTime, BOOL alwaysThink);
 
-	void SetTrack( CPathTrack *track ) { m_ppath = track->Nearest(pev->origin); }
-	void SetControls( entvars_t *pevControls );
-	BOOL OnControls( entvars_t *pev );
+	void SetTrack(CPathTrack* track) { m_ppath = track->Nearest(pev->origin); }
+	void SetControls(entvars_t* pevControls);
+	BOOL OnControls(entvars_t* pev);
 
-	void StopSound ( void );
-	void UpdateSound ( void );
-	
-	static CFuncTrackTrain *Instance( edict_t *pent );
+	void StopSound(void);
+	void UpdateSound(void);
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
-	
-	static	TYPEDESCRIPTION m_SaveData[];
-	virtual int	ObjectCaps( void ) { return (CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DIRECTIONAL_USE; }
+	static CFuncTrackTrain* Instance(edict_t* pent);
 
-	virtual void	OverrideReset( void );
+	virtual int Save(CSave& save);
+	virtual int Restore(CRestore& restore);
 
-	CPathTrack	*m_ppath;
-	float		m_length;
-	float		m_height;
+	static TYPEDESCRIPTION m_SaveData[];
+
+	virtual int ObjectCaps(void)
+	{
+		return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DIRECTIONAL_USE;
+	}
+
+	virtual void OverrideReset(void);
+
+	CPathTrack* m_ppath;
+	float m_length;
+	float m_height;
 	// I get it... this records the train's max speed (as set by the level designer), whereas
 	// pev->speed records the current speed (as set by the player). --LRC
 	// m_speed is also stored, as an int, in pev->impulse.
-	float		m_speed;
-	float		m_dir;
-	float		m_startSpeed;
-	Vector		m_controlMins;
-	Vector		m_controlMaxs;
-	int			m_soundPlaying;
-	int			m_sounds;
-	float		m_flVolume;
-	float		m_flBank;
-	float		m_oldSpeed;
-	Vector		m_vecMasterAvel; //LRC - masterAvel is to avelocity as m_speed is to speed.
-	Vector		m_vecBaseAvel; // LRC - the underlying avelocity, superceded by normal turning behaviour where applicable
+	float m_speed;
+	float m_dir;
+	float m_startSpeed;
+	Vector m_controlMins;
+	Vector m_controlMaxs;
+	int m_soundPlaying;
+	int m_sounds;
+	float m_flVolume;
+	float m_flBank;
+	float m_oldSpeed;
+	Vector m_vecMasterAvel; //LRC - masterAvel is to avelocity as m_speed is to speed.
+	Vector m_vecBaseAvel; // LRC - the underlying avelocity, superceded by normal turning behaviour where applicable
 
-	EHANDLE m_hActivator;	//AJH (give frags to this entity)
+	EHANDLE m_hActivator; //AJH (give frags to this entity)
 
 private:
 	unsigned short m_usAdjustPitch;

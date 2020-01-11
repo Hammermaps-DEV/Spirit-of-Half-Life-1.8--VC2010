@@ -55,6 +55,7 @@ extern int gmsgHUDColor;
 extern int gmsgCamData; // for trigger_viewset
 
 extern int g_teamplay;
+DLL_GLOBAL int g_serveractive = 0;
 
 void LinkUserMessages( void );
 
@@ -650,8 +651,6 @@ void ClientUserInfoChanged( edict_t *pEntity, char *infobuffer )
 
 	g_pGameRules->ClientUserInfoChanged( GetClassPtr((CBasePlayer *)&pEntity->v), infobuffer );
 }
-
-static int g_serveractive = 0;
 
 void ServerDeactivate( void )
 {
