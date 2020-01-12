@@ -20,19 +20,19 @@
 class CMark : public CPointEntity
 {
 public:
-	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
+	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult) override
 	{
 		*OUTresult = pev->movedir;
 		return true;
 	}
 
-	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult)
+	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult) override
 	{
 		*OUTresult = pev->frags;
 		return true;
 	}
 
-	void Think(void) { SUB_Remove(); }
+	void Think(void) override { SUB_Remove(); }
 };
 
 
@@ -42,7 +42,7 @@ public:
 // the former is a lerp based on a single random choice (e.g. 0.42 0.42 0.42),
 // the latter is three random choices (e.g. 0.42 0.73 0.11).
 bool TryParseVectorComponentwise(CBaseEntity* pLocus, const char* szText, Vector* OUTresult,
-                                 Vector* swizzleBasis = NULL, bool isPYR = false)
+                                 Vector* swizzleBasis = nullptr, bool isPYR = false)
 {
 	int nextComponentNameStart = 0;
 	int nextVectorComponent = 0;
@@ -130,7 +130,7 @@ bool TryParseVectorComponentwise(CBaseEntity* pLocus, const char* szText, Vector
 }
 
 bool TryParseLocusBrackets(CBaseEntity* pLocus, const char* szText, char* OUTszPreBracket, char* OUTszPostBracket,
-                           Vector* swizzleBasis = NULL, bool isPYR = false)
+                           Vector* swizzleBasis = nullptr, bool isPYR = false)
 {
 	int numBrackets = 0;
 	int bracketStartIdx;
@@ -155,7 +155,7 @@ bool TryParseLocusBrackets(CBaseEntity* pLocus, const char* szText, char* OUTszP
 			{
 				break; // found ) with no preceeding (, obviously not valid
 			}
-			else if (numBrackets == 0)
+			if (numBrackets == 0)
 			{
 				strncpy(OUTszPostBracket, &szText[bracketStartIdx], i - bracketStartIdx);
 				OUTszPostBracket[i - bracketStartIdx] = 0;
@@ -224,13 +224,13 @@ bool TryParseLocusNumber(const char* szText, float* OUTnumber, Vector* swizzleBa
 				*OUTnumber = factor * ang.x;
 				return true;
 			}
-			else if (FStrEq(szText, "YAW"))
+			if (FStrEq(szText, "YAW"))
 			{
 				Vector ang = UTIL_VecToAngles(*swizzleBasis);
 				*OUTnumber = factor * ang.y;
 				return true;
 			}
-			else if (FStrEq(szText, "LENGTH"))
+			if (FStrEq(szText, "LENGTH"))
 			{
 				*OUTnumber = factor * swizzleBasis->Length();
 				return true;
@@ -257,7 +257,7 @@ CBaseEntity* CalcLocusParameter(CBaseEntity* pLocus, const char* szParamName, Ve
 	if (TryParseVectorComponentwise(pLocus, szParamName, &tryVectorResult, swizzleBasis, isPYR))
 	{
 		// passing a componentwise vector as a locus; make a temporary reference point
-		CMark* pMark = GetClassPtr((CMark*)NULL);
+		CMark* pMark = GetClassPtr(static_cast<CMark*>(nullptr));
 		pMark->pev->classname = MAKE_STRING("mark");
 		pMark->pev->origin = tryVectorResult;
 		pMark->pev->movedir = tryVectorResult;
@@ -266,10 +266,10 @@ CBaseEntity* CalcLocusParameter(CBaseEntity* pLocus, const char* szParamName, Ve
 
 		return pMark;
 	}
-	else if (TryParseLocusNumber(szParamName, &tryNumberResult, swizzleBasis, isPYR))
+	if (TryParseLocusNumber(szParamName, &tryNumberResult, swizzleBasis, isPYR))
 	{
 		// passing a literal number as a locus; make a temporary reference point
-		CMark* pMark = GetClassPtr((CMark*)NULL);
+		CMark* pMark = GetClassPtr(static_cast<CMark*>(nullptr));
 		pMark->pev->classname = MAKE_STRING("mark");
 		pMark->pev->origin = g_vecZero;
 		pMark->pev->movedir = g_vecZero;
@@ -278,10 +278,7 @@ CBaseEntity* CalcLocusParameter(CBaseEntity* pLocus, const char* szParamName, Ve
 
 		return pMark;
 	}
-	else
-	{
-		return UTIL_FindEntityByTargetname(NULL, szParamName, pLocus);
-	}
+	return UTIL_FindEntityByTargetname(nullptr, szParamName, pLocus);
 }
 
 bool TryCalcLocus_Position(CBaseEntity* pEntity, CBaseEntity* pLocus, const char* szText, Vector* OUTresult)
@@ -307,9 +304,9 @@ bool TryCalcLocus_Position(CBaseEntity* pEntity, CBaseEntity* pLocus, const char
 		szText = szPreBracket;
 	}
 
-	CBaseEntity* pCalc = UTIL_FindEntityByTargetname(NULL, szText, pLocus);
+	CBaseEntity* pCalc = UTIL_FindEntityByTargetname(nullptr, szText, pLocus);
 
-	if (pCalc != NULL)
+	if (pCalc != nullptr)
 	{
 		return pCalc->CalcPosition(pLocus, OUTresult);
 	}
@@ -349,9 +346,9 @@ bool TryCalcLocus_Velocity(CBaseEntity* pEntity, CBaseEntity* pLocus, const char
 		szText = szPreBracket;
 	}
 
-	CBaseEntity* pCalc = UTIL_FindEntityByTargetname(NULL, szText, pLocus);
+	CBaseEntity* pCalc = UTIL_FindEntityByTargetname(nullptr, szText, pLocus);
 
-	if (pCalc != NULL)
+	if (pCalc != nullptr)
 		return pCalc->CalcVelocity(pLocus, OUTresult);
 
 	ALERT(at_debug, "%s \"%s\" has bad or missing LV value \"%s\"\n", STRING(pEntity->pev->classname),
@@ -375,9 +372,9 @@ bool TryCalcLocus_PYR(CBaseEntity* pEntity, CBaseEntity* pLocus, const char* szT
 		return true;
 	}
 
-	CBaseEntity* pCalc = UTIL_FindEntityByTargetname(NULL, szText, pLocus);
+	CBaseEntity* pCalc = UTIL_FindEntityByTargetname(nullptr, szText, pLocus);
 
-	if (pCalc != NULL)
+	if (pCalc != nullptr)
 		return pCalc->CalcPYR(pLocus, OUTresult);
 
 	ALERT(at_error, "%s \"%s\" has bad or missing PYR value \"%s\"\n", STRING(pEntity->pev->classname),
@@ -440,9 +437,9 @@ bool TryCalcLocus_NumberNonRandom(CBaseEntity* pLocus, const char* szText, float
 		szText = szPreBracket;
 	}
 
-	CBaseEntity* pCalc = UTIL_FindEntityByTargetname(NULL, szText, pLocus);
+	CBaseEntity* pCalc = UTIL_FindEntityByTargetname(nullptr, szText, pLocus);
 
-	if (pCalc != NULL)
+	if (pCalc != nullptr)
 		return pCalc->CalcNumber(pLocus, OUTresult);
 
 	ALERT(at_debug, "Bad or missing [LR] value \"%s\"\n", szText);
@@ -458,13 +455,13 @@ bool TryCalcLocus_NumberNonRandom(CBaseEntity* pLocus, const char* szText, float
 class CLocusAlias : public CBaseMutableAlias
 {
 public:
-	void PostSpawn(void);
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	CBaseEntity* FollowAlias(CBaseEntity* pFrom);
-	void FlushChanges(void);
+	void PostSpawn(void) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	CBaseEntity* FollowAlias(CBaseEntity* pFrom) override;
+	void FlushChanges(void) override;
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	EHANDLE m_hValue;
@@ -482,7 +479,7 @@ IMPLEMENT_SAVERESTORE(CLocusAlias, CBaseMutableAlias);
 
 void CLocusAlias::PostSpawn(void)
 {
-	m_hValue = UTIL_FindEntityByTargetname(NULL, STRING(pev->netname));
+	m_hValue = UTIL_FindEntityByTargetname(nullptr, STRING(pev->netname));
 }
 
 void CLocusAlias::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
@@ -494,20 +491,19 @@ void CLocusAlias::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 void CLocusAlias::FlushChanges(void)
 {
 	m_hValue = m_hChangeTo;
-	m_hChangeTo = NULL;
+	m_hChangeTo = nullptr;
 }
 
 CBaseEntity* CLocusAlias::FollowAlias(CBaseEntity* pFrom)
 {
 	if (m_hValue == NULL)
-		return NULL;
-	else if (pFrom == NULL || (OFFSET(m_hValue->pev) > OFFSET(pFrom->pev)))
+		return nullptr;
+	if (pFrom == nullptr || (OFFSET(m_hValue->pev) > OFFSET(pFrom->pev)))
 	{
 		//		ALERT(at_console, "LocusAlias returns %s:  %f %f %f\n", STRING(m_pValue->pev->targetname), m_pValue->pev->origin.x, m_pValue->pev->origin.y, m_pValue->pev->origin.z);
 		return m_hValue;
 	}
-	else
-		return NULL;
+	return nullptr;
 }
 
 
@@ -525,13 +521,13 @@ CBaseEntity* CLocusAlias::FollowAlias(CBaseEntity* pFrom)
 class CLocusBeam : public CPointEntity
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	void KeyValue(KeyValueData* pkvd);
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	void KeyValue(KeyValueData* pkvd) override;
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -645,10 +641,10 @@ void CLocusBeam::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 	switch (pev->impulse)
 	{
 	case 0: // ents
-		pStartEnt = UTIL_FindEntityByTargetname(NULL, STRING(m_iszStart), pActivator);
-		pEndEnt = UTIL_FindEntityByTargetname(NULL, STRING(m_iszEnd), pActivator);
+		pStartEnt = UTIL_FindEntityByTargetname(nullptr, STRING(m_iszStart), pActivator);
+		pEndEnt = UTIL_FindEntityByTargetname(nullptr, STRING(m_iszEnd), pActivator);
 
-		if (pStartEnt == NULL || pEndEnt == NULL)
+		if (pStartEnt == nullptr || pEndEnt == nullptr)
 			return;
 		pBeam = CBeam::BeamCreate(STRING(m_iszSprite), m_iWidth);
 		pBeam->EntsInit(pStartEnt->entindex(), pEndEnt->entindex());
@@ -656,9 +652,9 @@ void CLocusBeam::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 
 	case 1: // pointent
 		vecStartPos = CalcLocus_Position(this, pActivator, STRING(m_iszStart));
-		pEndEnt = UTIL_FindEntityByTargetname(NULL, STRING(m_iszEnd), pActivator);
+		pEndEnt = UTIL_FindEntityByTargetname(nullptr, STRING(m_iszEnd), pActivator);
 
-		if (pEndEnt == NULL)
+		if (pEndEnt == nullptr)
 			return;
 		pBeam = CBeam::BeamCreate(STRING(m_iszSprite), m_iWidth);
 		pBeam->PointEntInit(vecStartPos, pEndEnt->entindex());
@@ -724,7 +720,7 @@ void CLocusBeam::Spawn(void)
 class CCalcPosition : public CPointEntity
 {
 public:
-	bool CalcPosition(CBaseEntity* pLocus, Vector* OUTresult);
+	bool CalcPosition(CBaseEntity* pLocus, Vector* OUTresult) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_position, CCalcPosition);
@@ -732,7 +728,7 @@ LINK_ENTITY_TO_CLASS(calc_posfroment, CCalcPosition); //LRC 1.8
 
 bool CCalcPosition::CalcPosition(CBaseEntity* pLocus, Vector* OUTresult)
 {
-	CBaseEntity* pSubject = UTIL_FindEntityByTargetname(NULL, STRING(pev->netname), pLocus);
+	CBaseEntity* pSubject = UTIL_FindEntityByTargetname(nullptr, STRING(pev->netname), pLocus);
 	if (!pSubject)
 	{
 		ALERT(at_debug, "%s \"%s\" failed to find target entity \"%s\"\n", STRING(pev->classname),
@@ -784,19 +780,19 @@ bool CCalcPosition::CalcPosition(CBaseEntity* pLocus, Vector* OUTresult)
 	case 5:
 		// this could cause problems.
 		// is there a good way to check whether it's really a CBaseAnimating?
-		((CBaseAnimating*)pSubject)->GetAttachment(0, vecPosition, vecJunk);
+		static_cast<CBaseAnimating*>(pSubject)->GetAttachment(0, vecPosition, vecJunk);
 		*OUTresult = vecOffset + vecPosition;
 		break;
 	case 6:
-		((CBaseAnimating*)pSubject)->GetAttachment(1, vecPosition, vecJunk);
+		static_cast<CBaseAnimating*>(pSubject)->GetAttachment(1, vecPosition, vecJunk);
 		*OUTresult = vecOffset + vecPosition;
 		break;
 	case 7:
-		((CBaseAnimating*)pSubject)->GetAttachment(2, vecPosition, vecJunk);
+		static_cast<CBaseAnimating*>(pSubject)->GetAttachment(2, vecPosition, vecJunk);
 		*OUTresult = vecOffset + vecPosition;
 		break;
 	case 8:
-		((CBaseAnimating*)pSubject)->GetAttachment(3, vecPosition, vecJunk);
+		static_cast<CBaseAnimating*>(pSubject)->GetAttachment(3, vecPosition, vecJunk);
 		*OUTresult = vecOffset + vecPosition;
 		break;
 	case 9:
@@ -822,7 +818,7 @@ bool CCalcPosition::CalcPosition(CBaseEntity* pLocus, Vector* OUTresult)
 class CCalcNumFromNum : public CPointEntity
 {
 public:
-	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult);
+	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_numfromnum, CCalcNumFromNum); //LRC 1.8: new name for this entity
@@ -893,7 +889,7 @@ bool CCalcNumFromNum::CalcNumber(CBaseEntity* pLocus, float* OUTresult)
 				return true;
 			}
 
-			switch ((int)pev->frags)
+			switch (static_cast<int>(pev->frags))
 			{
 			case 0:
 				if (fBasis < fMin)
@@ -955,7 +951,7 @@ bool CCalcNumFromNum::CalcNumber(CBaseEntity* pLocus, float* OUTresult)
 class CCalcNumFromEnt : public CPointEntity
 {
 public:
-	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult);
+	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_numfroment, CCalcNumFromEnt); //LRC 1.8: new name for this entity
@@ -969,40 +965,34 @@ bool CCalcNumFromEnt::CalcNumber(CBaseEntity* pLocus, float* OUTresult)
 		return false;
 	}
 
-	CBaseEntity* target = UTIL_FindEntityByTargetname(NULL, STRING(pev->target));
+	CBaseEntity* target = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
 	if (target)
 	{
 		if (pev->impulse == 0)
 		{
 			return target->CalcNumber(pLocus, OUTresult);
 		}
-		else
+		if (pev->impulse == 1)
 		{
-			if (pev->impulse == 1)
+			if (FStrEq(STRING(target->pev->classname), "watcher_count"))
 			{
-				if (FStrEq(STRING(target->pev->classname), "watcher_count"))
-				{
-					*OUTresult = target->pev->iuser1 / target->pev->impulse;
-					return true;
-				}
-				else if (target->IsPlayer())
-				{
-					*OUTresult = ((CBasePlayer*)target)->HasWeapons() ? 1 : 0;
-					return true;
-				}
+				*OUTresult = target->pev->iuser1 / target->pev->impulse;
+				return true;
 			}
-
-			ALERT(at_debug, "calc_numfroment %s: cannot use mode %d on a %s\n", STRING(pev->targetname), pev->impulse,
-			      STRING(target->pev->classname));
-			return false;
+			if (target->IsPlayer())
+			{
+				*OUTresult = static_cast<CBasePlayer*>(target)->HasWeapons() ? 1 : 0;
+				return true;
+			}
 		}
-	}
-	else
-	{
-		ALERT(at_debug, "calc_numfroment %s: failed to find target %s\n", STRING(pev->targetname),
-		      STRING(pev->netname));
+
+		ALERT(at_debug, "calc_numfroment %s: cannot use mode %d on a %s\n", STRING(pev->targetname), pev->impulse,
+		      STRING(target->pev->classname));
 		return false;
 	}
+	ALERT(at_debug, "calc_numfroment %s: failed to find target %s\n", STRING(pev->targetname),
+	      STRING(pev->netname));
+	return false;
 }
 
 //=======================================================
@@ -1010,7 +1000,7 @@ bool CCalcNumFromEnt::CalcNumber(CBaseEntity* pLocus, float* OUTresult)
 class CCalcNumFromVec : public CPointEntity
 {
 public:
-	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult);
+	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_numfromvec, CCalcNumFromVec);
@@ -1126,11 +1116,8 @@ bool CCalcNumFromVec::CalcNumber(CBaseEntity* pLocus, float* OUTresult)
 				*OUTresult = vecA.Length() / bLength;
 				return true;
 			}
-			else
-			{
-				// is this the best thing to do? It means you can catch it with a calc_fallback...
-				return false;
-			}
+			// is this the best thing to do? It means you can catch it with a calc_fallback...
+			return false;
 		}
 	}
 
@@ -1236,17 +1223,17 @@ class CCalcFallback : public CPointEntity
 public:
 	EHANDLE m_hActivator; // don't need to save this, we only keep it for one frame
 
-	bool CalcPosition(CBaseEntity* pLocus, Vector* OUTresult)
+	bool CalcPosition(CBaseEntity* pLocus, Vector* OUTresult) override
 	{
 		return CalcWithFallback<Vector, &g_vecZero>(pLocus, OUTresult, TryCalcLocus_Position);
 	}
 
-	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
+	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult) override
 	{
 		return CalcWithFallback<Vector, &g_vecZero>(pLocus, OUTresult, TryCalcLocus_VelocityNoSwizzle);
 	}
 
-	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult)
+	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult) override
 	{
 		return CalcWithFallback<float, &s_Zero>(pLocus, OUTresult, TryCalcLocus_NumberNoSwizzle);
 	}
@@ -1260,35 +1247,32 @@ public:
 		{
 			return true;
 		}
+		if (FStringNull(pev->netname))
+		{
+			// return the default fallback (0 or 0,0,0).
+			*OUTresult = *DEFAULTR;
+		}
 		else
 		{
-			if (FStringNull(pev->netname))
+			// return the fallback value
+			if (!CalcFunction(this, pLocus, STRING(pev->netname), OUTresult))
 			{
-				// return the default fallback (0 or 0,0,0).
-				*OUTresult = *DEFAULTR;
+				// uh-oh, the fallback itself has failed!?
+				// return a failure, and don't trigger the fallback target.
+				// (thus if you have fallbacks for fallbacks for fallbacks, you only get a trigger from the fallback that worked.)
+				return false;
 			}
-			else
-			{
-				// return the fallback value
-				if (!CalcFunction(this, pLocus, STRING(pev->netname), OUTresult))
-				{
-					// uh-oh, the fallback itself has failed!?
-					// return a failure, and don't trigger the fallback target.
-					// (thus if you have fallbacks for fallbacks for fallbacks, you only get a trigger from the fallback that worked.)
-					return false;
-				}
-			}
-
-			if (!FStringNull(pev->message))
-			{
-				m_hActivator = pLocus;
-				UTIL_DesiredThink(this); // do the fallback trigger at the end of this frame
-			}
-			return true;
 		}
+
+		if (!FStringNull(pev->message))
+		{
+			m_hActivator = pLocus;
+			UTIL_DesiredThink(this); // do the fallback trigger at the end of this frame
+		}
+		return true;
 	}
 
-	void Think(void)
+	void Think(void) override
 	{
 		FireTargets(STRING(pev->message), m_hActivator, this, USE_TOGGLE, 0);
 	}
@@ -1304,27 +1288,24 @@ LINK_ENTITY_TO_CLASS(calc_fallback, CCalcFallback);
 class CCalcFromCVar : public CPointEntity
 {
 public:
-	bool CalcPosition(CBaseEntity* pLocus, Vector* OUTresult)
+	bool CalcPosition(CBaseEntity* pLocus, Vector* OUTresult) override
 	{
 		return TryCalcLocus_Position(this, pLocus, CVAR_GET_STRING(STRING(pev->target)), OUTresult);
 	}
 
-	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
+	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult) override
 	{
 		return TryCalcLocus_Velocity(this, pLocus, CVAR_GET_STRING(STRING(pev->target)), OUTresult);
 	}
 
-	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult)
+	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult) override
 	{
 		if (pev->spawnflags & SF_CALCFROMCVAR_PARSEASLR)
 		{
 			return TryCalcLocus_Number(pLocus, CVAR_GET_STRING(STRING(pev->target)), OUTresult);
 		}
-		else
-		{
-			*OUTresult = CVAR_GET_FLOAT(STRING(pev->target));
-			return true;
-		}
+		*OUTresult = CVAR_GET_FLOAT(STRING(pev->target));
+		return true;
 	}
 };
 
@@ -1348,7 +1329,7 @@ class CCalcSubVelocity : public CPointEntity
 	bool Convert(CBaseEntity* pLocus, Vector vecVel, Vector* OUTresult);
 	bool ConvertAngles(CBaseEntity* pLocus, Vector vecAngles, Vector* OUTresult);
 public:
-	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult);
+	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_subvelocity, CCalcSubVelocity);
@@ -1356,7 +1337,7 @@ LINK_ENTITY_TO_CLASS(calc_vecfroment, CCalcSubVelocity); //LRC 1.8
 
 bool CCalcSubVelocity::CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
 {
-	pLocus = UTIL_FindEntityByTargetname(NULL, STRING(pev->netname), pLocus);
+	pLocus = UTIL_FindEntityByTargetname(nullptr, STRING(pev->netname), pLocus);
 	if (!pLocus)
 	{
 		ALERT(at_debug, "calc_vecfroment \"%s\" failed to find target entity \"%s\"\n", STRING(pev->targetname),
@@ -1376,16 +1357,16 @@ bool CCalcSubVelocity::CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
 	case 5:
 		// this could cause problems.
 		// is there a good way to check whether it's really a CBaseAnimating?
-		((CBaseAnimating*)pLocus)->GetAttachment(0, vecJunk, vecAngles);
+		static_cast<CBaseAnimating*>(pLocus)->GetAttachment(0, vecJunk, vecAngles);
 		return ConvertAngles(pLocus, vecAngles, OUTresult);
 	case 6:
-		((CBaseAnimating*)pLocus)->GetAttachment(1, vecJunk, vecAngles);
+		static_cast<CBaseAnimating*>(pLocus)->GetAttachment(1, vecJunk, vecAngles);
 		return ConvertAngles(pLocus, vecAngles, OUTresult);
 	case 7:
-		((CBaseAnimating*)pLocus)->GetAttachment(2, vecJunk, vecAngles);
+		static_cast<CBaseAnimating*>(pLocus)->GetAttachment(2, vecJunk, vecAngles);
 		return ConvertAngles(pLocus, vecAngles, OUTresult);
 	case 8:
-		((CBaseAnimating*)pLocus)->GetAttachment(3, vecJunk, vecAngles);
+		static_cast<CBaseAnimating*>(pLocus)->GetAttachment(3, vecJunk, vecAngles);
 		return ConvertAngles(pLocus, vecAngles, OUTresult);
 	default:
 		return Convert(pLocus, pLocus->pev->velocity, OUTresult);
@@ -1447,7 +1428,7 @@ bool CCalcSubVelocity::ConvertAngles(CBaseEntity* pLocus, Vector vecAngles, Vect
 class CCalcAngles : public CPointEntity
 {
 public:
-	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
+	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult) override
 	{
 		Vector angles;
 		if (CalcPYR(pLocus, &angles))
@@ -1456,13 +1437,10 @@ public:
 			*OUTresult = gpGlobals->v_forward;
 			return true;
 		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 
-	bool CalcPYR(CBaseEntity* pLocus, Vector* OUTresult);
+	bool CalcPYR(CBaseEntity* pLocus, Vector* OUTresult) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_angles, CCalcAngles);
@@ -1477,8 +1455,8 @@ bool CCalcAngles::CalcPYR(CBaseEntity* pLocus, Vector* OUTresult)
 		result = CalcLocus_PYR(this, pLocus, STRING(pev->netname));
 		break;
 	case 1: // Viewangle [LE]
-		playerEnt = UTIL_FindEntityByTargetname(NULL, STRING(pev->netname));
-		if (playerEnt != NULL && playerEnt->IsPlayer())
+		playerEnt = UTIL_FindEntityByTargetname(nullptr, STRING(pev->netname));
+		if (playerEnt != nullptr && playerEnt->IsPlayer())
 		{
 			result = playerEnt->pev->v_angle;
 			result.x = -result.x; // v_angle uses inverse pitch for some reason
@@ -1512,7 +1490,7 @@ bool CCalcAngles::CalcPYR(CBaseEntity* pLocus, Vector* OUTresult)
 class CCalcVelocityPath : public CPointEntity
 {
 public:
-	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult);
+	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_velocity_path, CCalcVelocityPath);
@@ -1572,7 +1550,7 @@ bool CCalcVelocityPath::CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
 	if (pev->health)
 	{
 		float len = vecOffs.Length();
-		switch ((int)pev->health)
+		switch (static_cast<int>(pev->health))
 		{
 		case 1:
 			vecOffs = vecOffs / len;
@@ -1598,7 +1576,7 @@ bool CCalcVelocityPath::CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
 		IGNORE_GLASS iIgnoreGlass = ignore_glass;
 		IGNORE_MONSTERS iIgnoreMonsters = ignore_monsters;
 
-		switch ((int)pev->frags)
+		switch (static_cast<int>(pev->frags))
 		{
 		case 2:
 			iIgnoreGlass = dont_ignore_glass;
@@ -1611,7 +1589,7 @@ bool CCalcVelocityPath::CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
 			break;
 		}
 
-		UTIL_TraceLine(vecStart, vecStart + vecOffs, iIgnoreMonsters, iIgnoreGlass, NULL, &tr);
+		UTIL_TraceLine(vecStart, vecStart + vecOffs, iIgnoreMonsters, iIgnoreGlass, nullptr, &tr);
 		vecOffs = tr.vecEndPos - vecStart;
 	}
 
@@ -1644,7 +1622,7 @@ bool CCalcVelocityPath::CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
 class CCalcVelocityPolar : public CPointEntity
 {
 public:
-	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult);
+	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_velocity_polar, CCalcVelocityPolar);
@@ -1738,25 +1716,25 @@ bool CCalcVelocityPolar::CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
 class CLocusVariable : public CPointEntity
 {
 public:
-	void Spawn(void);
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void Spawn(void) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
+	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult) override
 	{
 		*OUTresult = pev->movedir;
 		return true;
 	}
 
 	//	Vector	CalcAngles( CBaseEntity *pLocus ) { return UTIL_VecToAngles( CalcVelocity(pLocus) ); }
-	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult)
+	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult) override
 	{
 		*OUTresult = pev->frags;
 		return true;
 	}
 
-	void KeyValue(KeyValueData* pkvd);
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	void KeyValue(KeyValueData* pkvd) override;
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -1836,7 +1814,7 @@ void CLocusVariable::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 
 	if (m_iszTargetName)
 	{
-		CMark* pMark = GetClassPtr((CMark*)NULL);
+		CMark* pMark = GetClassPtr(static_cast<CMark*>(nullptr));
 		pMark->pev->classname = MAKE_STRING("mark");
 		pMark->pev->origin = vecPos;
 		pMark->pev->movedir = vecDir;

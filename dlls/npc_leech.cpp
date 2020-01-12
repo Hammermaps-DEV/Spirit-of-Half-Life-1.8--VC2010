@@ -69,13 +69,13 @@
 class CLeech : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 
 	void EXPORT SwimThink(void);
 	void EXPORT DeadThink(void);
 
-	void Touch(CBaseEntity* pOther)
+	void Touch(CBaseEntity* pOther) override
 	{
 		if (pOther->IsPlayer())
 		{
@@ -88,14 +88,14 @@ public:
 		}
 	}
 
-	void SetObjectCollisionBox(void)
+	void SetObjectCollisionBox(void) override
 	{
 		pev->absmin = pev->origin + Vector(-8, -8, 0);
 		pev->absmax = pev->origin + Vector(8, 8, 2);
 	}
 
 	void AttackSound(void);
-	void AlertSound(void);
+	void AlertSound(void) override;
 	void UpdateMotion(void);
 	float ObstacleDistance(CBaseEntity* pTarget);
 	void MakeVectors(void);
@@ -103,16 +103,16 @@ public:
 	void SwitchLeechState(void);
 
 	// Base entity functions
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
-	int BloodColor(void) { return DONT_BLEED; }
-	void Killed(entvars_t* pevAttacker, int iGib);
-	void Activate(void);
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	int Classify(void) { return CLASS_INSECT; }
-	int IRelationship(CBaseEntity* pTarget);
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	int BloodColor(void) override { return DONT_BLEED; }
+	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void Activate(void) override;
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	int Classify(void) override { return CLASS_INSECT; }
+	int IRelationship(CBaseEntity* pTarget) override;
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	static const char* pAttackSounds[];
@@ -246,7 +246,7 @@ void CLeech::SwitchLeechState(void)
 	m_stateTime = gpGlobals->time + RANDOM_FLOAT(3, 6);
 	if (m_MonsterState == MONSTERSTATE_COMBAT)
 	{
-		m_hEnemy = NULL;
+		m_hEnemy = nullptr;
 		SetState(MONSTERSTATE_IDLE);
 		// We may be up against the player, so redo the side checks
 		m_sideTime = 0;
@@ -337,11 +337,11 @@ void CLeech::HandleAnimEvent(MonsterEvent_t* pEvent)
 		CBaseEntity* pEnemy;
 
 		pEnemy = m_hEnemy;
-		if (pEnemy != NULL)
+		if (pEnemy != nullptr)
 		{
 			Vector dir, face;
 
-			UTIL_MakeVectorsPrivate(pev->angles, face, NULL, NULL);
+			UTIL_MakeVectorsPrivate(pev->angles, face, nullptr, nullptr);
 			face.z = 0;
 			dir = (pEnemy->pev->origin - pev->origin);
 			dir.z = 0;
@@ -399,15 +399,12 @@ float CLeech::ObstacleDistance(CBaseEntity* pTarget)
 
 	if (tr.flFraction != 1.0)
 	{
-		if ((pTarget == NULL || tr.pHit != pTarget->edict()))
+		if ((pTarget == nullptr || tr.pHit != pTarget->edict()))
 		{
 			return tr.flFraction;
 		}
-		else
-		{
-			if (Vfabs(m_height - pev->origin.z) > 10)
-				return tr.flFraction;
-		}
+		if (Vfabs(m_height - pev->origin.z) > 10)
+			return tr.flFraction;
 	}
 
 	if (m_sideTime < gpGlobals->time)
@@ -440,7 +437,7 @@ void CLeech::DeadThink(void)
 			StopAnimation();
 			return;
 		}
-		else if (pev->flags & FL_ONGROUND)
+		if (pev->flags & FL_ONGROUND)
 		{
 			pev->solid = SOLID_NOT;
 			SetActivity(ACT_DIEFORWARD);
@@ -584,8 +581,7 @@ void CLeech::SwimThink(void)
 		pev->velocity = g_vecZero;
 		return;
 	}
-	else
-		SetNextThink(0.1);
+	SetNextThink(0.1);
 
 	targetSpeed = LEECH_SWIM_SPEED;
 
@@ -639,7 +635,7 @@ void CLeech::SwimThink(void)
 		}
 		if (RANDOM_LONG(0, 100) < 10)
 			targetYaw = RANDOM_LONG(-30, 30);
-		pTarget = NULL;
+		pTarget = nullptr;
 		// oldorigin test
 		if ((pev->origin - pev->oldorigin).Length() < 1)
 		{
@@ -709,7 +705,7 @@ void CLeech::Killed(entvars_t* pevAttacker, int iGib)
 
 	//ALERT(at_aiconsole, "Leech: killed\n");
 	// tell owner ( if any ) that we're dead.This is mostly for MonsterMaker functionality.
-	CBaseEntity* pOwner = CBaseEntity::Instance(pev->owner);
+	CBaseEntity* pOwner = Instance(pev->owner);
 	if (pOwner)
 		pOwner->DeathNotice(pev);
 

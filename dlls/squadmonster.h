@@ -66,11 +66,11 @@ public:
 	// squad member info
 	int m_iMySlot; // this is the behaviour slot that the monster currently holds in the squad. 
 
-	int CheckEnemy(CBaseEntity* pEnemy);
-	void StartMonster(void);
+	int CheckEnemy(CBaseEntity* pEnemy) override;
+	void StartMonster(void) override;
 	void VacateSlot(void);
-	void ScheduleChange(void);
-	void Killed(entvars_t* pevAttacker, int iGib);
+	void ScheduleChange(void) override;
+	void Killed(entvars_t* pevAttacker, int iGib) override;
 	BOOL OccupySlot(int iDesiredSlot);
 	BOOL NoFriendlyFire(void);
 	BOOL NoFriendlyFire(BOOL playerAlly);
@@ -78,8 +78,8 @@ public:
 	// squad functions still left in base class
 	CSquadMonster* MySquadLeader()
 	{
-		CSquadMonster* pSquadLeader = (CSquadMonster*)((CBaseEntity*)m_hSquadLeader);
-		if (pSquadLeader != NULL)
+		CSquadMonster* pSquadLeader = static_cast<CSquadMonster*>(static_cast<CBaseEntity*>(m_hSquadLeader));
+		if (pSquadLeader != nullptr)
 			return pSquadLeader;
 		return this;
 	}
@@ -88,8 +88,7 @@ public:
 	{
 		if (i >= MAX_SQUAD_MEMBERS - 1)
 			return this;
-		else
-			return (CSquadMonster*)((CBaseEntity*)m_hSquadMember[i]);
+		return static_cast<CSquadMonster*>(static_cast<CBaseEntity*>(m_hSquadMember[i]));
 	}
 
 	int InSquad(void) { return m_hSquadLeader != NULL; }
@@ -108,15 +107,15 @@ public:
 	BOOL SquadEnemySplit(void);
 	BOOL SquadMemberInRange(const Vector& vecLocation, float flDist);
 
-	virtual CSquadMonster* MySquadMonsterPointer(void) { return this; }
+	CSquadMonster* MySquadMonsterPointer(void) override { return this; }
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
-	BOOL FValidateCover(const Vector& vecCoverLocation);
+	BOOL FValidateCover(const Vector& vecCoverLocation) override;
 
-	MONSTERSTATE GetIdealState(void);
-	Schedule_t* GetScheduleOfType(int iType);
+	MONSTERSTATE GetIdealState(void) override;
+	Schedule_t* GetScheduleOfType(int iType) override;
 };

@@ -70,9 +70,9 @@ void CCrowbar::Precache(void)
 int CCrowbar::GetItemInfo(ItemInfo* p)
 {
 	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = NULL;
+	p->pszAmmo1 = nullptr;
 	p->iMaxAmmo1 = MAX_AMMO_NOCLIP;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = MAX_CLIP_NOCLIP;
 	p->iSlot = SLOT_CROWBAR;
@@ -182,7 +182,7 @@ int CCrowbar::Swing(int fFirst)
 		{
 			// Calculate the point of intersection of the line (or hull) and the object we hit
 			// This is and approximation of the "best" intersection
-			CBaseEntity* pHit = CBaseEntity::Instance(tr.pHit);
+			CBaseEntity* pHit = Instance(tr.pHit);
 			if (!pHit || pHit->IsBSPModel())
 				FindHullIntersection(vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX, m_pPlayer->edict());
 			vecEnd = tr.vecEndPos; // This is the point on the actual surface (the hull could have hit space)
@@ -231,7 +231,7 @@ int CCrowbar::Swing(int fFirst)
 
 		// hit
 		fDidHit = TRUE;
-		CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
+		CBaseEntity* pEntity = Instance(tr.pHit);
 
 		ClearMultiDamage();
 
@@ -271,8 +271,7 @@ int CCrowbar::Swing(int fFirst)
 					m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.25; //LRC: corrected half-life bug
 					return TRUE;
 				}
-				else
-					flVol = 0.1;
+				flVol = 0.1;
 
 				fHitWorld = FALSE;
 			}

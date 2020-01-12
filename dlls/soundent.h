@@ -68,9 +68,9 @@ class CSoundEnt : public CBaseEntity
 {
 public:
 
-	void Precache(void);
-	void Spawn(void);
-	void Think(void);
+	void Precache(void) override;
+	void Spawn(void) override;
+	void Think(void) override;
 	void Initialize(void);
 
 	static void InsertSound(int iType, const Vector& vecOrigin, int iVolume, float flDuration);
@@ -83,7 +83,7 @@ public:
 	BOOL IsEmpty(void) { return m_iActiveSound == SOUNDLIST_EMPTY; }
 	int ISoundsInList(int iListType);
 	int IAllocSound(void);
-	virtual int ObjectCaps(void) { return FCAP_DONT_SAVE; }
+	int ObjectCaps(void) override { return FCAP_DONT_SAVE; }
 
 	int m_iFreeSound; // index of the first sound in the free sound list
 	int m_iActiveSound; // indes of the first sound in the active sound list

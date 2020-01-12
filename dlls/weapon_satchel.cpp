@@ -43,9 +43,9 @@ enum satchel_radio_e
 
 class CSatchelCharge : public CGrenade
 {
-	void Spawn(void);
-	void Precache(void);
-	void BounceSound(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void BounceSound(void) override;
 
 	void EXPORT SatchelSlide(CBaseEntity* pOther);
 	void EXPORT SatchelThink(void);
@@ -189,7 +189,7 @@ int CSatchel::AddDuplicate(CBasePlayerItem* pOriginal)
 	if (g_pGameRules->IsMultiplayer())
 #endif
 	{
-		pSatchel = (CSatchel*)pOriginal;
+		pSatchel = static_cast<CSatchel*>(pOriginal);
 
 		if (pSatchel->m_chargeReady != 0)
 		{
@@ -246,7 +246,7 @@ int CSatchel::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "Satchel Charge";
 	p->iMaxAmmo1 = MAX_CARRY_SATCHEL;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = MAX_CLIP_NOCLIP;
 	p->iSlot = SLOT_SATCHEL;
@@ -301,8 +301,7 @@ BOOL CSatchel::Deploy()
 
 	if (m_chargeReady)
 		return DefaultDeploy("models/v_satchel_radio.mdl", "models/p_satchel_radio.mdl", SATCHEL_RADIO_DRAW, "hive");
-	else
-		return DefaultDeploy("models/v_satchel.mdl", "models/p_satchel.mdl", SATCHEL_DRAW, "trip");
+	return DefaultDeploy("models/v_satchel.mdl", "models/p_satchel.mdl", SATCHEL_DRAW, "trip");
 
 
 	return TRUE;
@@ -347,9 +346,9 @@ void CSatchel::PrimaryAttack()
 
 			edict_t* pPlayer = m_pPlayer->edict();
 
-			CBaseEntity* pSatchel = NULL;
+			CBaseEntity* pSatchel = nullptr;
 
-			while ((pSatchel = UTIL_FindEntityInSphere(pSatchel, m_pPlayer->pev->origin, 4096)) != NULL)
+			while ((pSatchel = UTIL_FindEntityInSphere(pSatchel, m_pPlayer->pev->origin, 4096)) != nullptr)
 			{
 				if (FClassnameIs(pSatchel->pev, "monster_satchel"))
 				{
@@ -476,12 +475,12 @@ void DeactivateSatchels(CBasePlayer* pOwner)
 {
 	edict_t* pFind;
 
-	pFind = FIND_ENTITY_BY_CLASSNAME(NULL, "monster_satchel");
+	pFind = FIND_ENTITY_BY_CLASSNAME(nullptr, "monster_satchel");
 
 	while (!FNullEnt(pFind))
 	{
 		CBaseEntity* pEnt = CBaseEntity::Instance(pFind);
-		CSatchelCharge* pSatchel = (CSatchelCharge*)pEnt;
+		CSatchelCharge* pSatchel = static_cast<CSatchelCharge*>(pEnt);
 
 		if (pSatchel)
 		{

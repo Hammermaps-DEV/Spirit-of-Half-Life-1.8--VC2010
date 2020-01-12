@@ -36,7 +36,7 @@ extern DLL_GLOBAL Vector g_vecAttackDir;
 // be spawned, and still remain fairly flexible
 const char* CBreakable::pSpawnObjects[] =
 {
-	NULL, // 0
+	nullptr, // 0
 	"item_battery", // 1
 	"item_healthkit", // 2
 	"weapon_9mmhandgun", // 3
@@ -83,7 +83,7 @@ void CBreakable::KeyValue(KeyValueData* pkvd)
 		if ((i < 0) || (i >= matLastMaterial))
 			m_Material = matWood;
 		else
-			m_Material = (Materials)i;
+			m_Material = static_cast<Materials>(i);
 
 		pkvd->fHandled = TRUE;
 	}
@@ -182,7 +182,7 @@ void CBreakable::Spawn(void)
 
 	if (m_iszWhenHit) //LRC - locus trigger
 	{
-		m_pHitProxy = GetClassPtr((CPointEntity*)NULL);
+		m_pHitProxy = GetClassPtr(static_cast<CPointEntity*>(nullptr));
 	}
 
 	pev->solid = SOLID_BSP;
@@ -223,10 +223,9 @@ STATE CBreakable::GetState(void)
 	{
 		if (pev->effects & EF_NODRAW)
 			return STATE_OFF;
-		else
-			return STATE_ON;
+		return STATE_ON;
 	}
-	else return STATE_OFF;
+	return STATE_OFF;
 }
 
 const char* CBreakable::pSoundsWood[] =
@@ -270,7 +269,7 @@ const char* CBreakable::pSoundsGlass[] =
 
 const char** CBreakable::MaterialSoundList(Materials precacheMaterial, int& soundCount)
 {
-	const char** pSoundList = NULL;
+	const char** pSoundList = nullptr;
 
 	switch (precacheMaterial)
 	{
@@ -677,10 +676,10 @@ void CBreakable::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecD
 	//LRC
 	if (m_iszWhenHit)
 	{
-		if (m_pHitProxy == NULL)
+		if (m_pHitProxy == nullptr)
 		{
 			//AJH may need to reset this as it's null after save/load
-			m_pHitProxy = GetClassPtr((CPointEntity*)NULL);
+			m_pHitProxy = GetClassPtr(static_cast<CPointEntity*>(nullptr));
 		}
 
 		m_pHitProxy->pev->origin = ptr->vecEndPos;
@@ -768,7 +767,7 @@ void CBreakable::Die(void)
 {
 	Vector vecSpot; // shard origin
 	Vector vecVelocity; // shard velocity
-	CBaseEntity* pEntity = NULL;
+	CBaseEntity* pEntity = nullptr;
 	char cFlag = 0;
 	int pitch;
 	float fvol;
@@ -917,7 +916,7 @@ void CBreakable::Die(void)
 		for (int i = 0; i < count; i++)
 		{
 			ClearBits(pList[i]->pev->flags, FL_ONGROUND);
-			pList[i]->pev->groundentity = NULL;
+			pList[i]->pev->groundentity = nullptr;
 		}
 	}
 
@@ -935,7 +934,7 @@ void CBreakable::Die(void)
 		LIGHT_STYLE(-m_iStyle, "z");
 
 	// Fire targets on break
-	SUB_UseTargets(NULL, USE_TOGGLE, 0);
+	SUB_UseTargets(nullptr, USE_TOGGLE, 0);
 
 	if (m_iRespawnTime == -1)
 	{
@@ -957,7 +956,7 @@ void CBreakable::Die(void)
 		{
 			m_pHitProxy->SetThink(&CBreakable::SUB_Remove);
 			m_pHitProxy->SetNextThink(0.1);
-			m_pHitProxy = NULL;
+			m_pHitProxy = nullptr;
 		}
 
 		SetThink(&CBreakable::SUB_Remove);
@@ -966,7 +965,7 @@ void CBreakable::Die(void)
 	}
 
 	if (m_iszSpawnObject)
-		CBaseEntity::Create((char*)STRING(m_iszSpawnObject), VecBModelOrigin(pev), pev->angles, edict());
+		Create((char*)STRING(m_iszSpawnObject), VecBModelOrigin(pev), pev->angles, edict());
 
 
 	if (Explodable())
@@ -997,24 +996,28 @@ int CBreakable::DamageDecal(int bitsDamageType)
 class CPushable : public CBreakable
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void Touch(CBaseEntity* pOther);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void Touch(CBaseEntity* pOther) override;
 	void Move(CBaseEntity* pMover, int push);
-	void KeyValue(KeyValueData* pkvd);
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void DoRespawn(void); //AJH Fix for respawnable breakable pushables (BY HAWK777)
+	void KeyValue(KeyValueData* pkvd) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	void DoRespawn(void) override; //AJH Fix for respawnable breakable pushables (BY HAWK777)
 	void EXPORT StopSound(void);
 	//	virtual void	SetActivator( CBaseEntity *pActivator ) { m_pPusher = pActivator; }
 
-	virtual int ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_CONTINUOUS_USE; }
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int ObjectCaps(void) override
+	{
+		return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_CONTINUOUS_USE;
+	}
 
-	inline float MaxSpeed(void) { return m_maxSpeed; }
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
+
+	float MaxSpeed(void) { return m_maxSpeed; }
 
 	// breakables use an overridden takedamage
-	virtual int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -1175,8 +1178,7 @@ void CPushable::Move(CBaseEntity* pOther, int push)
 		{
 			if (pev->waterlevel < 1 || pev->watertype <= CONTENT_FLYFIELD)
 				return;
-			else
-				factor = 0.1;
+			factor = 0.1;
 		}
 		else
 			factor = 1;

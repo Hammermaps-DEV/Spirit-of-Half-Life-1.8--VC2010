@@ -83,7 +83,7 @@ int CHgun::AddToPlayer(CBasePlayer* pPlayer)
 		}
 #endif
 
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 		return TRUE;
@@ -96,7 +96,7 @@ int CHgun::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "Hornets";
 	p->iMaxAmmo1 = MAX_CARRY_HORNET;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = MAX_CLIP_NOCLIP;
 	p->iSlot = SLOT_HORNETGUN;
@@ -139,7 +139,7 @@ void CHgun::PrimaryAttack()
 #ifndef CLIENT_DLL
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 
-	CBaseEntity* pHornet = CBaseEntity::Create(
+	CBaseEntity* pHornet = Create(
 		"hornet",
 		m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 16 + gpGlobals->v_right * 8 + gpGlobals->v_up * -12,
 		m_pPlayer->pev->v_angle, m_pPlayer->edict());
@@ -230,7 +230,7 @@ void CHgun::SecondaryAttack(void)
 		break;
 	}
 
-	pHornet = CBaseEntity::Create("hornet", vecSrc, m_pPlayer->pev->v_angle, m_pPlayer->edict());
+	pHornet = Create("hornet", vecSrc, m_pPlayer->pev->v_angle, m_pPlayer->edict());
 	pHornet->pev->velocity = gpGlobals->v_forward * 1200;
 	pHornet->pev->angles = UTIL_VecToAngles(pHornet->pev->velocity);
 

@@ -46,17 +46,17 @@ public:
 	int m_iMode; //AJH 0 = On/Off mode, 1 = list mode
 	int m_iCurrentTarget; //AJH the current target that is being aliased
 
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void Spawn(void);
-	STATE GetState() { return (pev->spawnflags & SF_ALIAS_OFF) ? STATE_OFF : STATE_ON; }
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	void Spawn(void) override;
+	STATE GetState() override { return (pev->spawnflags & SF_ALIAS_OFF) ? STATE_OFF : STATE_ON; }
 
-	CBaseEntity* FollowAlias(CBaseEntity* pFrom);
-	void ChangeValue(int iszValue);
-	void FlushChanges(void);
-	void KeyValue(struct KeyValueData_s*); //AJH
+	CBaseEntity* FollowAlias(CBaseEntity* pFrom) override;
+	void ChangeValue(int iszValue) override;
+	void FlushChanges(void) override;
+	void KeyValue(struct KeyValueData_s*) override; //AJH
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 };
 
@@ -293,14 +293,14 @@ void CInfoGroup::KeyValue(KeyValueData* pkvd)
 
 void CInfoGroup::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	CBaseEntity* pTarget = UTIL_FindEntityByTargetname(NULL, STRING(pev->target));
+	CBaseEntity* pTarget = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
 
 	if (pTarget && pTarget->IsMutableAlias())
 	{
 		if (pev->spawnflags & SF_GROUP_DEBUG)
 			ALERT(at_debug, "DEBUG: info_group %s changes the contents of %s \"%s\"\n", STRING(pev->targetname),
 			      STRING(pTarget->pev->classname), STRING(pTarget->pev->targetname));
-		((CBaseMutableAlias*)pTarget)->ChangeValue(this);
+		static_cast<CBaseMutableAlias*>(pTarget)->ChangeValue(this);
 	}
 	else if (pev->target)
 	{
@@ -391,7 +391,7 @@ void CMultiAlias::KeyValue(KeyValueData* pkvd)
 
 CBaseEntity* CMultiAlias::FollowAlias(CBaseEntity* pStartEntity)
 {
-	CBaseEntity* pBestEntity = NULL; // the entity we're currently planning to return.
+	CBaseEntity* pBestEntity = nullptr; // the entity we're currently planning to return.
 	int iBestOffset = -1; // the offset of that entity.
 	CBaseEntity* pTempEntity;
 	int iTempOffset;
@@ -402,7 +402,7 @@ CBaseEntity* CMultiAlias::FollowAlias(CBaseEntity* pStartEntity)
 		// During any given 'game moment', this code may be called more than once. It must use the
 		// same random values each time (because otherwise it gets really messy). I'm using srand
 		// to arrange this.
-		srand((int)(gpGlobals->time * 100));
+		srand(static_cast<int>(gpGlobals->time * 100));
 		rand(); // throw away the first result - it's just the seed value
 		if (m_iMode == 1) // 'choose one' mode
 		{
@@ -439,7 +439,7 @@ CBaseEntity* CMultiAlias::FollowAlias(CBaseEntity* pStartEntity)
 		}
 		if (m_iMode == 1)
 			break; // if it's in "pick one" mode, stop after the first.
-		else if (m_iMode == 2)
+		if (m_iMode == 2)
 		{
 			i++;
 			// if it's in "percent chance" mode, try to find another one to fire.
@@ -470,10 +470,10 @@ CBaseEntity* CMultiAlias::FollowAlias(CBaseEntity* pStartEntity)
 class CTriggerChangeAlias : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void Spawn(void) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 };
 
 LINK_ENTITY_TO_CLASS(trigger_changealias, CTriggerChangeAlias);
@@ -484,7 +484,7 @@ void CTriggerChangeAlias::Spawn(void)
 
 void CTriggerChangeAlias::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	CBaseEntity* pTarget = UTIL_FindEntityByTargetname(NULL, STRING(pev->target), pActivator);
+	CBaseEntity* pTarget = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target), pActivator);
 
 	if (pTarget && pTarget->IsMutableAlias())
 	{
@@ -496,13 +496,13 @@ void CTriggerChangeAlias::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 		}
 		else if (pev->spawnflags & SF_CHANGEALIAS_RESOLVE)
 		{
-			pValue = UTIL_FollowReference(NULL, STRING(pev->netname));
+			pValue = UTIL_FollowReference(nullptr, STRING(pev->netname));
 		}
 
 		if (pValue)
-			((CBaseMutableAlias*)pTarget)->ChangeValue(pValue);
+			static_cast<CBaseMutableAlias*>(pTarget)->ChangeValue(pValue);
 		else
-			((CBaseMutableAlias*)pTarget)->ChangeValue(pev->netname);
+			static_cast<CBaseMutableAlias*>(pTarget)->ChangeValue(pev->netname);
 	}
 	else
 	{

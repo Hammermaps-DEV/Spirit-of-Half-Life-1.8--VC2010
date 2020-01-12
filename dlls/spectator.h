@@ -17,7 +17,7 @@
 class CBaseSpectator : public CBaseEntity
 {
 public:
-	void Spawn();
+	void Spawn() override;
 	void SpectatorConnect(void);
 	void SpectatorDisconnect(void);
 	void SpectatorThink(void);

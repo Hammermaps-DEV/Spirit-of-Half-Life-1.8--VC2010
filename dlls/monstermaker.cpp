@@ -38,20 +38,20 @@
 class CMonsterMaker : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
 	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT CyclicUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT MakerThink(void);
 	void EXPORT MakeMonsterThink(void);
-	void DeathNotice(entvars_t* pevChild);
+	void DeathNotice(entvars_t* pevChild) override;
 	// monster maker children use this to tell the monster maker that they have died.
 	void TryMakeMonster(void); //LRC - to allow for a spawndelay
 	CBaseMonster* MakeMonster(void); //LRC - actually make a monster (and return the new creation)
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -188,7 +188,7 @@ void CMonsterMaker::TryMakeMonster(void)
 	if (pev->noise)
 	{
 		// AJH	dynamic origin for monstermakers
-		pTemp = UTIL_FindEntityByTargetname(NULL,STRING(pev->noise), this);
+		pTemp = UTIL_FindEntityByTargetname(nullptr,STRING(pev->noise), this);
 		if (pTemp)
 		{
 			pev->vuser1 = pTemp->pev->origin;
@@ -203,7 +203,7 @@ void CMonsterMaker::TryMakeMonster(void)
 	if (pev->noise1)
 	{
 		//AJH dynamic offset for monstermaker
-		Vector vTemp = CalcLocus_Position(this, NULL, STRING(pev->noise1));
+		Vector vTemp = CalcLocus_Position(this, nullptr, STRING(pev->noise1));
 		pev->vuser1 = pev->vuser1 + vTemp;
 		//	ALERT(at_debug,"DEBUG: Monstermaker dynamic offset is %f %f %f\n",vTemp.x,vTemp.y,vTemp.z);
 		//	ALERT(at_debug,"DEBUG: Monstermaker position now %f %f %f \n", pWhere->pev->origin.x,pWhere->pev->origin.y,pWhere->pev->origin.z);
@@ -212,7 +212,7 @@ void CMonsterMaker::TryMakeMonster(void)
 	if (pev->noise2)
 	{
 		// AJH	dynamic angles for monstermakers
-		pTemp = UTIL_FindEntityByTargetname(NULL,STRING(pev->noise2), this);
+		pTemp = UTIL_FindEntityByTargetname(nullptr,STRING(pev->noise2), this);
 		if (pTemp) pev->vuser2 = pTemp->pev->angles;
 		//	ALERT(at_debug,"DEBUG: Monstermaker setting angles to %f %f %f\n",pWhere->pev->angles.x,pWhere->pev->angles.y,pWhere->pev->angles.z);
 	}
@@ -224,7 +224,7 @@ void CMonsterMaker::TryMakeMonster(void)
 	if (pev->noise3)
 	{
 		// AJH	dynamic velocity for monstermakers
-		pTemp = UTIL_FindEntityByTargetname(NULL,STRING(pev->noise3), this);
+		pTemp = UTIL_FindEntityByTargetname(nullptr,STRING(pev->noise3), this);
 		if (pTemp) pev->vuser3 = pTemp->pev->velocity;
 		//	ALERT(at_debug,"DEBUG: Monstermaker setting velocity to %f %f %f\n",pWhere->pev->velocity.x,pWhere->pev->velocity.y,pWhere->pev->velocity.z);
 	}
@@ -304,7 +304,7 @@ CBaseMonster* CMonsterMaker::MakeMonster(void)
 	if (FNullEnt(pent))
 	{
 		ALERT(at_debug, "NULL Ent in MonsterMaker!\n");
-		return NULL;
+		return nullptr;
 	}
 
 	pevCreate = VARS(pent);
@@ -326,9 +326,9 @@ CBaseMonster* CMonsterMaker::MakeMonster(void)
 	pevCreate->owner = edict();
 
 	//LRC - custom monster behaviour
-	CBaseEntity* pEntity = CBaseEntity::Instance(pevCreate);
-	CBaseMonster* pMonst = NULL;
-	if (pEntity && (pMonst = pEntity->MyMonsterPointer()) != NULL)
+	CBaseEntity* pEntity = Instance(pevCreate);
+	CBaseMonster* pMonst = nullptr;
+	if (pEntity && (pMonst = pEntity->MyMonsterPointer()) != nullptr)
 	{
 		pMonst->m_iClass = this->m_iClass;
 		pMonst->m_iPlayerReact = this->m_iPlayerReact;
@@ -424,6 +424,6 @@ void CMonsterMaker::DeathNotice(entvars_t* pevChild)
 
 	if (!m_fFadeChildren)
 	{
-		pevChild->owner = NULL;
+		pevChild->owner = nullptr;
 	}
 }

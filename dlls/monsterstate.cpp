@@ -45,7 +45,7 @@ void CBaseMonster::SetState(MONSTERSTATE State)
 
 		if (m_hEnemy != NULL)
 		{
-			m_hEnemy = NULL; // not allowed to have an enemy anymore.
+			m_hEnemy = nullptr; // not allowed to have an enemy anymore.
 			ALERT(at_aiconsole, "Stripped\n");
 		}
 		break;

@@ -102,7 +102,7 @@ int CEgon::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 		return TRUE;
@@ -124,7 +124,7 @@ int CEgon::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "uranium";
 	p->iMaxAmmo1 = MAX_CARRY_URANIUM;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = MAX_CLIP_NOCLIP;
 	p->iSlot = SLOT_EGON;
@@ -264,9 +264,9 @@ void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
 		return;
 
 #ifndef CLIENT_DLL
-	CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
+	CBaseEntity* pEntity = Instance(tr.pHit);
 
-	if (pEntity == NULL)
+	if (pEntity == nullptr)
 		return;
 
 	if (g_pGameRules->IsMultiplayer())
@@ -341,8 +341,8 @@ void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
 			if (g_pGameRules->IsMultiplayer())
 			{
 				// radius damage a little more potent in multiplayer.
-				::RadiusDamage(tr.vecEndPos, pev, m_pPlayer->pev, gSkillData.plrDmgEgonWide / 4, 128, CLASS_NONE,
-				               DMG_ENERGYBEAM | DMG_BLAST | DMG_ALWAYSGIB);
+				RadiusDamage(tr.vecEndPos, pev, m_pPlayer->pev, gSkillData.plrDmgEgonWide / 4, 128, CLASS_NONE,
+				             DMG_ENERGYBEAM | DMG_BLAST | DMG_ALWAYSGIB);
 			}
 
 			if (!m_pPlayer->IsAlive())
@@ -471,12 +471,12 @@ void CEgon::DestroyEffect(void)
 	if (m_pBeam)
 	{
 		UTIL_Remove(m_pBeam);
-		m_pBeam = NULL;
+		m_pBeam = nullptr;
 	}
 	if (m_pNoise)
 	{
 		UTIL_Remove(m_pNoise);
-		m_pNoise = NULL;
+		m_pNoise = nullptr;
 	}
 	if (m_pSprite)
 	{
@@ -484,7 +484,7 @@ void CEgon::DestroyEffect(void)
 			m_pSprite->Expand(10, 500);
 		else
 			UTIL_Remove(m_pSprite);
-		m_pSprite = NULL;
+		m_pSprite = nullptr;
 	}
 #endif
 }
@@ -541,20 +541,20 @@ void CEgon::EndAttack(void)
 
 class CEgonAmmo : public CBasePlayerAmmo
 {
-	void Spawn(void)
+	void Spawn(void) override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_chainammo.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
-	void Precache(void)
+	void Precache(void) override
 	{
 		PRECACHE_MODEL("models/w_chainammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther)
+	BOOL AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium", MAX_CARRY_URANIUM) != -1)
 		{

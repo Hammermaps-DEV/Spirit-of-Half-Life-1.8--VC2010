@@ -199,7 +199,7 @@ public:
 
 	int HullIndex(const CBaseEntity* pEntity); // what hull the monster uses
 	int NodeType(const CBaseEntity* pEntity); // what node type the monster uses
-	inline int CapIndex(int afCapMask)
+	int CapIndex(int afCapMask)
 	{
 		if (afCapMask & (bits_CAP_OPEN_DOORS | bits_CAP_AUTO_DOORS | bits_CAP_USE))
 			return 1;
@@ -207,7 +207,7 @@ public:
 	}
 
 
-	inline CNode& Node(int i)
+	CNode& Node(int i)
 	{
 #ifdef _DEBUG
 		if (!m_pNodes || i < 0 || i > m_cNodes)
@@ -216,7 +216,7 @@ public:
 		return m_pNodes[i];
 	}
 
-	inline CLink& Link(int i)
+	CLink& Link(int i)
 	{
 #ifdef _DEBUG
 		if (!m_pLinkPool || i < 0 || i > m_cLinks)
@@ -225,17 +225,17 @@ public:
 		return m_pLinkPool[i];
 	}
 
-	inline CLink& NodeLink(int iNode, int iLink)
+	CLink& NodeLink(int iNode, int iLink)
 	{
 		return Link(Node(iNode).m_iFirstLink + iLink);
 	}
 
-	inline CLink& NodeLink(const CNode& node, int iLink)
+	CLink& NodeLink(const CNode& node, int iLink)
 	{
 		return Link(node.m_iFirstLink + iLink);
 	}
 
-	inline int INodeLink(int iNode, int iLink)
+	int INodeLink(int iNode, int iLink)
 	{
 		return NodeLink(iNode, iLink).m_iDestNode;
 	}
@@ -264,9 +264,9 @@ public:
 //=========================================================
 class CNodeEnt : public CBaseEntity
 {
-	void Spawn(void);
-	void KeyValue(KeyValueData* pkvd);
-	virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	void Spawn(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
+	int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	short m_sHintType;
 	short m_sHintActivity;
@@ -301,10 +301,10 @@ class CQueue
 public:
 
 	CQueue(void); // constructor
-	inline int Full(void) { return (m_cSize == MAX_STACK_NODES); }
-	inline int Empty(void) { return (m_cSize == 0); }
+	int Full(void) { return (m_cSize == MAX_STACK_NODES); }
+	int Empty(void) { return (m_cSize == 0); }
 	//inline int Tail ( void ) { return ( m_queue[ m_tail ] ); }
-	inline int Size(void) { return (m_cSize); }
+	int Size(void) { return (m_cSize); }
 	void Insert(int, float);
 	int Remove(float&);
 
@@ -330,10 +330,10 @@ class CQueuePriority
 public:
 
 	CQueuePriority(void); // constructor
-	inline int Full(void) { return (m_cSize == MAX_STACK_NODES); }
-	inline int Empty(void) { return (m_cSize == 0); }
+	int Full(void) { return (m_cSize == MAX_STACK_NODES); }
+	int Empty(void) { return (m_cSize == 0); }
 	//inline int Tail ( float & ) { return ( m_queue[ m_tail ].Id ); }
-	inline int Size(void) { return (m_cSize); }
+	int Size(void) { return (m_cSize); }
 	void Insert(int, float);
 	int Remove(float&);
 

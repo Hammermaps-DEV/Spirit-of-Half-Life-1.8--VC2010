@@ -43,21 +43,21 @@ enum tripmine_e
 
 class CTripmineGrenade : public CGrenade
 {
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	void EXPORT WarningThink(void);
 	void EXPORT PowerupThink(void);
 	void EXPORT BeamBreakThink(void);
 	void EXPORT DelayDeathThink(void);
-	void Killed(entvars_t* pevAttacker, int iGib);
+	void Killed(entvars_t* pevAttacker, int iGib) override;
 
 	void MakeBeam(void);
 	void KillBeam(void);
@@ -128,7 +128,7 @@ void CTripmineGrenade::Spawn(void)
 	pev->dmg = gSkillData.plrDmgTripmine;
 	pev->health = 1; // don't let die normally
 
-	if (pev->owner != NULL)
+	if (pev->owner != nullptr)
 	{
 		// play deploy sound
 		EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/mine_deploy.wav", 1.0, ATTN_NORM);
@@ -173,7 +173,7 @@ void CTripmineGrenade::PowerupThink(void)
 	{
 		// find an owner
 		edict_t* oldowner = pev->owner;
-		pev->owner = NULL;
+		pev->owner = nullptr;
 		UTIL_TraceLine(pev->origin + m_vecDir * 8, pev->origin - m_vecDir * 32, dont_ignore_monsters, ENT(pev), &tr);
 		if (tr.fStartSolid || (oldowner && tr.pHit == oldowner))
 		{
@@ -185,7 +185,7 @@ void CTripmineGrenade::PowerupThink(void)
 		if (tr.flFraction < 1.0)
 		{
 			pev->owner = tr.pHit;
-			m_hOwner = CBaseEntity::Instance(pev->owner);
+			m_hOwner = Instance(pev->owner);
 			m_posOwner = m_hOwner->pev->origin;
 			m_angleOwner = m_hOwner->pev->angles;
 		}
@@ -236,7 +236,7 @@ void CTripmineGrenade::KillBeam(void)
 	if (m_pBeam)
 	{
 		UTIL_Remove(m_pBeam);
-		m_pBeam = NULL;
+		m_pBeam = nullptr;
 	}
 }
 
@@ -282,7 +282,7 @@ void CTripmineGrenade::BeamBreakThink(void)
 	{
 		MakeBeam();
 		if (tr.pHit)
-			m_hOwner = CBaseEntity::Instance(tr.pHit); // reset owner too
+			m_hOwner = Instance(tr.pHit); // reset owner too
 	}
 
 	if (Vfabs(m_flBeamLength - tr.flFraction) > 0.001)
@@ -396,7 +396,7 @@ int CTripmine::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "Trip Mine";
 	p->iMaxAmmo1 = MAX_CARRY_TRIPMINE;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = MAX_AMMO_NOCLIP;
 	p->iSlot = SLOT_TRIPMINE;
@@ -455,13 +455,13 @@ void CTripmine::PrimaryAttack(void)
 
 	if (tr.flFraction < 1.0)
 	{
-		CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
+		CBaseEntity* pEntity = Instance(tr.pHit);
 		if (pEntity && !(pEntity->pev->flags & FL_CONVEYOR))
 		{
 			Vector angles = UTIL_VecToAngles(tr.vecPlaneNormal);
 
-			CBaseEntity* pEnt = CBaseEntity::Create("monster_tripmine", tr.vecEndPos + tr.vecPlaneNormal * 8, angles,
-			                                        m_pPlayer->edict());
+			CBaseEntity* pEnt = Create("monster_tripmine", tr.vecEndPos + tr.vecPlaneNormal * 8, angles,
+			                           m_pPlayer->edict());
 
 			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
 

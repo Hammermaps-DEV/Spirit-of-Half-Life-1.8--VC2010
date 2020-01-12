@@ -127,40 +127,41 @@ enum
 class CHGrunt : public CSquadMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int Classify(void);
-	int ISoundMask(void);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
-	BOOL FCanCheckAttacks(void);
-	BOOL CheckMeleeAttack1(float flDot, float flDist);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	BOOL CheckRangeAttack2(float flDot, float flDist);
-	void CheckAmmo(void);
-	void SetActivity(Activity NewActivity);
-	void StartTask(Task_t* pTask);
-	void RunTask(Task_t* pTask);
-	void DeathSound(void);
-	void PainSound(void);
-	void IdleSound(void);
-	Vector GetGunPosition(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void SetYawSpeed(void) override;
+	int Classify(void) override;
+	int ISoundMask(void) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	BOOL FCanCheckAttacks(void) override;
+	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
+	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	BOOL CheckRangeAttack2(float flDot, float flDist) override;
+	void CheckAmmo(void) override;
+	void SetActivity(Activity NewActivity) override;
+	void StartTask(Task_t* pTask) override;
+	void RunTask(Task_t* pTask) override;
+	void DeathSound(void) override;
+	void PainSound(void) override;
+	void IdleSound(void) override;
+	Vector GetGunPosition(void) override;
 	void Shoot(void);
 	void Shotgun(void);
-	void PrescheduleThink(void);
-	void GibMonster(void);
+	void PrescheduleThink(void) override;
+	void GibMonster(void) override;
 	void SpeakSentence(void);
 
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	CBaseEntity* Kick(void);
-	Schedule_t* GetSchedule(void);
-	Schedule_t* GetScheduleOfType(int Type);
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	Schedule_t* GetSchedule(void) override;
+	Schedule_t* GetScheduleOfType(int Type) override;
+	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+	                 int bitsDamageType) override;
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-	int IRelationship(CBaseEntity* pTarget);
+	int IRelationship(CBaseEntity* pTarget) override;
 
 	BOOL FOkToSpeak(void);
 	void JustSpoke(void);
@@ -398,8 +399,7 @@ BOOL CHGrunt::FCanCheckAttacks(void)
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 		return TRUE;
-	else
-		return FALSE;
+	return FALSE;
 }
 
 
@@ -743,11 +743,11 @@ CBaseEntity* CHGrunt::Kick(void)
 
 	if (tr.pHit)
 	{
-		CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
+		CBaseEntity* pEntity = Instance(tr.pHit);
 		return pEntity;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 //=========================================================
@@ -758,8 +758,7 @@ Vector CHGrunt::GetGunPosition()
 {
 	if (m_fStanding)
 		return pev->origin + Vector(0, 0, 60);
-	else
-		return pev->origin + Vector(0, 0, 48);
+	return pev->origin + Vector(0, 0, 48);
 }
 
 //=========================================================
@@ -767,7 +766,7 @@ Vector CHGrunt::GetGunPosition()
 //=========================================================
 void CHGrunt::Shoot(void)
 {
-	if (m_hEnemy == NULL && m_pCine == NULL) //LRC - scripts may fire when you have no enemy
+	if (m_hEnemy == NULL && m_pCine == nullptr) //LRC - scripts may fire when you have no enemy
 		return;
 
 	Vector vecShootOrigin = GetGunPosition();
@@ -797,7 +796,7 @@ void CHGrunt::Shoot(void)
 //=========================================================
 void CHGrunt::Shotgun(void)
 {
-	if (m_hEnemy == NULL && m_pCine == NULL)
+	if (m_hEnemy == NULL && m_pCine == nullptr)
 		return;
 
 	Vector vecShootOrigin = GetGunPosition();
@@ -1248,9 +1247,9 @@ void CHGrunt::DeathSound(void)
 Task_t tlGruntFail[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_WAIT, (float)2},
-	{TASK_WAIT_PVS, (float)0},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT, static_cast<float>(2)},
+	{TASK_WAIT_PVS, static_cast<float>(0)},
 };
 
 Schedule_t slGruntFail[] =
@@ -1273,9 +1272,9 @@ Schedule_t slGruntFail[] =
 Task_t tlGruntCombatFail[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_WAIT_FACE_ENEMY, (float)2},
-	{TASK_WAIT_PVS, (float)0},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT_FACE_ENEMY, static_cast<float>(2)},
+	{TASK_WAIT_PVS, static_cast<float>(0)},
 };
 
 Schedule_t slGruntCombatFail[] =
@@ -1295,14 +1294,14 @@ Schedule_t slGruntCombatFail[] =
 //=========================================================
 Task_t tlGruntVictoryDance[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_WAIT, (float)1.5},
-	{TASK_GET_PATH_TO_ENEMY_CORPSE, (float)0},
-	{TASK_WALK_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_VICTORY_DANCE},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_WAIT, static_cast<float>(1.5)},
+	{TASK_GET_PATH_TO_ENEMY_CORPSE, static_cast<float>(0)},
+	{TASK_WALK_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_VICTORY_DANCE)},
 };
 
 Schedule_t slGruntVictoryDance[] =
@@ -1324,11 +1323,11 @@ Schedule_t slGruntVictoryDance[] =
 //=========================================================
 Task_t tlGruntEstablishLineOfFire[] =
 {
-	{TASK_SET_FAIL_SCHEDULE, (float)SCHED_GRUNT_ELOF_FAIL},
-	{TASK_GET_PATH_TO_ENEMY, (float)0},
-	{TASK_GRUNT_SPEAK_SENTENCE, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
+	{TASK_SET_FAIL_SCHEDULE, static_cast<float>(SCHED_GRUNT_ELOF_FAIL)},
+	{TASK_GET_PATH_TO_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_SPEAK_SENTENCE, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
 };
 
 Schedule_t slGruntEstablishLineOfFire[] =
@@ -1356,8 +1355,8 @@ Schedule_t slGruntEstablishLineOfFire[] =
 Task_t tlGruntFoundEnemy[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_SIGNAL1},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE_FACE_ENEMY, static_cast<float>(ACT_SIGNAL1)},
 };
 
 Schedule_t slGruntFoundEnemy[] =
@@ -1378,10 +1377,10 @@ Schedule_t slGruntFoundEnemy[] =
 Task_t tlGruntCombatFace1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_WAIT, (float)1.5},
-	{TASK_SET_SCHEDULE, (float)SCHED_GRUNT_SWEEP},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_WAIT, static_cast<float>(1.5)},
+	{TASK_SET_SCHEDULE, static_cast<float>(SCHED_GRUNT_SWEEP)},
 };
 
 Schedule_t slGruntCombatFace[] =
@@ -1405,23 +1404,23 @@ Schedule_t slGruntCombatFace[] =
 Task_t tlGruntSignalSuppress[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_SIGNAL2},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE_FACE_ENEMY, static_cast<float>(ACT_SIGNAL2)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
 };
 
 Schedule_t slGruntSignalSuppress[] =
@@ -1444,21 +1443,21 @@ Schedule_t slGruntSignalSuppress[] =
 Task_t tlGruntSuppress[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
 };
 
 Schedule_t slGruntSuppress[] =
@@ -1486,9 +1485,9 @@ Schedule_t slGruntSuppress[] =
 //=========================================================
 Task_t tlGruntWaitInCover[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_WAIT_FACE_ENEMY, (float)1},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT_FACE_ENEMY, static_cast<float>(1)},
 };
 
 Schedule_t slGruntWaitInCover[] =
@@ -1514,15 +1513,15 @@ Schedule_t slGruntWaitInCover[] =
 //=========================================================
 Task_t tlGruntTakeCover1[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_SET_FAIL_SCHEDULE, (float)SCHED_GRUNT_TAKECOVER_FAILED},
-	{TASK_WAIT, (float)0.2},
-	{TASK_FIND_COVER_FROM_ENEMY, (float)0},
-	{TASK_GRUNT_SPEAK_SENTENCE, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_REMEMBER, (float)bits_MEMORY_INCOVER},
-	{TASK_SET_SCHEDULE, (float)SCHED_GRUNT_WAIT_FACE_ENEMY},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_SET_FAIL_SCHEDULE, static_cast<float>(SCHED_GRUNT_TAKECOVER_FAILED)},
+	{TASK_WAIT, static_cast<float>(0.2)},
+	{TASK_FIND_COVER_FROM_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_SPEAK_SENTENCE, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_REMEMBER, static_cast<float>(bits_MEMORY_INCOVER)},
+	{TASK_SET_SCHEDULE, static_cast<float>(SCHED_GRUNT_WAIT_FACE_ENEMY)},
 };
 
 Schedule_t slGruntTakeCover[] =
@@ -1541,14 +1540,14 @@ Schedule_t slGruntTakeCover[] =
 //=========================================================
 Task_t tlGruntGrenadeCover1[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FIND_COVER_FROM_ENEMY, (float)99},
-	{TASK_FIND_FAR_NODE_COVER_FROM_ENEMY, (float)384},
-	{TASK_PLAY_SEQUENCE, (float)ACT_SPECIAL_ATTACK1},
-	{TASK_CLEAR_MOVE_WAIT, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_SET_SCHEDULE, (float)SCHED_GRUNT_WAIT_FACE_ENEMY},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FIND_COVER_FROM_ENEMY, static_cast<float>(99)},
+	{TASK_FIND_FAR_NODE_COVER_FROM_ENEMY, static_cast<float>(384)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_SPECIAL_ATTACK1)},
+	{TASK_CLEAR_MOVE_WAIT, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_SET_SCHEDULE, static_cast<float>(SCHED_GRUNT_WAIT_FACE_ENEMY)},
 };
 
 Schedule_t slGruntGrenadeCover[] =
@@ -1568,9 +1567,9 @@ Schedule_t slGruntGrenadeCover[] =
 //=========================================================
 Task_t tlGruntTossGrenadeCover1[] =
 {
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_RANGE_ATTACK2, (float)0},
-	{TASK_SET_SCHEDULE, (float)SCHED_TAKE_COVER_FROM_ENEMY},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK2, static_cast<float>(0)},
+	{TASK_SET_SCHEDULE, static_cast<float>(SCHED_TAKE_COVER_FROM_ENEMY)},
 };
 
 Schedule_t slGruntTossGrenadeCover[] =
@@ -1589,13 +1588,13 @@ Schedule_t slGruntTossGrenadeCover[] =
 //=========================================================
 Task_t tlGruntTakeCoverFromBestSound[] =
 {
-	{TASK_SET_FAIL_SCHEDULE, (float)SCHED_COWER}, // duck and cover if cannot move from explosion
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FIND_COVER_FROM_BEST_SOUND, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_REMEMBER, (float)bits_MEMORY_INCOVER},
-	{TASK_TURN_LEFT, (float)179},
+	{TASK_SET_FAIL_SCHEDULE, static_cast<float>(SCHED_COWER)}, // duck and cover if cannot move from explosion
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FIND_COVER_FROM_BEST_SOUND, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_REMEMBER, static_cast<float>(bits_MEMORY_INCOVER)},
+	{TASK_TURN_LEFT, static_cast<float>(179)},
 };
 
 Schedule_t slGruntTakeCoverFromBestSound[] =
@@ -1614,14 +1613,14 @@ Schedule_t slGruntTakeCoverFromBestSound[] =
 //=========================================================
 Task_t tlGruntHideReload[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_SET_FAIL_SCHEDULE, (float)SCHED_RELOAD},
-	{TASK_FIND_COVER_FROM_ENEMY, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_REMEMBER, (float)bits_MEMORY_INCOVER},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_RELOAD},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_SET_FAIL_SCHEDULE, static_cast<float>(SCHED_RELOAD)},
+	{TASK_FIND_COVER_FROM_ENEMY, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_REMEMBER, static_cast<float>(bits_MEMORY_INCOVER)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_RELOAD)},
 };
 
 Schedule_t slGruntHideReload[] =
@@ -1641,10 +1640,10 @@ Schedule_t slGruntHideReload[] =
 //=========================================================
 Task_t tlGruntSweep[] =
 {
-	{TASK_TURN_LEFT, (float)179},
-	{TASK_WAIT, (float)1},
-	{TASK_TURN_LEFT, (float)179},
-	{TASK_WAIT, (float)1},
+	{TASK_TURN_LEFT, static_cast<float>(179)},
+	{TASK_WAIT, static_cast<float>(1)},
+	{TASK_TURN_LEFT, static_cast<float>(179)},
+	{TASK_WAIT, static_cast<float>(1)},
 };
 
 Schedule_t slGruntSweep[] =
@@ -1674,19 +1673,19 @@ Schedule_t slGruntSweep[] =
 //=========================================================
 Task_t tlGruntRangeAttack1A[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_CROUCH},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE_FACE_ENEMY, static_cast<float>(ACT_CROUCH)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
 };
 
 Schedule_t slGruntRangeAttack1A[] =
@@ -1714,19 +1713,19 @@ Schedule_t slGruntRangeAttack1A[] =
 //=========================================================
 Task_t tlGruntRangeAttack1B[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_IDLE_ANGRY},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_GRUNT_CHECK_FIRE, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE_FACE_ENEMY, static_cast<float>(ACT_IDLE_ANGRY)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_GRUNT_CHECK_FIRE, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
 };
 
 Schedule_t slGruntRangeAttack1B[] =
@@ -1753,10 +1752,11 @@ Schedule_t slGruntRangeAttack1B[] =
 //=========================================================
 Task_t tlGruntRangeAttack2[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_GRUNT_FACE_TOSS_DIR, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_RANGE_ATTACK2},
-	{TASK_SET_SCHEDULE, (float)SCHED_GRUNT_WAIT_FACE_ENEMY}, // don't run immediately after throwing grenade.
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_GRUNT_FACE_TOSS_DIR, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_RANGE_ATTACK2)},
+	{TASK_SET_SCHEDULE, static_cast<float>(SCHED_GRUNT_WAIT_FACE_ENEMY)},
+	// don't run immediately after throwing grenade.
 };
 
 Schedule_t slGruntRangeAttack2[] =
@@ -1776,9 +1776,9 @@ Schedule_t slGruntRangeAttack2[] =
 //=========================================================
 Task_t tlGruntRepel[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_GLIDE},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_GLIDE)},
 };
 
 Schedule_t slGruntRepel[] =
@@ -1805,9 +1805,9 @@ Schedule_t slGruntRepel[] =
 //=========================================================
 Task_t tlGruntRepelAttack[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_FLY},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_FLY)},
 };
 
 Schedule_t slGruntRepelAttack[] =
@@ -1826,12 +1826,12 @@ Schedule_t slGruntRepelAttack[] =
 //=========================================================
 Task_t tlGruntRepelLand[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_LAND},
-	{TASK_GET_PATH_TO_LASTPOSITION, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_CLEAR_LASTPOSITION, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_LAND)},
+	{TASK_GET_PATH_TO_LASTPOSITION, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_CLEAR_LASTPOSITION, static_cast<float>(0)},
 };
 
 Schedule_t slGruntRepelLand[] =
@@ -2011,14 +2011,10 @@ Schedule_t* CHGrunt::GetSchedule(void)
 			pev->movetype = MOVETYPE_STEP;
 			return GetScheduleOfType(SCHED_GRUNT_REPEL_LAND);
 		}
-		else
-		{
-			// repel down a rope, 
-			if (m_MonsterState == MONSTERSTATE_COMBAT)
-				return GetScheduleOfType(SCHED_GRUNT_REPEL_ATTACK);
-			else
-				return GetScheduleOfType(SCHED_GRUNT_REPEL);
-		}
+		// repel down a rope, 
+		if (m_MonsterState == MONSTERSTATE_COMBAT)
+			return GetScheduleOfType(SCHED_GRUNT_REPEL_ATTACK);
+		return GetScheduleOfType(SCHED_GRUNT_REPEL);
 	}
 
 	// grunts place HIGH priority on running away from danger sounds.
@@ -2064,31 +2060,27 @@ Schedule_t* CHGrunt::GetSchedule(void)
 					{
 						return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 					}
-					else
+					ALERT(at_aiconsole, "leader spotted player!\n");
+					if (FOkToSpeak()) // && RANDOM_LONG(0,1))
 					{
-						ALERT(at_aiconsole, "leader spotted player!\n");
-						if (FOkToSpeak()) // && RANDOM_LONG(0,1))
-						{
-							if ((m_hEnemy != NULL) && m_hEnemy->IsPlayer())
-								// player
-								SENTENCEG_PlayRndSz(ENT(pev), "HG_ALERT", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0,
-								                    m_voicePitch);
-							else if ((m_hEnemy != NULL) &&
-								(m_hEnemy->Classify() != CLASS_PLAYER_ALLY) &&
-								(m_hEnemy->Classify() != CLASS_HUMAN_PASSIVE) &&
-								(m_hEnemy->Classify() != CLASS_MACHINE))
-								// monster
-								SENTENCEG_PlayRndSz(ENT(pev), "HG_MONST", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0,
-								                    m_voicePitch);
+						if ((m_hEnemy != NULL) && m_hEnemy->IsPlayer())
+							// player
+							SENTENCEG_PlayRndSz(ENT(pev), "HG_ALERT", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0,
+							                    m_voicePitch);
+						else if ((m_hEnemy != NULL) &&
+							(m_hEnemy->Classify() != CLASS_PLAYER_ALLY) &&
+							(m_hEnemy->Classify() != CLASS_HUMAN_PASSIVE) &&
+							(m_hEnemy->Classify() != CLASS_MACHINE))
+							// monster
+							SENTENCEG_PlayRndSz(ENT(pev), "HG_MONST", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0,
+							                    m_voicePitch);
 
-							JustSpoke();
-						}
-
-						if (HasConditions(bits_COND_CAN_RANGE_ATTACK1))
-							return GetScheduleOfType(SCHED_GRUNT_SUPPRESS);
-						else
-							return GetScheduleOfType(SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE);
+						JustSpoke();
 					}
+
+					if (HasConditions(bits_COND_CAN_RANGE_ATTACK1))
+						return GetScheduleOfType(SCHED_GRUNT_SUPPRESS);
+					return GetScheduleOfType(SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE);
 				}
 			}
 			else if (HasConditions(bits_COND_NO_AMMO_LOADED))
@@ -2106,10 +2098,7 @@ Schedule_t* CHGrunt::GetSchedule(void)
 					}
 					return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 				}
-				else
-				{
-					return GetScheduleOfType(SCHED_SMALL_FLINCH);
-				}
+				return GetScheduleOfType(SCHED_SMALL_FLINCH);
 			}
 				// can kick
 			else if (HasConditions(bits_COND_CAN_MELEE_ATTACK1))
@@ -2144,16 +2133,13 @@ Schedule_t* CHGrunt::GetSchedule(void)
 					// try to take an available ENGAGE slot
 					return GetScheduleOfType(SCHED_RANGE_ATTACK1);
 				}
-				else if (HasConditions(bits_COND_CAN_RANGE_ATTACK2) && OccupySlot(bits_SLOTS_HGRUNT_GRENADE))
+				if (HasConditions(bits_COND_CAN_RANGE_ATTACK2) && OccupySlot(bits_SLOTS_HGRUNT_GRENADE))
 				{
 					// throw a grenade if can and no engage slots are available
 					return GetScheduleOfType(SCHED_RANGE_ATTACK2);
 				}
-				else
-				{
-					// hide!
-					return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
-				}
+				// hide!
+				return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 			}
 				// can't see enemy
 			else if (HasConditions(bits_COND_ENEMY_OCCLUDED))
@@ -2168,7 +2154,7 @@ Schedule_t* CHGrunt::GetSchedule(void)
 					}
 					return GetScheduleOfType(SCHED_RANGE_ATTACK2);
 				}
-				else if (OccupySlot(bits_SLOTS_HGRUNT_ENGAGE))
+				if (OccupySlot(bits_SLOTS_HGRUNT_ENGAGE))
 				{
 					//!!!KELLY - grunt cannot see the enemy and has just decided to 
 					// charge the enemy's position. 
@@ -2181,18 +2167,15 @@ Schedule_t* CHGrunt::GetSchedule(void)
 
 					return GetScheduleOfType(SCHED_GRUNT_ESTABLISH_LINE_OF_FIRE);
 				}
-				else
+				//!!!KELLY - grunt is going to stay put for a couple seconds to see if
+				// the enemy wanders back out into the open, or approaches the
+				// grunt's covered position. Good place for a taunt, I guess?
+				if (FOkToSpeak() && RANDOM_LONG(0, 1))
 				{
-					//!!!KELLY - grunt is going to stay put for a couple seconds to see if
-					// the enemy wanders back out into the open, or approaches the
-					// grunt's covered position. Good place for a taunt, I guess?
-					if (FOkToSpeak() && RANDOM_LONG(0, 1))
-					{
-						SENTENCEG_PlayRndSz(ENT(pev), "HG_TAUNT", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
-						JustSpoke();
-					}
-					return GetScheduleOfType(SCHED_STANDOFF);
+					SENTENCEG_PlayRndSz(ENT(pev), "HG_TAUNT", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					JustSpoke();
 				}
+				return GetScheduleOfType(SCHED_STANDOFF);
 			}
 
 			if (HasConditions(bits_COND_SEE_ENEMY) && !HasConditions(bits_COND_CAN_RANGE_ATTACK1))
@@ -2227,22 +2210,13 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 
 					return slGruntTossGrenadeCover;
 				}
-				else
-				{
-					return &slGruntTakeCover[0];
-				}
+				return &slGruntTakeCover[0];
 			}
-			else
+			if (OccupySlot(bits_SLOTS_HGRUNT_GRENADE) && RANDOM_LONG(0, 1))
 			{
-				if (OccupySlot(bits_SLOTS_HGRUNT_GRENADE) && RANDOM_LONG(0, 1))
-				{
-					return &slGruntGrenadeCover[0];
-				}
-				else
-				{
-					return &slGruntTakeCover[0];
-				}
+				return &slGruntGrenadeCover[0];
 			}
+			return &slGruntTakeCover[0];
 		}
 	case SCHED_TAKE_COVER_FROM_BEST_SOUND:
 		{
@@ -2277,8 +2251,7 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 
 			if (m_fStanding)
 				return &slGruntRangeAttack1B[0];
-			else
-				return &slGruntRangeAttack1A[0];
+			return &slGruntRangeAttack1A[0];
 		}
 	case SCHED_RANGE_ATTACK2:
 		{
@@ -2324,10 +2297,7 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 				// after first encounter, leader won't issue handsigns anymore when he has a new enemy
 				return &slGruntSignalSuppress[0];
 			}
-			else
-			{
-				return &slGruntSuppress[0];
-			}
+			return &slGruntSuppress[0];
 		}
 	case SCHED_FAIL:
 		{
@@ -2371,8 +2341,8 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 class CHGruntRepel : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 	void EXPORT RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	int m_iSpriteTexture; // Don't save, precache
 };
@@ -2427,10 +2397,10 @@ void CHGruntRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 class CDeadHGrunt : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	int Classify(void) { return CLASS_HUMAN_MILITARY; }
+	void Spawn(void) override;
+	int Classify(void) override { return CLASS_HUMAN_MILITARY; }
 
-	void KeyValue(KeyValueData* pkvd);
+	void KeyValue(KeyValueData* pkvd) override;
 
 	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	static char* m_szPoses[3];

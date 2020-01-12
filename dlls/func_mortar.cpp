@@ -31,15 +31,15 @@
 class CFuncMortarField : public CBaseToggle
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
 
 	// Bmodels don't go across transitions
-	virtual int ObjectCaps(void) { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps(void) override { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -132,7 +132,7 @@ void CFuncMortarField::FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 	case 0: // random
 		break;
 	case 1: // Trigger Activator
-		if (pActivator != NULL)
+		if (pActivator != nullptr)
 		{
 			vecStart.x = pActivator->pev->origin.x;
 			vecStart.y = pActivator->pev->origin.y;
@@ -144,16 +144,16 @@ void CFuncMortarField::FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 
 			if (!FStringNull(m_iszXController))
 			{
-				pController = UTIL_FindEntityByTargetname(NULL, STRING(m_iszXController));
-				if (pController != NULL)
+				pController = UTIL_FindEntityByTargetname(nullptr, STRING(m_iszXController));
+				if (pController != nullptr)
 				{
 					vecStart.x = pev->mins.x + pController->pev->ideal_yaw * (pev->size.x);
 				}
 			}
 			if (!FStringNull(m_iszYController))
 			{
-				pController = UTIL_FindEntityByTargetname(NULL, STRING(m_iszYController));
-				if (pController != NULL)
+				pController = UTIL_FindEntityByTargetname(nullptr, STRING(m_iszYController));
+				if (pController != nullptr)
 				{
 					vecStart.y = pev->mins.y + pController->pev->ideal_yaw * (pev->size.y);
 				}
@@ -176,7 +176,7 @@ void CFuncMortarField::FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 		TraceResult tr;
 		UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -1) * 4096, ignore_monsters, ENT(pev), &tr);
 
-		edict_t* pentOwner = NULL;
+		edict_t* pentOwner = nullptr;
 		if (pActivator) pentOwner = pActivator->edict();
 
 		CBaseEntity* pMortar = Create("monster_mortar", tr.vecEndPos, Vector(0, 0, 0), pentOwner);
@@ -192,8 +192,8 @@ void CFuncMortarField::FieldUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 class CMortar : public CGrenade
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 
 	void EXPORT MortarExplode(void);
 

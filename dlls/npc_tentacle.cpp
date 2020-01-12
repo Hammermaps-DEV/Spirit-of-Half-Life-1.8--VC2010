@@ -38,18 +38,18 @@ class CTentacle : public CBaseMonster
 public:
 	CTentacle(void);
 
-	void Spawn();
-	void Precache();
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn() override;
+	void Precache() override;
+	void KeyValue(KeyValueData* pkvd) override;
 
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	// Don't allow the tentacle to go across transitions!!!
-	virtual int ObjectCaps(void) { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps(void) override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	void SetObjectCollisionBox(void)
+	void SetObjectCollisionBox(void) override
 	{
 		pev->absmin = pev->origin + Vector(-400, -400, 0);
 		pev->absmax = pev->origin + Vector(400, 400, 850);
@@ -64,17 +64,17 @@ public:
 
 	void EXPORT HitTouch(CBaseEntity* pOther);
 
-	float HearingSensitivity(void) { return 2.0; };
+	float HearingSensitivity(void) override { return 2.0; };
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
-	void Killed(entvars_t* pevAttacker, int iGib);
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	void Killed(entvars_t* pevAttacker, int iGib) override;
 
-	MONSTERSTATE GetIdealState(void) { return MONSTERSTATE_IDLE; };
+	MONSTERSTATE GetIdealState(void) override { return MONSTERSTATE_IDLE; };
 	//	int CanPlaySequence( BOOL fDisregardState ) { return TRUE; };
-	int CanPlaySequence(int interruptFlags) { return TRUE; };
+	int CanPlaySequence(int interruptFlags) override { return TRUE; };
 
-	int Classify(void);
+	int Classify(void) override;
 
 	int Level(float dz);
 	int MyLevel(void);
@@ -480,7 +480,7 @@ void CTentacle::Cycle(void)
 	if (HasConditions(bits_COND_HEAR_SOUND))
 		pSound = PBestSound();
 	else
-		pSound = NULL;
+		pSound = nullptr;
 
 	if (pSound)
 	{
@@ -957,7 +957,7 @@ void CTentacle::HitTouch(CBaseEntity* pOther)
 		return;
 
 	// only look at the ones where the player hit me
-	if (tr.pHit == NULL || tr.pHit->v.modelindex != pev->modelindex)
+	if (tr.pHit == nullptr || tr.pHit->v.modelindex != pev->modelindex)
 		return;
 
 	if (tr.iHitgroup >= 3)
@@ -1000,15 +1000,14 @@ int CTentacle::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float
 void CTentacle::Killed(entvars_t* pevAttacker, int iGib)
 {
 	m_iGoalAnim = TENTACLE_ANIM_Pit_Idle;
-	return;
 }
 
 
 class CTentacleMaw : public CBaseMonster
 {
 public:
-	void Spawn();
-	void Precache();
+	void Spawn() override;
+	void Precache() override;
 };
 
 LINK_ENTITY_TO_CLASS(monster_tentaclemaw, CTentacleMaw);

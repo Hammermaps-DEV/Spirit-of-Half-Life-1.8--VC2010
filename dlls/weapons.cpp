@@ -94,7 +94,7 @@ Collects multiple small damages into a single damage
 //
 void ClearMultiDamage(void)
 {
-	gMultiDamage.pEntity = NULL;
+	gMultiDamage.pEntity = nullptr;
 	gMultiDamage.amount = 0;
 	gMultiDamage.type = 0;
 }
@@ -146,7 +146,7 @@ SpawnBlood
 */
 void SpawnBlood(Vector vecSpot, int bloodColor, float flDamage)
 {
-	UTIL_BloodDrips(vecSpot, g_vecAttackDir, bloodColor, (int)flDamage);
+	UTIL_BloodDrips(vecSpot, g_vecAttackDir, bloodColor, static_cast<int>(flDamage));
 }
 
 
@@ -166,7 +166,7 @@ void DecalGunshot(TraceResult* pTrace, int iBulletType)
 
 	if (VARS(pTrace->pHit)->solid == SOLID_BSP || VARS(pTrace->pHit)->movetype == MOVETYPE_PUSHSTEP)
 	{
-		CBaseEntity* pEntity = NULL;
+		CBaseEntity* pEntity = nullptr;
 		// Decal the wall with a gunshot
 		if (!FNullEnt(pTrace->pHit))
 			pEntity = CBaseEntity::Instance(pTrace->pHit);
@@ -263,7 +263,7 @@ void UTIL_PrecacheOtherWeapon(const char* szClassname)
 		ItemInfo II;
 		pEntity->Precache();
 		memset(&II, 0, sizeof II);
-		if (((CBasePlayerItem*)pEntity)->GetItemInfo(&II))
+		if (static_cast<CBasePlayerItem*>(pEntity)->GetItemInfo(&II))
 		{
 			CBasePlayerItem::ItemInfoArray[II.iId] = II;
 
@@ -560,8 +560,8 @@ CBaseEntity* CBasePlayerItem::Respawn(void)
 {
 	// make a copy of this weapon that is invisible and inaccessible to players (no touch function). The weapon spawn/respawn code
 	// will decide when to make the weapon visible and touchable.
-	CBaseEntity* pNewWeapon = CBaseEntity::Create((char*)STRING(pev->classname),
-	                                              g_pGameRules->VecWeaponRespawnSpot(this), pev->angles, pev->owner);
+	CBaseEntity* pNewWeapon = Create((char*)STRING(pev->classname),
+	                                 g_pGameRules->VecWeaponRespawnSpot(this), pev->angles, pev->owner);
 
 	if (pNewWeapon)
 	{
@@ -589,7 +589,7 @@ void CBasePlayerItem::DefaultTouch(CBaseEntity* pOther)
 	if (!pOther->IsPlayer())
 		return;
 
-	CBasePlayer* pPlayer = (CBasePlayer*)pOther;
+	CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
 
 	// can I have this?
 	if (!g_pGameRules->CanHavePlayerItem(pPlayer, this))
@@ -642,10 +642,7 @@ BOOL CanAttack(float attack_time, float curtime, BOOL isPredicted)
 	{
 		return (attack_time <= curtime) ? TRUE : FALSE;
 	}
-	else
-	{
-		return (attack_time <= 0.0) ? TRUE : FALSE;
-	}
+	return (attack_time <= 0.0) ? TRUE : FALSE;
 }
 
 void CBasePlayerWeapon::ItemPostFrame(void)
@@ -793,13 +790,10 @@ int CBasePlayerWeapon::AddDuplicate(CBasePlayerItem* pOriginal)
 
 	if (m_iDefaultAmmo)
 	{
-		return ExtractAmmo((CBasePlayerWeapon*)pOriginal);
+		return ExtractAmmo(static_cast<CBasePlayerWeapon*>(pOriginal));
 	}
-	else
-	{
-		// a dead player dropped this.
-		return ExtractClipAmmo((CBasePlayerWeapon*)pOriginal);
-	}
+	// a dead player dropped this.
+	return ExtractClipAmmo(static_cast<CBasePlayerWeapon*>(pOriginal));
 }
 
 
@@ -864,7 +858,7 @@ int CBasePlayerWeapon::UpdateClientData(CBasePlayer* pPlayer)
 
 	if (bSend)
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, NULL, pPlayer->pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, nullptr, pPlayer->pev);
 		WRITE_BYTE(state);
 		WRITE_BYTE(m_iId);
 		WRITE_BYTE(m_iClip);
@@ -895,7 +889,7 @@ void CBasePlayerWeapon::SendWeaponAnim(int iAnim, int skiplocal, int body)
 		return;
 #endif
 
-	MESSAGE_BEGIN(MSG_ONE, SVC_WEAPONANIM, NULL, m_pPlayer->pev);
+	MESSAGE_BEGIN(MSG_ONE, SVC_WEAPONANIM, nullptr, m_pPlayer->pev);
 	WRITE_BYTE(iAnim); // sequence number
 	WRITE_BYTE(pev->body); // weaponmodel bodygroup.
 	MESSAGE_END();
@@ -1154,7 +1148,7 @@ int CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon* pWeapon)
 {
 	int iReturn;
 
-	if (pszAmmo1() != NULL)
+	if (pszAmmo1() != nullptr)
 	{
 		// blindly call with m_iDefaultAmmo. It's either going to be a value or zero. If it is zero,
 		// we only get the ammo in the weapon's clip, which is what we want. 
@@ -1162,7 +1156,7 @@ int CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon* pWeapon)
 		m_iDefaultAmmo = 0;
 	}
 
-	if (pszAmmo2() != NULL)
+	if (pszAmmo2() != nullptr)
 	{
 		iReturn = pWeapon->AddSecondaryAmmo(0, (char*)pszAmmo2(), iMaxAmmo2());
 	}
@@ -1212,7 +1206,7 @@ void CBasePlayerWeapon::DrainClip(CBasePlayer* pPlayer, BOOL keep, int i9mm, int
 	int iPAI = PrimaryAmmoIndex();
 	int iAmt;
 	if (iPAI == -1) return;
-	else if (iPAI == pPlayer->GetAmmoIndex("9mm")) iAmt = i9mm;
+	if (iPAI == pPlayer->GetAmmoIndex("9mm")) iAmt = i9mm;
 	else if (iPAI == pPlayer->GetAmmoIndex("357")) iAmt = i357;
 	else if (iPAI == pPlayer->GetAmmoIndex("buckshot")) iAmt = iBuck;
 	else if (iPAI == pPlayer->GetAmmoIndex("bolts")) iAmt = iBolt;
@@ -1345,7 +1339,7 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
 		return;
 	}
 
-	CBasePlayer* pPlayer = (CBasePlayer*)pOther;
+	CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
 	int i;
 
 	// dole out ammo
@@ -1426,7 +1420,7 @@ BOOL CWeaponBox::PackWeapon(CBasePlayerItem* pWeapon)
 	{
 		// first weapon we have for this slot
 		m_rgpPlayerItems[iWeaponSlot] = pWeapon;
-		pWeapon->m_pNext = NULL;
+		pWeapon->m_pNext = nullptr;
 	}
 
 	pWeapon->pev->spawnflags |= SF_NORESPAWN; // never respawn
@@ -1438,7 +1432,7 @@ BOOL CWeaponBox::PackWeapon(CBasePlayerItem* pWeapon)
 	pWeapon->pev->owner = edict();
 	pWeapon->SetThink(NULL); // crowbar may be trying to swing again, etc.
 	pWeapon->SetTouch(NULL);
-	pWeapon->m_pPlayer = NULL;
+	pWeapon->m_pPlayer = nullptr;
 
 	//ALERT ( at_console, "packed %s\n", STRING(pWeapon->pev->classname) );
 

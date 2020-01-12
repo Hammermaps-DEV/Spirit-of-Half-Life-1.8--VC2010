@@ -106,13 +106,13 @@ int CMP5::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
-			WRITE_BYTE(m_iId);
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->pev);
+		WRITE_BYTE(m_iId);
 		MESSAGE_END();
-		
+
 		return TRUE;
 	}
-	
+
 	return FALSE;
 }
 
@@ -157,16 +157,16 @@ void CMP5::PrimaryAttack()
 
 #ifndef CLIENT_DLL
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-		WRITE_BYTE(TE_DLIGHT);
-		WRITE_COORD(pev->origin.x); // origin
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_BYTE(16); // radius
-		WRITE_BYTE(255); // R
-		WRITE_BYTE(255); // G
-		WRITE_BYTE(160); // B
-		WRITE_BYTE(0); // life * 10
-		WRITE_BYTE(0); // decay
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(pev->origin.x); // origin
+	WRITE_COORD(pev->origin.y);
+	WRITE_COORD(pev->origin.z);
+	WRITE_BYTE(16); // radius
+	WRITE_BYTE(255); // R
+	WRITE_BYTE(255); // G
+	WRITE_BYTE(160); // B
+	WRITE_BYTE(0); // life * 10
+	WRITE_BYTE(0); // decay
 	MESSAGE_END();
 #endif
 

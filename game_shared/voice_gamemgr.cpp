@@ -55,13 +55,13 @@ static CBasePlayer* FindPlayerByName(const char* pTestName)
 				const char* pNetName = STRING(pEnt->pev->netname);
 				if (_stricmp(pNetName, pTestName) == 0)
 				{
-					return (CBasePlayer*)pEnt;
+					return static_cast<CBasePlayer*>(pEnt);
 				}
 			}
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 static void VoiceServerDebug(char const* pFmt, ...)
@@ -195,7 +195,7 @@ bool CVoiceGameMgr::ClientCommand(CBasePlayer* pPlayer, const char* cmd)
 		//UpdateMasks();		
 		return true;
 	}
-	else if (_stricmp(cmd, "VModEnable") == 0 && CMD_ARGC() >= 2)
+	if (_stricmp(cmd, "VModEnable") == 0 && CMD_ARGC() >= 2)
 	{
 		VoiceServerDebug("CVoiceGameMgr::ClientCommand: VModEnable (%d)\n", !!atoi(CMD_ARGV(1)));
 		g_PlayerModEnable[playerClientIndex] = !!atoi(CMD_ARGV(1));
@@ -203,10 +203,7 @@ bool CVoiceGameMgr::ClientCommand(CBasePlayer* pPlayer, const char* cmd)
 		//UpdateMasks();		
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+	return false;
 }
 
 
@@ -225,11 +222,11 @@ void CVoiceGameMgr::UpdateMasks()
 		// Request the state of their "VModEnable" cvar.
 		if (g_bWantModEnable[iClient])
 		{
-			MESSAGE_BEGIN(MSG_ONE, m_msgRequestState, NULL, pEnt->pev);
+			MESSAGE_BEGIN(MSG_ONE, m_msgRequestState, nullptr, pEnt->pev);
 			MESSAGE_END();
 		}
 
-		CBasePlayer* pPlayer = (CBasePlayer*)pEnt;
+		CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pEnt);
 
 		CPlayerBitVec gameRulesMask;
 		if (g_PlayerModEnable[iClient])
@@ -239,7 +236,7 @@ void CVoiceGameMgr::UpdateMasks()
 			{
 				CBaseEntity* pEnt = UTIL_PlayerByIndex(iOtherClient + 1);
 				if (pEnt && pEnt->IsPlayer() &&
-					(bAllTalk || m_pHelper->CanPlayerHearPlayer(pPlayer, (CBasePlayer*)pEnt)))
+					(bAllTalk || m_pHelper->CanPlayerHearPlayer(pPlayer, static_cast<CBasePlayer*>(pEnt))))
 				{
 					gameRulesMask[iOtherClient] = true;
 				}
@@ -253,7 +250,7 @@ void CVoiceGameMgr::UpdateMasks()
 			g_SentGameRulesMasks[iClient] = gameRulesMask;
 			g_SentBanMasks[iClient] = g_BanMasks[iClient];
 
-			MESSAGE_BEGIN(MSG_ONE, m_msgPlayerVoiceMask, NULL, pPlayer->pev);
+			MESSAGE_BEGIN(MSG_ONE, m_msgPlayerVoiceMask, nullptr, pPlayer->pev);
 			int dw;
 			for (dw = 0; dw < VOICE_MAX_PLAYERS_DW; dw++)
 			{

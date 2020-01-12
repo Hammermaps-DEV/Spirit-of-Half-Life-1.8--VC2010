@@ -86,24 +86,21 @@ int UTIL_SharedRandomLong(unsigned int seed, int low, int high)
 {
 	unsigned int range;
 
-	U_Srand((int)seed + low + high);
+	U_Srand(static_cast<int>(seed) + low + high);
 
 	range = high - low + 1;
 	if (!(range - 1))
 	{
 		return low;
 	}
-	else
-	{
-		int offset;
-		int rnum;
+	int offset;
+	int rnum;
 
-		rnum = U_Random();
+	rnum = U_Random();
 
-		offset = rnum % range;
+	offset = rnum % range;
 
-		return (low + offset);
-	}
+	return (low + offset);
 }
 
 /*
@@ -116,7 +113,7 @@ float UTIL_SharedRandomFloat(unsigned int seed, float low, float high)
 	//
 	unsigned int range;
 
-	U_Srand((int)seed + *(int*)&low + *(int*)&high);
+	U_Srand(static_cast<int>(seed) + *(int*)&low + *(int*)&high);
 
 	U_Random();
 	U_Random();
@@ -126,17 +123,14 @@ float UTIL_SharedRandomFloat(unsigned int seed, float low, float high)
 	{
 		return low;
 	}
-	else
-	{
-		int tensixrand;
-		float offset;
+	int tensixrand;
+	float offset;
 
-		tensixrand = U_Random() & 65535;
+	tensixrand = U_Random() & 65535;
 
-		offset = (float)tensixrand / 65536.0;
+	offset = static_cast<float>(tensixrand) / 65536.0;
 
-		return (low + offset * range);
-	}
+	return (low + offset * range);
 }
 
 void UTIL_ParametricRocket(entvars_t* pev, Vector vecOrigin, Vector vecAngles, edict_t* owner)
@@ -316,11 +310,11 @@ TYPEDESCRIPTION gEntvarsDescription[] =
 #ifdef	DEBUG
 edict_t* DBG_EntOfVars(const entvars_t* pev)
 {
-	if (pev->pContainingEntity != NULL)
+	if (pev->pContainingEntity != nullptr)
 		return pev->pContainingEntity;
 	ALERT(at_debug, "entvars_t pContainingEntity is NULL, calling into engine");
 	edict_t* pent = (*g_engfuncs.pfnFindEntityByVars)((entvars_t*)pev);
-	if (pent == NULL)
+	if (pent == nullptr)
 		ALERT(at_debug, "DAMN!  Even the engine couldn't FindEntityByVars!");
 	((entvars_t*)pev)->pContainingEntity = pent;
 	return pent;
@@ -340,7 +334,7 @@ DBG_AssertFunction(
 	if (fExpr)
 		return;
 	char szOut[512];
-	if (szMessage != NULL)
+	if (szMessage != nullptr)
 		sprintf_s(szOut, "ASSERT FAILED:\n %s \n(%s@%d)\n%s", szExpr, szFile, szLine, szMessage);
 	else
 		sprintf_s(szOut, "ASSERT FAILED:\n %s \n(%s@%d)", szExpr, szFile, szLine);
@@ -358,11 +352,11 @@ float UTIL_AngleMod(float a)
 {
 	if (a < 0)
 	{
-		a = a + 360 * ((int)(a / 360) + 1);
+		a = a + 360 * (static_cast<int>(a / 360) + 1);
 	}
 	else if (a >= 360)
 	{
-		a = a - 360 * ((int)(a / 360));
+		a = a - 360 * static_cast<int>(a / 360);
 	}
 	// a = (360.0/65536) * ((int)(a*(65536/360.0)) & 65535);
 	return a;
@@ -544,13 +538,13 @@ CBaseEntity* UTIL_FindEntityInSphere(CBaseEntity* pStartEntity, const Vector& ve
 	if (pStartEntity)
 		pentEntity = pStartEntity->edict();
 	else
-		pentEntity = NULL;
+		pentEntity = nullptr;
 
 	pentEntity = FIND_ENTITY_IN_SPHERE(pentEntity, vecCenter, flRadius);
 
 	if (!FNullEnt(pentEntity))
 		return CBaseEntity::Instance(pentEntity);
-	return NULL;
+	return nullptr;
 }
 
 
@@ -562,7 +556,7 @@ CBaseEntity* UTIL_FindEntityByString(CBaseEntity* pStartEntity, const char* szKe
 	if (pStartEntity)
 		pentEntity = pStartEntity->edict();
 	else
-		pentEntity = NULL;
+		pentEntity = nullptr;
 
 	for (;;)
 	{
@@ -572,15 +566,12 @@ CBaseEntity* UTIL_FindEntityByString(CBaseEntity* pStartEntity, const char* szKe
 		// if pentEntity (the edict) is null, we're at the end of the entities. Give up.
 		if (FNullEnt(pentEntity))
 		{
-			return NULL;
+			return nullptr;
 		}
-		else
-		{
-			// ...but if only pEntity (the classptr) is null, we've just got one dud, so we try again.
-			pEntity = CBaseEntity::Instance(pentEntity);
-			if (pEntity)
-				return pEntity;
-		}
+		// ...but if only pEntity (the classptr) is null, we've just got one dud, so we try again.
+		pEntity = CBaseEntity::Instance(pentEntity);
+		if (pEntity)
+			return pEntity;
 	}
 }
 
@@ -626,20 +617,18 @@ void UTIL_AddToAliasList(CBaseMutableAlias* pAlias)
 	pAlias->m_iLFlags |= LF_ALIASLIST;
 
 	//	ALERT(at_console, "Adding %s \"%s\" to alias list\n", STRING(pAlias->pev->classname), STRING(pAlias->pev->targetname));
-	if (g_pWorld->m_pFirstAlias == NULL)
+	if (g_pWorld->m_pFirstAlias == nullptr)
 	{
 		g_pWorld->m_pFirstAlias = pAlias;
-		pAlias->m_pNextAlias = NULL;
+		pAlias->m_pNextAlias = nullptr;
 	}
 	else if (g_pWorld->m_pFirstAlias == pAlias)
 	{
-		// already in the list
-		return;
 	}
 	else
 	{
 		CBaseMutableAlias* pCurrent = g_pWorld->m_pFirstAlias;
-		while (pCurrent->m_pNextAlias != NULL)
+		while (pCurrent->m_pNextAlias != nullptr)
 		{
 			if (pCurrent->m_pNextAlias == pAlias)
 			{
@@ -649,7 +638,7 @@ void UTIL_AddToAliasList(CBaseMutableAlias* pAlias)
 			pCurrent = pCurrent->m_pNextAlias;
 		}
 		pCurrent->m_pNextAlias = pAlias;
-		pAlias->m_pNextAlias = NULL;
+		pAlias->m_pNextAlias = nullptr;
 	}
 }
 
@@ -658,12 +647,12 @@ void UTIL_AddToAliasList(CBaseMutableAlias* pAlias)
 CBaseEntity* UTIL_FollowAliasReference(CBaseEntity* pStartEntity, const char* szValue)
 {
 	CBaseEntity* pEntity;
-	CBaseEntity* pBestEntity = NULL; // the entity we're currently planning to return.
+	CBaseEntity* pBestEntity = nullptr; // the entity we're currently planning to return.
 	int iBestOffset = -1; // the offset of that entity.
 	CBaseEntity* pTempEntity;
 	int iTempOffset;
 
-	pEntity = UTIL_FindEntityByTargetname(NULL, szValue);
+	pEntity = UTIL_FindEntityByTargetname(nullptr, szValue);
 
 	while (pEntity)
 	{
@@ -690,13 +679,13 @@ CBaseEntity* UTIL_FollowAliasReference(CBaseEntity* pStartEntity, const char* sz
 CBaseEntity* UTIL_FollowGroupReference(CBaseEntity* pStartEntity, char* szGroupName, char* szMemberName)
 {
 	CBaseEntity* pEntity;
-	CBaseEntity* pBestEntity = NULL; // the entity we're currently planning to return.
+	CBaseEntity* pBestEntity = nullptr; // the entity we're currently planning to return.
 	int iBestOffset = -1; // the offset of that entity.
 	CBaseEntity* pTempEntity;
 	int iTempOffset;
 	char szBuf[MAX_ALIASNAME_LEN];
 	char* szThisMember = szMemberName;
-	char* szTail = NULL;
+	char* szTail = nullptr;
 	int iszMemberValue;
 	int i;
 
@@ -715,12 +704,12 @@ CBaseEntity* UTIL_FollowGroupReference(CBaseEntity* pStartEntity, char* szGroupN
 		}
 	}
 
-	pEntity = UTIL_FindEntityByTargetname(NULL, szGroupName);
+	pEntity = UTIL_FindEntityByTargetname(nullptr, szGroupName);
 	while (pEntity)
 	{
 		if (FStrEq(STRING(pEntity->pev->classname), "info_group"))
 		{
-			iszMemberValue = ((CInfoGroup*)pEntity)->GetMember(szThisMember);
+			iszMemberValue = static_cast<CInfoGroup*>(pEntity)->GetMember(szThisMember);
 			//			ALERT(at_console,"survived getMember\n");
 			//			return NULL;
 			if (!FStringNull(iszMemberValue))
@@ -749,7 +738,7 @@ CBaseEntity* UTIL_FollowGroupReference(CBaseEntity* pStartEntity, char* szGroupN
 		//		ALERT(at_console,"\"%s\".\"%s\" returns %s\n",szGroupName,szMemberName,STRING(pBestEntity->pev->targetname));
 		return pBestEntity;
 	}
-	return NULL;
+	return nullptr;
 }
 
 // Returns the first entity which szName refers to and which is after pStartEntity.
@@ -760,7 +749,7 @@ CBaseEntity* UTIL_FollowReference(CBaseEntity* pStartEntity, const char* szName)
 	int i;
 	CBaseEntity* pResult;
 
-	if (!szName || szName[0] == 0) return NULL;
+	if (!szName || szName[0] == 0) return nullptr;
 
 	// reference through an info_group?
 	for (i = 0; szName[i]; i++)
@@ -784,11 +773,10 @@ CBaseEntity* UTIL_FollowReference(CBaseEntity* pStartEntity, const char* szName)
 	{
 		if (FStrEq(szName, "*player"))
 		{
-			CBaseEntity* pPlayer = UTIL_FindEntityByClassname(NULL, "player");
-			if (pPlayer && (pStartEntity == NULL || pPlayer->eoffset() > pStartEntity->eoffset()))
+			CBaseEntity* pPlayer = UTIL_FindEntityByClassname(nullptr, "player");
+			if (pPlayer && (pStartEntity == nullptr || pPlayer->eoffset() > pStartEntity->eoffset()))
 				return pPlayer;
-			else
-				return NULL;
+			return nullptr;
 		}
 		//ALERT(at_console,"Following alias %s\n",szName+1);
 		pResult = UTIL_FollowAliasReference(pStartEntity, szName + 1);
@@ -798,7 +786,7 @@ CBaseEntity* UTIL_FollowReference(CBaseEntity* pStartEntity, const char* szName)
 	}
 	// not a reference
 	//	ALERT(at_console,"%s is not a reference\n",szName);
-	return NULL;
+	return nullptr;
 }
 
 CBaseEntity* UTIL_FindEntityByTargetname(CBaseEntity* pStartEntity, const char* szName)
@@ -806,21 +794,18 @@ CBaseEntity* UTIL_FindEntityByTargetname(CBaseEntity* pStartEntity, const char* 
 	CBaseEntity* pFound = UTIL_FollowReference(pStartEntity, szName);
 	if (pFound)
 		return pFound;
-	else
-		return UTIL_FindEntityByString(pStartEntity, "targetname", szName);
+	return UTIL_FindEntityByString(pStartEntity, "targetname", szName);
 }
 
 CBaseEntity* UTIL_FindEntityByTargetname(CBaseEntity* pStartEntity, const char* szName, CBaseEntity* pActivator)
 {
 	if (FStrEq(szName, "*locus"))
 	{
-		if (pActivator && (pStartEntity == NULL || pActivator->eoffset() > pStartEntity->eoffset()))
+		if (pActivator && (pStartEntity == nullptr || pActivator->eoffset() > pStartEntity->eoffset()))
 			return pActivator;
-		else
-			return NULL;
+		return nullptr;
 	}
-	else
-		return UTIL_FindEntityByTargetname(pStartEntity, szName);
+	return UTIL_FindEntityByTargetname(pStartEntity, szName);
 }
 
 CBaseEntity* UTIL_FindEntityByTarget(CBaseEntity* pStartEntity, const char* szName)
@@ -830,15 +815,15 @@ CBaseEntity* UTIL_FindEntityByTarget(CBaseEntity* pStartEntity, const char* szNa
 
 CBaseEntity* UTIL_FindEntityGeneric(const char* szWhatever, Vector& vecSrc, float flRadius)
 {
-	CBaseEntity* pEntity = NULL;
+	CBaseEntity* pEntity = nullptr;
 
-	pEntity = UTIL_FindEntityByTargetname(NULL, szWhatever);
+	pEntity = UTIL_FindEntityByTargetname(nullptr, szWhatever);
 	if (pEntity)
 		return pEntity;
 
-	CBaseEntity* pSearch = NULL;
+	CBaseEntity* pSearch = nullptr;
 	float flMaxDist2 = flRadius * flRadius;
-	while ((pSearch = UTIL_FindEntityByClassname(pSearch, szWhatever)) != NULL)
+	while ((pSearch = UTIL_FindEntityByClassname(pSearch, szWhatever)) != nullptr)
 	{
 		float flDist2 = (pSearch->pev->origin - vecSrc).Length();
 		flDist2 = flDist2 * flDist2;
@@ -857,7 +842,7 @@ CBaseEntity* UTIL_FindEntityGeneric(const char* szWhatever, Vector& vecSrc, floa
 // Index is 1 based
 CBaseEntity* UTIL_PlayerByIndex(int playerIndex)
 {
-	CBaseEntity* pPlayer = NULL;
+	CBaseEntity* pPlayer = nullptr;
 
 	if (playerIndex > 0 && playerIndex <= gpGlobals->maxClients)
 	{
@@ -928,7 +913,7 @@ static unsigned short FixedUnsigned16(float value, float scale)
 	if (output > 0xFFFF)
 		output = 0xFFFF;
 
-	return (unsigned short)output;
+	return static_cast<unsigned short>(output);
 }
 
 static short FixedSigned16(float value, float scale)
@@ -943,7 +928,7 @@ static short FixedSigned16(float value, float scale)
 	if (output < -32768)
 		output = -32768;
 
-	return (short)output;
+	return static_cast<short>(output);
 }
 
 // Shake the screen of all clients within radius
@@ -985,7 +970,7 @@ void UTIL_ScreenShake(const Vector& center, float amplitude, float frequency, fl
 		{
 			shake.amplitude = FixedUnsigned16(localAmplitude, 1 << 12); // 4.12 fixed
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgShake, NULL, pPlayer->edict()); // use the magic #1 for "one client"
+			MESSAGE_BEGIN(MSG_ONE, gmsgShake, nullptr, pPlayer->edict()); // use the magic #1 for "one client"
 
 			WRITE_SHORT(shake.amplitude); // shake amount
 			WRITE_SHORT(shake.duration); // shake lasts this long
@@ -1007,9 +992,9 @@ void UTIL_ScreenFadeBuild(ScreenFade& fade, const Vector& color, float fadeTime,
 {
 	fade.duration = FixedUnsigned16(fadeTime, 1 << 12); // 4.12 fixed
 	fade.holdTime = FixedUnsigned16(fadeHold, 1 << 12); // 4.12 fixed
-	fade.r = (int)color.x;
-	fade.g = (int)color.y;
-	fade.b = (int)color.z;
+	fade.r = static_cast<int>(color.x);
+	fade.g = static_cast<int>(color.y);
+	fade.b = static_cast<int>(color.z);
 	fade.a = alpha;
 	fade.fadeFlags = flags;
 }
@@ -1020,7 +1005,7 @@ void UTIL_ScreenFadeWrite(const ScreenFade& fade, CBaseEntity* pEntity)
 	if (!pEntity || !pEntity->IsNetClient())
 		return;
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgFade, NULL, pEntity->edict()); // use the magic #1 for "one client"
+	MESSAGE_BEGIN(MSG_ONE, gmsgFade, nullptr, pEntity->edict()); // use the magic #1 for "one client"
 
 	WRITE_SHORT(fade.duration); // fade lasts this long
 	WRITE_SHORT(fade.holdTime); // fade lasts this long
@@ -1063,7 +1048,7 @@ void UTIL_HudMessage(CBaseEntity* pEntity, const hudtextparms_t& textparms, cons
 	if (!pEntity || !pEntity->IsNetClient())
 		return;
 
-	MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, NULL, pEntity->edict());
+	MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, nullptr, pEntity->edict());
 	WRITE_BYTE(TE_TEXTMESSAGE);
 	WRITE_BYTE(textparms.channel & 0xFF);
 
@@ -1139,7 +1124,7 @@ void UTIL_ClientPrintAll(int msg_dest, const char* msg_name, const char* param1,
 void ClientPrint(entvars_t* client, int msg_dest, const char* msg_name, const char* param1, const char* param2,
                  const char* param3, const char* param4)
 {
-	MESSAGE_BEGIN(MSG_ONE, gmsgTextMsg, NULL, client);
+	MESSAGE_BEGIN(MSG_ONE, gmsgTextMsg, nullptr, client);
 	WRITE_BYTE(msg_dest);
 	WRITE_STRING(msg_name);
 
@@ -1160,7 +1145,7 @@ void UTIL_SayText(const char* pText, CBaseEntity* pEntity)
 	if (!pEntity->IsNetClient())
 		return;
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgSayText, NULL, pEntity->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, pEntity->edict());
 	WRITE_BYTE(pEntity->entindex());
 	WRITE_STRING(pText);
 	MESSAGE_END();
@@ -1168,7 +1153,7 @@ void UTIL_SayText(const char* pText, CBaseEntity* pEntity)
 
 void UTIL_SayTextAll(const char* pText, CBaseEntity* pEntity)
 {
-	MESSAGE_BEGIN(MSG_ALL, gmsgSayText, NULL);
+	MESSAGE_BEGIN(MSG_ALL, gmsgSayText, nullptr);
 	WRITE_BYTE(pEntity->entindex());
 	WRITE_STRING(pText);
 	MESSAGE_END();
@@ -1208,7 +1193,7 @@ void UTIL_ShowMessage(const char* pString, CBaseEntity* pEntity)
 	if (!pEntity || !pEntity->IsNetClient())
 		return;
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgHudText, NULL, pEntity->edict());
+	MESSAGE_BEGIN(MSG_ONE, gmsgHudText, nullptr, pEntity->edict());
 	WRITE_STRING(pString);
 	MESSAGE_END();
 }
@@ -1298,7 +1283,7 @@ void UTIL_SetOrigin(CBaseEntity* pEntity, const Vector& vecOrigin)
 
 void UTIL_ParticleEffect(const Vector& vecOrigin, const Vector& vecDirection, ULONG ulColor, ULONG ulCount)
 {
-	PARTICLE_EFFECT(vecOrigin, vecDirection, (float)ulColor, (float)ulCount);
+	PARTICLE_EFFECT(vecOrigin, vecDirection, static_cast<float>(ulColor), static_cast<float>(ulCount));
 }
 
 float UTIL_Approach(float target, float value, float speed)
@@ -1405,7 +1390,7 @@ BOOL UTIL_IsMasterTriggered(string_t iszMaster, CBaseEntity* pActivator)
 			szMaster++;
 		}
 
-		pMaster = UTIL_FindEntityByTargetname(NULL, szMaster);
+		pMaster = UTIL_FindEntityByTargetname(nullptr, szMaster);
 		if (!pMaster)
 		{
 			for (i = 0; szMaster[i]; i++)
@@ -1418,7 +1403,7 @@ BOOL UTIL_IsMasterTriggered(string_t iszMaster, CBaseEntity* pActivator)
 						{
 							strncpy_s(szBuf, szMaster + i + 1, (j - i) - 1);
 							szBuf[(j - i) - 1] = 0;
-							pActivator = UTIL_FindEntityByTargetname(NULL, szBuf);
+							pActivator = UTIL_FindEntityByTargetname(nullptr, szBuf);
 							found = true;
 							break;
 						}
@@ -1439,15 +1424,14 @@ BOOL UTIL_IsMasterTriggered(string_t iszMaster, CBaseEntity* pActivator)
 
 			strncpy_s(szBuf, szMaster, i);
 			szBuf[i] = 0;
-			pMaster = UTIL_FindEntityByTargetname(NULL, szBuf);
+			pMaster = UTIL_FindEntityByTargetname(nullptr, szBuf);
 		}
 
 		if (pMaster)
 		{
 			if (reverse)
 				return (pMaster->GetState(pActivator) != STATE_ON);
-			else
-				return (pMaster->GetState(pActivator) == STATE_ON);
+			return (pMaster->GetState(pActivator) == STATE_ON);
 		}
 	}
 
@@ -1641,7 +1625,7 @@ void UTIL_PlayerDecalTrace(TraceResult* pTrace, int playernum, int decalNumber, 
 	WRITE_COORD(pTrace->vecEndPos.x);
 	WRITE_COORD(pTrace->vecEndPos.y);
 	WRITE_COORD(pTrace->vecEndPos.z);
-	WRITE_SHORT((short)ENTINDEX(pTrace->pHit));
+	WRITE_SHORT(static_cast<short>(ENTINDEX(pTrace->pHit)));
 	WRITE_BYTE(index);
 	MESSAGE_END();
 }
@@ -1663,7 +1647,7 @@ void UTIL_GunshotDecalTrace(TraceResult* pTrace, int decalNumber)
 	WRITE_COORD(pTrace->vecEndPos.x);
 	WRITE_COORD(pTrace->vecEndPos.y);
 	WRITE_COORD(pTrace->vecEndPos.z);
-	WRITE_SHORT((short)ENTINDEX(pTrace->pHit));
+	WRITE_SHORT(static_cast<short>(ENTINDEX(pTrace->pHit)));
 	WRITE_BYTE(index);
 	MESSAGE_END();
 }
@@ -1687,7 +1671,7 @@ void UTIL_Ricochet(const Vector& position, float scale)
 	WRITE_COORD(position.x);
 	WRITE_COORD(position.y);
 	WRITE_COORD(position.z);
-	WRITE_BYTE((int)(scale * 10));
+	WRITE_BYTE(static_cast<int>(scale * 10));
 	MESSAGE_END();
 }
 
@@ -1717,7 +1701,7 @@ BOOL UTIL_IsFacing(entvars_t* pevTest, const Vector& reference)
 	Vector forward, angle;
 	angle = pevTest->v_angle;
 	angle.x = 0;
-	UTIL_MakeVectorsPrivate(angle, forward, NULL, NULL);
+	UTIL_MakeVectorsPrivate(angle, forward, nullptr, nullptr);
 	// He's facing me, he meant it
 	if (DotProduct(forward, vecDir) > 0.96) // +/- 15 degrees or so
 	{
@@ -2089,7 +2073,7 @@ static int gSizes[FIELD_TYPECOUNT] =
 // Base class includes common SAVERESTOREDATA pointer, and manages the entity table
 CSaveRestoreBuffer::CSaveRestoreBuffer(void)
 {
-	m_pdata = NULL;
+	m_pdata = nullptr;
 }
 
 
@@ -2105,7 +2089,7 @@ CSaveRestoreBuffer::~CSaveRestoreBuffer(void)
 
 int CSaveRestoreBuffer::EntityIndex(CBaseEntity* pEntity)
 {
-	if (pEntity == NULL)
+	if (pEntity == nullptr)
 		return -1;
 	return EntityIndex(pEntity->pev);
 }
@@ -2113,7 +2097,7 @@ int CSaveRestoreBuffer::EntityIndex(CBaseEntity* pEntity)
 
 int CSaveRestoreBuffer::EntityIndex(entvars_t* pevLookup)
 {
-	if (pevLookup == NULL)
+	if (pevLookup == nullptr)
 		return -1;
 	return EntityIndex(ENT(pevLookup));
 }
@@ -2126,7 +2110,7 @@ int CSaveRestoreBuffer::EntityIndex(EOFFSET eoLookup)
 
 int CSaveRestoreBuffer::EntityIndex(edict_t* pentLookup)
 {
-	if (!m_pdata || pentLookup == NULL)
+	if (!m_pdata || pentLookup == nullptr)
 		return -1;
 
 	int i;
@@ -2145,7 +2129,7 @@ int CSaveRestoreBuffer::EntityIndex(edict_t* pentLookup)
 edict_t* CSaveRestoreBuffer::EntityFromIndex(int entityIndex)
 {
 	if (!m_pdata || entityIndex < 0)
-		return NULL;
+		return nullptr;
 
 	int i;
 	ENTITYTABLE* pTable;
@@ -2156,7 +2140,7 @@ edict_t* CSaveRestoreBuffer::EntityFromIndex(int entityIndex)
 		if (pTable->id == entityIndex)
 			return pTable->pent;
 	}
-	return NULL;
+	return nullptr;
 }
 
 
@@ -2219,7 +2203,8 @@ unsigned int CSaveRestoreBuffer::HashString(const char* pszToken)
 
 unsigned short CSaveRestoreBuffer::TokenHash(const char* pszToken)
 {
-	unsigned short hash = (unsigned short)(HashString(pszToken) % (unsigned)m_pdata->tokenCount);
+	unsigned short hash = static_cast<unsigned short>(HashString(pszToken) % static_cast<unsigned>(m_pdata->tokenCount)
+	);
 
 #if _DEBUG
 	static int tokensparsed = 0;
@@ -2449,8 +2434,7 @@ int CSave::WriteEntVars(const char* pname, entvars_t* pev)
 {
 	if (pev->targetname)
 		return WriteFields(STRING(pev->targetname), pname, pev, gEntvarsDescription, ENTVARS_COUNT);
-	else
-		return WriteFields(STRING(pev->classname), pname, pev, gEntvarsDescription, ENTVARS_COUNT);
+	return WriteFields(STRING(pev->classname), pname, pev, gEntvarsDescription, ENTVARS_COUNT);
 }
 
 
@@ -2465,8 +2449,8 @@ int CSave::WriteFields(const char* cname, const char* pname, void* pBaseData, TY
 	for (i = 0; i < fieldCount; i++)
 	{
 		void* pOutputData;
-		pOutputData = ((char*)pBaseData + pFields[i].fieldOffset);
-		if (DataEmpty((const char*)pOutputData, pFields[i].fieldSize * gSizes[pFields[i].fieldType]))
+		pOutputData = (static_cast<char*>(pBaseData) + pFields[i].fieldOffset);
+		if (DataEmpty(static_cast<const char*>(pOutputData), pFields[i].fieldSize * gSizes[pFields[i].fieldType]))
 			emptyCount++;
 	}
 
@@ -2478,24 +2462,24 @@ int CSave::WriteFields(const char* cname, const char* pname, void* pBaseData, TY
 	{
 		void* pOutputData;
 		pTest = &pFields[i];
-		pOutputData = ((char*)pBaseData + pTest->fieldOffset);
+		pOutputData = (static_cast<char*>(pBaseData) + pTest->fieldOffset);
 
 		// UNDONE: Must we do this twice?
-		if (DataEmpty((const char*)pOutputData, pTest->fieldSize * gSizes[pTest->fieldType]))
+		if (DataEmpty(static_cast<const char*>(pOutputData), pTest->fieldSize * gSizes[pTest->fieldType]))
 			continue;
 
 		switch (pTest->fieldType)
 		{
 		case FIELD_FLOAT:
-			WriteFloat(pTest->fieldName, (float*)pOutputData, pTest->fieldSize);
+			WriteFloat(pTest->fieldName, static_cast<float*>(pOutputData), pTest->fieldSize);
 			break;
 		case FIELD_TIME:
-			WriteTime(pTest->fieldName, (float*)pOutputData, pTest->fieldSize);
+			WriteTime(pTest->fieldName, static_cast<float*>(pOutputData), pTest->fieldSize);
 			break;
 		case FIELD_MODELNAME:
 		case FIELD_SOUNDNAME:
 		case FIELD_STRING:
-			WriteString(pTest->fieldName, (int*)pOutputData, pTest->fieldSize);
+			WriteString(pTest->fieldName, static_cast<int*>(pOutputData), pTest->fieldSize);
 			break;
 		case FIELD_CLASSPTR:
 		case FIELD_EVARS:
@@ -2509,51 +2493,51 @@ int CSave::WriteFields(const char* cname, const char* pname, void* pBaseData, TY
 				switch (pTest->fieldType)
 				{
 				case FIELD_EVARS:
-					entityArray[j] = EntityIndex(((entvars_t**)pOutputData)[j]);
+					entityArray[j] = EntityIndex(static_cast<entvars_t**>(pOutputData)[j]);
 					break;
 				case FIELD_CLASSPTR:
-					entityArray[j] = EntityIndex(((CBaseEntity**)pOutputData)[j]);
+					entityArray[j] = EntityIndex(static_cast<CBaseEntity**>(pOutputData)[j]);
 					break;
 				case FIELD_EDICT:
-					entityArray[j] = EntityIndex(((edict_t**)pOutputData)[j]);
+					entityArray[j] = EntityIndex(static_cast<edict_t**>(pOutputData)[j]);
 					break;
 				case FIELD_ENTITY:
-					entityArray[j] = EntityIndex(((EOFFSET*)pOutputData)[j]);
+					entityArray[j] = EntityIndex(static_cast<EOFFSET*>(pOutputData)[j]);
 					break;
 				case FIELD_EHANDLE:
-					entityArray[j] = EntityIndex((CBaseEntity*)(((EHANDLE*)pOutputData)[j]));
+					entityArray[j] = EntityIndex(static_cast<CBaseEntity*>(static_cast<EHANDLE*>(pOutputData)[j]));
 					break;
 				}
 			}
 			WriteInt(pTest->fieldName, entityArray, pTest->fieldSize);
 			break;
 		case FIELD_POSITION_VECTOR:
-			WritePositionVector(pTest->fieldName, (float*)pOutputData, pTest->fieldSize);
+			WritePositionVector(pTest->fieldName, static_cast<float*>(pOutputData), pTest->fieldSize);
 			break;
 		case FIELD_VECTOR:
-			WriteVector(pTest->fieldName, (float*)pOutputData, pTest->fieldSize);
+			WriteVector(pTest->fieldName, static_cast<float*>(pOutputData), pTest->fieldSize);
 			break;
 
 		case FIELD_BOOLEAN:
 		case FIELD_INTEGER:
-			WriteInt(pTest->fieldName, (int*)pOutputData, pTest->fieldSize);
+			WriteInt(pTest->fieldName, static_cast<int*>(pOutputData), pTest->fieldSize);
 			break;
 
 		case FIELD_SHORT:
-			WriteData(pTest->fieldName, 2 * pTest->fieldSize, ((char*)pOutputData));
+			WriteData(pTest->fieldName, 2 * pTest->fieldSize, static_cast<char*>(pOutputData));
 			break;
 
 		case FIELD_CHARACTER:
-			WriteData(pTest->fieldName, pTest->fieldSize, ((char*)pOutputData));
+			WriteData(pTest->fieldName, pTest->fieldSize, static_cast<char*>(pOutputData));
 			break;
 
 			// For now, just write the address out, we're not going to change memory while doing this yet!
 		case FIELD_POINTER:
-			WriteInt(pTest->fieldName, (int*)(char*)pOutputData, pTest->fieldSize);
+			WriteInt(pTest->fieldName, (int*)static_cast<char*>(pOutputData), pTest->fieldSize);
 			break;
 
 		case FIELD_FUNCTION:
-			WriteFunction(cname, pTest->fieldName, (int*)(char*)pOutputData, pTest->fieldSize);
+			WriteFunction(cname, pTest->fieldName, (int*)static_cast<char*>(pOutputData), pTest->fieldSize);
 			break;
 		default:
 			ALERT(at_error, "Bad field type\n");
@@ -2655,25 +2639,26 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 			{
 				for (j = 0; j < pTest->fieldSize; j++)
 				{
-					void* pOutputData = ((char*)pBaseData + pTest->fieldOffset + (j * gSizes[pTest->fieldType]));
-					void* pInputData = (char*)pData + j * gSizes[pTest->fieldType];
+					void* pOutputData = (static_cast<char*>(pBaseData) + pTest->fieldOffset + (j * gSizes[pTest->
+						fieldType]));
+					void* pInputData = static_cast<char*>(pData) + j * gSizes[pTest->fieldType];
 
 					switch (pTest->fieldType)
 					{
 					case FIELD_TIME:
-						timeData = *(float*)pInputData;
+						timeData = *static_cast<float*>(pInputData);
 						// Re-base time variables
 						timeData += time;
-						*((float*)pOutputData) = timeData;
+						*static_cast<float*>(pOutputData) = timeData;
 						break;
 					case FIELD_FLOAT:
-						*((float*)pOutputData) = *(float*)pInputData;
+						*static_cast<float*>(pOutputData) = *static_cast<float*>(pInputData);
 						break;
 					case FIELD_MODELNAME:
 					case FIELD_SOUNDNAME:
 					case FIELD_STRING:
 						// Skip over j strings
-						pString = (char*)pData;
+						pString = static_cast<char*>(pData);
 						for (stringCount = 0; stringCount < j; stringCount++)
 						{
 							while (*pString)
@@ -2681,15 +2666,15 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 							pString++;
 						}
 						pInputData = pString;
-						if (strlen((char*)pInputData) == 0)
-							*((int*)pOutputData) = 0;
+						if (strlen(static_cast<char*>(pInputData)) == 0)
+							*static_cast<int*>(pOutputData) = 0;
 						else
 						{
 							int string;
 
-							string = ALLOC_STRING((char*)pInputData);
+							string = ALLOC_STRING(static_cast<char*>(pInputData));
 
-							*((int*)pOutputData) = string;
+							*static_cast<int*>(pOutputData) = string;
 
 							if (!FStringNull(string) && m_precache)
 							{
@@ -2701,80 +2686,81 @@ int CRestore::ReadField(void* pBaseData, TYPEDESCRIPTION* pFields, int fieldCoun
 						}
 						break;
 					case FIELD_EVARS:
-						entityIndex = *(int*)pInputData;
+						entityIndex = *static_cast<int*>(pInputData);
 						pent = EntityFromIndex(entityIndex);
 						if (pent)
-							*((entvars_t**)pOutputData) = VARS(pent);
+							*static_cast<entvars_t**>(pOutputData) = VARS(pent);
 						else
-							*((entvars_t**)pOutputData) = NULL;
+							*static_cast<entvars_t**>(pOutputData) = nullptr;
 						break;
 					case FIELD_CLASSPTR:
-						entityIndex = *(int*)pInputData;
+						entityIndex = *static_cast<int*>(pInputData);
 						pent = EntityFromIndex(entityIndex);
 						if (pent)
-							*((CBaseEntity**)pOutputData) = CBaseEntity::Instance(pent);
+							*static_cast<CBaseEntity**>(pOutputData) = CBaseEntity::Instance(pent);
 						else
 						{
-							*((CBaseEntity**)pOutputData) = NULL;
+							*static_cast<CBaseEntity**>(pOutputData) = nullptr;
 							if (entityIndex != -1)
 								ALERT(at_console, "## Restore: invalid entitynum %d\n", entityIndex);
 						}
 						break;
 					case FIELD_EDICT:
-						entityIndex = *(int*)pInputData;
+						entityIndex = *static_cast<int*>(pInputData);
 						pent = EntityFromIndex(entityIndex);
-						*((edict_t**)pOutputData) = pent;
+						*static_cast<edict_t**>(pOutputData) = pent;
 						break;
 					case FIELD_EHANDLE:
 						// Input and Output sizes are different!
-						pOutputData = (char*)pOutputData + j * (sizeof(EHANDLE) - gSizes[pTest->fieldType]);
-						entityIndex = *(int*)pInputData;
+						pOutputData = static_cast<char*>(pOutputData) + j * (sizeof(EHANDLE) - gSizes[pTest->fieldType]
+						);
+						entityIndex = *static_cast<int*>(pInputData);
 						pent = EntityFromIndex(entityIndex);
 						if (pent)
-							*((EHANDLE*)pOutputData) = CBaseEntity::Instance(pent);
+							*static_cast<EHANDLE*>(pOutputData) = CBaseEntity::Instance(pent);
 						else
-							*((EHANDLE*)pOutputData) = NULL;
+							*static_cast<EHANDLE*>(pOutputData) = nullptr;
 						break;
 					case FIELD_ENTITY:
-						entityIndex = *(int*)pInputData;
+						entityIndex = *static_cast<int*>(pInputData);
 						pent = EntityFromIndex(entityIndex);
 						if (pent)
-							*((EOFFSET*)pOutputData) = OFFSET(pent);
+							*static_cast<EOFFSET*>(pOutputData) = OFFSET(pent);
 						else
-							*((EOFFSET*)pOutputData) = 0;
+							*static_cast<EOFFSET*>(pOutputData) = 0;
 						break;
 					case FIELD_VECTOR:
-						((float*)pOutputData)[0] = ((float*)pInputData)[0];
-						((float*)pOutputData)[1] = ((float*)pInputData)[1];
-						((float*)pOutputData)[2] = ((float*)pInputData)[2];
+						static_cast<float*>(pOutputData)[0] = static_cast<float*>(pInputData)[0];
+						static_cast<float*>(pOutputData)[1] = static_cast<float*>(pInputData)[1];
+						static_cast<float*>(pOutputData)[2] = static_cast<float*>(pInputData)[2];
 						break;
 					case FIELD_POSITION_VECTOR:
-						((float*)pOutputData)[0] = ((float*)pInputData)[0] + position.x;
-						((float*)pOutputData)[1] = ((float*)pInputData)[1] + position.y;
-						((float*)pOutputData)[2] = ((float*)pInputData)[2] + position.z;
+						static_cast<float*>(pOutputData)[0] = static_cast<float*>(pInputData)[0] + position.x;
+						static_cast<float*>(pOutputData)[1] = static_cast<float*>(pInputData)[1] + position.y;
+						static_cast<float*>(pOutputData)[2] = static_cast<float*>(pInputData)[2] + position.z;
 						break;
 
 					case FIELD_BOOLEAN:
 					case FIELD_INTEGER:
-						*((int*)pOutputData) = *(int*)pInputData;
+						*static_cast<int*>(pOutputData) = *static_cast<int*>(pInputData);
 						break;
 
 					case FIELD_SHORT:
-						*((short*)pOutputData) = *(short*)pInputData;
+						*static_cast<short*>(pOutputData) = *static_cast<short*>(pInputData);
 						break;
 
 					case FIELD_CHARACTER:
-						*((char*)pOutputData) = *(char*)pInputData;
+						*static_cast<char*>(pOutputData) = *static_cast<char*>(pInputData);
 						break;
 
 					case FIELD_POINTER:
-						*((int*)pOutputData) = *(int*)pInputData;
+						*static_cast<int*>(pOutputData) = *static_cast<int*>(pInputData);
 						break;
 					case FIELD_FUNCTION:
-						if (strlen((char*)pInputData) == 0)
-							*((int*)pOutputData) = 0;
+						if (strlen(static_cast<char*>(pInputData)) == 0)
+							*static_cast<int*>(pOutputData) = 0;
 						else
-							*((int*)pOutputData) = FUNCTION_FROM_NAME((char*)pInputData);
+							*static_cast<int*>(pOutputData) = FUNCTION_FROM_NAME(static_cast<char*>(pInputData));
 						break;
 
 					default:
@@ -2831,7 +2817,8 @@ int CRestore::ReadFields(const char* pname, void* pBaseData, TYPEDESCRIPTION* pF
 	{
 		// Don't clear global fields
 		if (!m_global || !(pFields[i].flags & FTYPEDESC_GLOBAL))
-			memset(((char*)pBaseData + pFields[i].fieldOffset), 0, pFields[i].fieldSize * gSizes[pFields[i].fieldType]);
+			memset((static_cast<char*>(pBaseData) + pFields[i].fieldOffset), 0,
+			       pFields[i].fieldSize * gSizes[pFields[i].fieldType]);
 	}
 
 	for (i = 0; i < fileCount; i++)
@@ -2890,7 +2877,7 @@ char* CRestore::ReadNamedString(const char* pName)
 #ifdef TOKENIZE
 	return (char *)(m_pdata->pTokens[*(short *)header.pData]);
 #else
-	return (char*)header.pData;
+	return static_cast<char*>(header.pData);
 #endif
 }
 
@@ -2898,7 +2885,7 @@ char* CRestore::ReadNamedString(const char* pName)
 char* CRestore::BufferPointer(void)
 {
 	if (!m_pdata)
-		return NULL;
+		return nullptr;
 
 	return m_pdata->pCurrentData;
 }
@@ -2926,7 +2913,7 @@ void CRestore::BufferReadBytes(char* pOutput, int size)
 
 void CRestore::BufferSkipBytes(int bytes)
 {
-	BufferReadBytes(NULL, bytes);
+	BufferReadBytes(nullptr, bytes);
 }
 
 int CRestore::BufferSkipZString(void)
@@ -2972,10 +2959,10 @@ int HaveCamerasInPVS(edict_t* edict)
 	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{
 		CBaseEntity* pEntity = UTIL_PlayerByIndex(i);
-		CBasePlayer* pPlayer = (CBasePlayer*)pEntity;
+		CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pEntity);
 		if (pPlayer->viewFlags & 1) // custom view active
 		{
-			CBaseEntity* pViewEnt = UTIL_FindEntityByTargetname(NULL,STRING(pPlayer->viewEntity));
+			CBaseEntity* pViewEnt = UTIL_FindEntityByTargetname(nullptr,STRING(pPlayer->viewEntity));
 			if (!pViewEnt)
 			{
 				ALERT(at_error, "bad entity string in CamerasInPVS\n");

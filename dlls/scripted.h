@@ -47,21 +47,21 @@
 class CCineMonster : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	virtual void KeyValue(KeyValueData* pkvd);
-	virtual void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	virtual void Blocked(CBaseEntity* pOther);
-	virtual void Touch(CBaseEntity* pOther);
-	virtual int ObjectCaps(void) { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
-	virtual void Activate(void);
+	void Spawn(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	void Blocked(CBaseEntity* pOther) override;
+	void Touch(CBaseEntity* pOther) override;
+	int ObjectCaps(void) override { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	void Activate(void) override;
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
 	//LRC: states for script entities
-	virtual STATE GetState(void) { return m_iState; };
+	STATE GetState(void) override { return m_iState; };
 	STATE m_iState;
 
 	// void EXPORT CineSpawnThink( void );
@@ -73,7 +73,7 @@ public:
 	CBaseMonster* FindEntity(const char* sName, CBaseEntity* pActivator);
 	virtual void PossessEntity(void);
 
-	inline BOOL IsAction(void) { return FClassnameIs(pev, "scripted_action"); }; //LRC
+	BOOL IsAction(void) { return FClassnameIs(pev, "scripted_action"); }; //LRC
 
 	//LRC: Should the monster do a precise attack for this scripted_action?
 	// (Do a precise attack if we'll be turning to face the target, but we haven't just walked to the target.)
@@ -95,7 +95,7 @@ public:
 	virtual void FixScriptMonsterSchedule(CBaseMonster* pMonster);
 	BOOL CanInterrupt(void);
 	void AllowInterrupt(BOOL fAllow);
-	int IgnoreConditions(void);
+	int IgnoreConditions(void) override;
 
 	int m_iszIdle; // string index for idle animation
 	int m_iszPlay; // string index for scripted animation

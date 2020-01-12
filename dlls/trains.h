@@ -58,13 +58,13 @@
 class CPathTrack : public CPointEntity
 {
 public:
-	void Spawn(void);
-	void Activate(void);
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn(void) override;
+	void Activate(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
 
 	void SetPrevious(CPathTrack* pprevious);
 	void Link(void);
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	CPathTrack* ValidPath(CPathTrack* ppath, int testFlag); // Returns ppath if enabled, NULL otherwise
 	void Project(CPathTrack* pstart, CPathTrack* pend, Vector* origin, float dist);
@@ -77,8 +77,8 @@ public:
 	CPathTrack* GetNext(void);
 	CPathTrack* GetPrevious(void);
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 #if PATH_SPARKLE_DEBUG
@@ -97,19 +97,19 @@ class CTrainSequence;
 class CFuncTrackTrain : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 
-	void Blocked(CBaseEntity* pOther);
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void KeyValue(KeyValueData* pkvd);
+	void Blocked(CBaseEntity* pOther) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	void KeyValue(KeyValueData* pkvd) override;
 
 	//LRC
 	void StartSequence(CTrainSequence* pSequence);
 	void StopSequence();
 	CTrainSequence* m_pSequence;
 
-	void DesiredAction(void); //LRC - used to be called Next!
+	void DesiredAction(void) override; //LRC - used to be called Next!
 
 	//	void EXPORT Next( void );
 	void EXPORT PostponeNext(void);
@@ -121,24 +121,24 @@ public:
 
 	void SetTrack(CPathTrack* track) { m_ppath = track->Nearest(pev->origin); }
 	void SetControls(entvars_t* pevControls);
-	BOOL OnControls(entvars_t* pev);
+	BOOL OnControls(entvars_t* pev) override;
 
 	void StopSound(void);
 	void UpdateSound(void);
 
 	static CFuncTrackTrain* Instance(edict_t* pent);
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	virtual int ObjectCaps(void)
+	int ObjectCaps(void) override
 	{
 		return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DIRECTIONAL_USE;
 	}
 
-	virtual void OverrideReset(void);
+	void OverrideReset(void) override;
 
 	CPathTrack* m_ppath;
 	float m_length;

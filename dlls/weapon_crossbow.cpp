@@ -34,9 +34,9 @@
 // speed - the ideal magnitude of my velocity
 class CCrossbowBolt : public CBaseEntity
 {
-	void Spawn(void);
-	void Precache(void);
-	int Classify(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int Classify(void) override;
 	void EXPORT BubbleThink(void);
 	void EXPORT BoltTouch(CBaseEntity* pOther);
 	void EXPORT ExplodeThink(void);
@@ -52,7 +52,7 @@ LINK_ENTITY_TO_CLASS(crossbow_bolt, CCrossbowBolt);
 CCrossbowBolt* CCrossbowBolt::BoltCreate(void)
 {
 	// Create a new entity with CCrossbowBolt private data
-	CCrossbowBolt* pBolt = GetClassPtr((CCrossbowBolt*)NULL);
+	CCrossbowBolt* pBolt = GetClassPtr(static_cast<CCrossbowBolt*>(nullptr));
 	pBolt->pev->classname = MAKE_STRING("bolt");
 	pBolt->Spawn();
 
@@ -215,11 +215,11 @@ void CCrossbowBolt::ExplodeThink(void)
 	if (pev->owner)
 		pevOwner = VARS(pev->owner);
 	else
-		pevOwner = NULL;
+		pevOwner = nullptr;
 
-	pev->owner = NULL; // can't traceline attack owner if this is set
+	pev->owner = nullptr; // can't traceline attack owner if this is set
 
-	::RadiusDamage(pev->origin, pev, pevOwner, pev->dmg, 128, CLASS_NONE, DMG_BLAST | DMG_ALWAYSGIB);
+	RadiusDamage(pev->origin, pev, pevOwner, pev->dmg, 128, CLASS_NONE, DMG_BLAST | DMG_ALWAYSGIB);
 
 	UTIL_Remove(this);
 }
@@ -270,7 +270,7 @@ int CCrossbow::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 		return TRUE;
@@ -299,7 +299,7 @@ int CCrossbow::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "bolts";
 	p->iMaxAmmo1 = MAX_CARRY_BOLT;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = MAX_CLIP_CROSSBOW;
 	p->iSlot = SLOT_CROSSBOW;
@@ -389,7 +389,7 @@ void CCrossbow::FireSniperBolt()
 	if (tr.pHit->v.takedamage)
 	{
 		ClearMultiDamage();
-		CBaseEntity::Instance(tr.pHit)->TraceAttack(m_pPlayer->pev, 120, vecDir, &tr, DMG_BULLET | DMG_NEVERGIB);
+		Instance(tr.pHit)->TraceAttack(m_pPlayer->pev, 120, vecDir, &tr, DMG_BULLET | DMG_NEVERGIB);
 		ApplyMultiDamage(pev, m_pPlayer->pev);
 	}
 #endif
@@ -540,20 +540,20 @@ void CCrossbow::WeaponIdle(void)
 
 class CCrossbowAmmo : public CBasePlayerAmmo
 {
-	void Spawn(void)
+	void Spawn(void) override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_crossbow_clip.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
-	void Precache(void)
+	void Precache(void) override
 	{
 		PRECACHE_MODEL("models/w_crossbow_clip.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther)
+	BOOL AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(CROSSBOW_DEFAULT_GIVE, "bolts", MAX_CARRY_BOLT) != -1)
 		{

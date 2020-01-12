@@ -45,7 +45,7 @@ float CBaseAnimating::StudioFrameAdvance(float flInterval)
 			return 0.0;
 		}
 	}
-	
+
 	if (!pev->animtime)
 		flInterval = 0.0;
 
@@ -55,7 +55,7 @@ float CBaseAnimating::StudioFrameAdvance(float flInterval)
 	if (pev->frame < 0.0 || pev->frame >= 256.0)
 	{
 		if (m_fSequenceLoops)
-			pev->frame -= (int)(pev->frame / 256.0) * 256.0;
+			pev->frame -= static_cast<int>(pev->frame / 256.0) * 256.0;
 		else
 			pev->frame = (pev->frame < 0.0) ? 0 : 255;
 		m_fSequenceFinished = TRUE; // just in case it wasn't caught in GetEvents
@@ -207,7 +207,7 @@ int CBaseAnimating::FindTransition(int iEndingSequence, int iGoalSequence, int* 
 {
 	void* pmodel = GET_MODEL_PTR(ENT(pev));
 
-	if (piDir == NULL)
+	if (piDir == nullptr)
 	{
 		int iDir;
 		int sequence = ::FindTransition(pmodel, iEndingSequence, iGoalSequence, &iDir);

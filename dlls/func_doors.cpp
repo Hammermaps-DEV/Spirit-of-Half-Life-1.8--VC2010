@@ -36,30 +36,29 @@ extern void SetMovedir(entvars_t* ev);
 class CBaseDoor : public CBaseToggle
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	virtual void PostSpawn(void);
-	virtual void KeyValue(KeyValueData* pkvd);
-	virtual void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	virtual void Blocked(CBaseEntity* pOther);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void PostSpawn(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	void Blocked(CBaseEntity* pOther) override;
 
 
-	virtual int ObjectCaps(void)
+	int ObjectCaps(void) override
 	{
 		if (pev->spawnflags & SF_ITEM_USE_ONLY)
 		{
 			return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_IMPULSE_USE |
 				(m_iDirectUse ? FCAP_ONLYDIRECT_USE : 0);
 		}
-		else
-			return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION);
+		return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION);
 	};
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	virtual void SetToggleState(int state);
+	void SetToggleState(int state) override;
 
 	// used to selectivly override defaults
 	void EXPORT DoorTouch(CBaseEntity* pOther);
@@ -587,14 +586,14 @@ void CBaseDoor::Precache(void)
 
 	if (m_bLockedSound)
 	{
-		pszSound = ButtonSound((int)m_bLockedSound);
+		pszSound = ButtonSound(static_cast<int>(m_bLockedSound));
 		PRECACHE_SOUND(pszSound);
 		m_ls.sLockedSound = ALLOC_STRING(pszSound);
 	}
 
 	if (m_bUnlockedSound)
 	{
-		pszSound = ButtonSound((int)m_bUnlockedSound);
+		pszSound = ButtonSound(static_cast<int>(m_bUnlockedSound));
 		PRECACHE_SOUND(pszSound);
 		m_ls.sUnlockedSound = ALLOC_STRING(pszSound);
 	}
@@ -711,7 +710,7 @@ void CBaseDoor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 				}
 				return;
 			}
-			else if (useType == USE_OFF)
+			if (useType == USE_OFF)
 			{
 				if (m_toggle_state == TS_AT_TOP)
 				{
@@ -1004,8 +1003,8 @@ void CBaseDoor::DoorHitBottom(void)
 
 void CBaseDoor::Blocked(CBaseEntity* pOther)
 {
-	CBaseEntity* pTarget = NULL;
-	CBaseDoor* pDoor = NULL;
+	CBaseEntity* pTarget = nullptr;
+	CBaseDoor* pDoor = nullptr;
 
 	//	ALERT(at_debug, "%s blocked\n", STRING(pev->targetname));
 
@@ -1121,13 +1120,13 @@ button or trigger field activates the door.
 class CRotDoor : public CBaseDoor
 {
 public:
-	void Spawn(void);
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
 
-	virtual void PostSpawn(void)
+	void PostSpawn(void) override
 	{
 	} // don't use the moveWith fix from CBaseDoor
-	virtual void SetToggleState(int state);
+	void SetToggleState(int state) override;
 };
 
 LINK_ENTITY_TO_CLASS(func_door_rotating, CRotDoor);
@@ -1137,7 +1136,7 @@ void CRotDoor::Spawn(void)
 {
 	Precache();
 	// set the axis of rotation
-	CBaseToggle::AxisDir(pev);
+	AxisDir(pev);
 
 	// check for clockwise rotation
 	if (FBitSet(pev->spawnflags, SF_DOOR_ROTATE_BACKWARDS))
@@ -1187,7 +1186,7 @@ void CRotDoor::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "axes"))
 	{
-		UTIL_StringToVector((float*)(pev->movedir), pkvd->szValue);
+		UTIL_StringToVector(static_cast<float*>(pev->movedir), pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
 	else
@@ -1208,16 +1207,16 @@ void CRotDoor::SetToggleState(int state)
 class CMomentaryDoor : public CBaseToggle
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 	void EXPORT MomentaryMoveDone(void);
 
-	void KeyValue(KeyValueData* pkvd);
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	virtual int ObjectCaps(void) { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	void KeyValue(KeyValueData* pkvd) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	int ObjectCaps(void) override { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	BYTE m_bMoveSnd; // sound a door makes while moving
@@ -1226,9 +1225,9 @@ public:
 	STATE m_iState;
 	float m_fLastPos;
 
-	STATE GetState(void) { return m_iState; }
+	STATE GetState(void) override { return m_iState; }
 
-	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult)
+	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult) override
 	{
 		*OUTresult = m_fLastPos;
 		return true;

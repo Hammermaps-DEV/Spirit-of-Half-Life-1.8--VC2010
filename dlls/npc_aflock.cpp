@@ -33,13 +33,13 @@
 class CFlockingFlyerFlock : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
 	void SpawnFlock(void);
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	// Sounds are shared by the flock
@@ -62,8 +62,8 @@ IMPLEMENT_SAVERESTORE(CFlockingFlyerFlock, CBaseMonster);
 class CFlockingFlyer : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 	void SpawnCommonCode(void);
 	void EXPORT IdleThink(void);
 	void BoidAdvanceFrame(void);
@@ -76,17 +76,17 @@ public:
 	void AlertFlock(void);
 	void SpreadFlock(void);
 	void SpreadFlock2(void);
-	void Killed(entvars_t* pevAttacker, int iGib);
+	void Killed(entvars_t* pevAttacker, int iGib) override;
 	void Poop(void);
 	BOOL FPathBlocked(void);
 	//void KeyValue( KeyValueData *pkvd );
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int IsLeader(void) { return m_pSquadLeader == this; }
-	int InSquad(void) { return m_pSquadLeader != NULL; }
+	int InSquad(void) { return m_pSquadLeader != nullptr; }
 	int SquadCount(void);
 	void SquadRemove(CFlockingFlyer* pRemove);
 	void SquadUnlink(void);
@@ -182,11 +182,11 @@ void CFlockingFlyerFlock::SpawnFlock(void)
 	Vector vecSpot;
 	CFlockingFlyer *pBoid, *pLeader;
 
-	pLeader = pBoid = NULL;
+	pLeader = pBoid = nullptr;
 
 	for (iCount = 0; iCount < m_cFlockSize; iCount++)
 	{
-		pBoid = GetClassPtr((CFlockingFlyer*)NULL);
+		pBoid = GetClassPtr(static_cast<CFlockingFlyer*>(nullptr));
 
 		if (!pLeader)
 		{
@@ -194,7 +194,7 @@ void CFlockingFlyerFlock::SpawnFlock(void)
 			pLeader = pBoid;
 
 			pLeader->m_pSquadLeader = pLeader;
-			pLeader->m_pSquadNext = NULL;
+			pLeader->m_pSquadNext = nullptr;
 		}
 
 		vecSpot.x = RANDOM_FLOAT(-R, R);
@@ -275,12 +275,12 @@ void CFlockingFlyer::Killed(entvars_t* pevAttacker, int iGib)
 {
 	CFlockingFlyer* pSquad;
 
-	pSquad = (CFlockingFlyer*)m_pSquadLeader;
+	pSquad = static_cast<CFlockingFlyer*>(m_pSquadLeader);
 
 	while (pSquad)
 	{
 		pSquad->m_flAlertTime = gpGlobals->time + 15;
-		pSquad = (CFlockingFlyer*)pSquad->m_pSquadNext;
+		pSquad = static_cast<CFlockingFlyer*>(pSquad->m_pSquadNext);
 	}
 
 	if (m_pSquadLeader)
@@ -422,12 +422,12 @@ void CFlockingFlyer::FormFlock(void)
 	{
 		// I am my own leader
 		m_pSquadLeader = this;
-		m_pSquadNext = NULL;
+		m_pSquadNext = nullptr;
 		int squadCount = 1;
 
-		CBaseEntity* pEntity = NULL;
+		CBaseEntity* pEntity = nullptr;
 
-		while ((pEntity = UTIL_FindEntityInSphere(pEntity, pev->origin, AFLOCK_MAX_RECRUIT_RADIUS)) != NULL)
+		while ((pEntity = UTIL_FindEntityInSphere(pEntity, pev->origin, AFLOCK_MAX_RECRUIT_RADIUS)) != nullptr)
 		{
 			CBaseMonster* pRecruit = pEntity->MyMonsterPointer();
 
@@ -437,7 +437,7 @@ void CFlockingFlyer::FormFlock(void)
 				if (FClassnameIs(pRecruit->pev, "monster_flyer"))
 				{
 					squadCount++;
-					SquadAdd((CFlockingFlyer*)pRecruit);
+					SquadAdd(static_cast<CFlockingFlyer*>(pRecruit));
 				}
 			}
 		}
@@ -664,8 +664,6 @@ void CFlockingFlyer::FlockLeaderThink(void)
 	}
 
 	BoidAdvanceFrame();
-
-	return;
 }
 
 //=========================================================
@@ -805,8 +803,8 @@ void CFlockingFlyer::FlockFollowerThink(void)
 //=========================================================
 void CFlockingFlyer::SquadUnlink(void)
 {
-	m_pSquadLeader = NULL;
-	m_pSquadNext = NULL;
+	m_pSquadLeader = nullptr;
+	m_pSquadNext = nullptr;
 }
 
 //=========================================================

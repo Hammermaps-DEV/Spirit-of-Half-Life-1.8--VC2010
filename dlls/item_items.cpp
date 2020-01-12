@@ -49,8 +49,8 @@ void I_Precache(void)
 class CWorldItem : public CBaseEntity
 {
 public:
-	void KeyValue(KeyValueData* pkvd);
-	void Spawn(void);
+	void KeyValue(KeyValueData* pkvd) override;
+	void Spawn(void) override;
 	int m_iType;
 };
 
@@ -69,21 +69,21 @@ void CWorldItem::KeyValue(KeyValueData* pkvd)
 
 void CWorldItem::Spawn(void)
 {
-	CBaseEntity* pEntity = NULL;
+	CBaseEntity* pEntity = nullptr;
 
 	switch (m_iType)
 	{
 	case 44: // ITEM_BATTERY:
-		pEntity = CBaseEntity::Create("item_battery", pev->origin, pev->angles);
+		pEntity = Create("item_battery", pev->origin, pev->angles);
 		break;
 	case 42: // ITEM_ANTIDOTE:
-		pEntity = CBaseEntity::Create("item_antidote", pev->origin, pev->angles);
+		pEntity = Create("item_antidote", pev->origin, pev->angles);
 		break;
 	case 43: // ITEM_SECURITY:
-		pEntity = CBaseEntity::Create("item_security", pev->origin, pev->angles);
+		pEntity = Create("item_security", pev->origin, pev->angles);
 		break;
 	case 45: // ITEM_SUIT:
-		pEntity = CBaseEntity::Create("item_suit", pev->origin, pev->angles);
+		pEntity = Create("item_suit", pev->origin, pev->angles);
 		break;
 	}
 
@@ -115,7 +115,6 @@ void CItem::Spawn(void)
 		ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y,
 		      pev->origin.z);
 		UTIL_Remove(this);
-		return;
 	}
 }
 
@@ -129,7 +128,7 @@ void CItem::ItemTouch(CBaseEntity* pOther)
 		return;
 	}
 
-	CBasePlayer* pPlayer = (CBasePlayer*)pOther;
+	CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
 
 	// ok, a player is touching this item, but can he have it?
 	if (!g_pGameRules->CanHaveItem(pPlayer, this))
@@ -189,19 +188,19 @@ void CItem::Materialize(void)
 
 class CItemSuit : public CItem
 {
-	void Spawn(void)
+	void Spawn(void) override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_suit.mdl");
 		CItem::Spawn();
 	}
 
-	void Precache(void)
+	void Precache(void) override
 	{
 		PRECACHE_MODEL("models/w_suit.mdl");
 	}
 
-	BOOL MyTouch(CBasePlayer* pPlayer)
+	BOOL MyTouch(CBasePlayer* pPlayer) override
 	{
 		if (pPlayer->pev->deadflag != DEAD_NO)
 		{
@@ -227,7 +226,7 @@ LINK_ENTITY_TO_CLASS(item_suit, CItemSuit);
 
 class CItemBattery : public CItem
 {
-	void Spawn(void)
+	void Spawn(void) override
 	{
 		Precache();
 		if (pev->model)
@@ -237,7 +236,7 @@ class CItemBattery : public CItem
 		CItem::Spawn();
 	}
 
-	void Precache(void)
+	void Precache(void) override
 	{
 		if (pev->model)
 			PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
@@ -250,7 +249,7 @@ class CItemBattery : public CItem
 			PRECACHE_SOUND("items/gunpickup2.wav");
 	}
 
-	BOOL MyTouch(CBasePlayer* pPlayer)
+	BOOL MyTouch(CBasePlayer* pPlayer) override
 	{
 		if (pPlayer->pev->deadflag != DEAD_NO)
 		{
@@ -275,14 +274,15 @@ class CItemBattery : public CItem
 			else
 				EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, NULL, pPlayer->pev);
+			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->pev);
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
 
 			// Suit reports new power level
 			// For some reason this wasn't working in release build -- round it.
-			pct = (int)((float)(pPlayer->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
+			pct = static_cast<int>(static_cast<float>(pPlayer->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) +
+				0.5);
 			pct = (pct / 5);
 			if (pct > 0)
 				pct--;
@@ -318,7 +318,7 @@ BOOL CItemAntidote::MyTouch(CBasePlayer* pPlayer)
 
 	pPlayer->m_rgItems[ITEM_ANTIDOTE] += 1;
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev); //AJH msg change inventory
+	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, nullptr, pPlayer->pev); //AJH msg change inventory
 	WRITE_SHORT((ITEM_ANTIDOTE)); //which item to change
 	WRITE_SHORT(pPlayer->m_rgItems[ITEM_ANTIDOTE]); //set counter to this ammount
 	MESSAGE_END();
@@ -339,7 +339,7 @@ void CItemAntidote::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 		return;
 	}
 
-	CBasePlayer* m_hActivator = (CBasePlayer*)pActivator;
+	CBasePlayer* m_hActivator = static_cast<CBasePlayer*>(pActivator);
 	ALERT(at_console, "HazardSuit: Antitoxin shots remaining: %i\n", m_hActivator->m_rgItems[ITEM_ANTIDOTE]);
 }
 
@@ -349,24 +349,24 @@ LINK_ENTITY_TO_CLASS(item_antidote, CItemAntidote);
 
 class CItemSecurity : public CItem
 {
-	void Spawn(void)
+	void Spawn(void) override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_security.mdl");
 		CItem::Spawn();
 	}
 
-	void Precache(void)
+	void Precache(void) override
 	{
 		PRECACHE_MODEL("models/w_security.mdl");
 	}
 
-	BOOL MyTouch(CBasePlayer* pPlayer)
+	BOOL MyTouch(CBasePlayer* pPlayer) override
 	{
 		pPlayer->m_rgItems[ITEM_SECURITY] += 1;
 		//AJH implement a new system with different cards instead of just MORE cards
 
-		MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev); //AJH msg change inventory
+		MESSAGE_BEGIN(MSG_ONE, gmsgInventory, nullptr, pPlayer->pev); //AJH msg change inventory
 		WRITE_SHORT((ITEM_SECURITY)); //which item to change
 		WRITE_SHORT(pPlayer->m_rgItems[ITEM_SECURITY]); //set counter to this ammount
 		MESSAGE_END();
@@ -384,19 +384,19 @@ LINK_ENTITY_TO_CLASS(item_security, CItemSecurity);
 
 class CItemLongJump : public CItem
 {
-	void Spawn(void)
+	void Spawn(void) override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_longjump.mdl");
 		CItem::Spawn();
 	}
 
-	void Precache(void)
+	void Precache(void) override
 	{
 		PRECACHE_MODEL("models/w_longjump.mdl");
 	}
 
-	BOOL MyTouch(CBasePlayer* pPlayer)
+	BOOL MyTouch(CBasePlayer* pPlayer) override
 	{
 		if (pPlayer->m_fLongJump)
 		{
@@ -409,11 +409,11 @@ class CItemLongJump : public CItem
 
 			g_engfuncs.pfnSetPhysicsKeyValue(pPlayer->edict(), "slj", "1");
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, NULL, pPlayer->pev);
+			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, nullptr, pPlayer->pev);
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev); //AJH msg change inventory
+			MESSAGE_BEGIN(MSG_ONE, gmsgInventory, nullptr, pPlayer->pev); //AJH msg change inventory
 			WRITE_SHORT((ITEM_LONGJUMP)); //which item to change
 			WRITE_SHORT(1); //set counter to this ammount
 			MESSAGE_END();
@@ -455,7 +455,6 @@ void CItemMedicalKit::Spawn(void)
 		ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y,
 		      pev->origin.z);
 		UTIL_Remove(this);
-		return;
 	}
 }
 
@@ -467,13 +466,14 @@ void CItemMedicalKit::Precache(void)
 
 int CItemMedicalKit::MyTouch(CBasePlayer* pPlayer)
 {
-	if (pPlayer->pev->deadflag != DEAD_NO || pPlayer->m_rgItems[ITEM_HEALTHKIT] >= (int)CVAR_GET_FLOAT("max_medkit"))
+	if (pPlayer->pev->deadflag != DEAD_NO || pPlayer->m_rgItems[ITEM_HEALTHKIT] >= static_cast<int>(
+		CVAR_GET_FLOAT("max_medkit")))
 	{
 		return ITEM_NOTPICKEDUP;
 	}
 	pPlayer->m_rgItems[ITEM_HEALTHKIT] += (pev->health) ? pev->health : CHARGE_IN_MEDKIT;
 	//increment/decrement counter by this ammount
-	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev); //msg change inventory
+	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, nullptr, pPlayer->pev); //msg change inventory
 	WRITE_SHORT((ITEM_HEALTHKIT)); //which item to change
 	WRITE_SHORT(pPlayer->m_rgItems[ITEM_HEALTHKIT]); //set counter to this ammount
 	MESSAGE_END();
@@ -486,21 +486,18 @@ int CItemMedicalKit::MyTouch(CBasePlayer* pPlayer)
 		//	Respawn();// respawn the model (with the new decreased charge)
 		return ITEM_DRAINED;
 	}
+	if (g_pGameRules->ItemShouldRespawn(this))
+	{
+		pev->health = pev->dmg; //Reset initial health;
+		Respawn();
+	}
 	else
 	{
-		if (g_pGameRules->ItemShouldRespawn(this))
-		{
-			pev->health = pev->dmg; //Reset initial health;
-			Respawn();
-		}
-		else
-		{
-			SetTouch(NULL); //Is this necessary?
-			UTIL_Remove(this);
-		}
-
-		return ITEM_PICKEDUP;
+		SetTouch(NULL); //Is this necessary?
+		UTIL_Remove(this);
 	}
+
+	return ITEM_PICKEDUP;
 }
 
 void CItemMedicalKit::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
@@ -514,12 +511,13 @@ void CItemMedicalKit::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	EMIT_SOUND(pActivator->edict(), CHAN_ITEM, "items/smallmedkit1.wav", 1, ATTN_NORM);
 	//play sound to tell player it's been used
 
-	CBasePlayer* m_hActivator = (CBasePlayer*)pActivator;
-	int m_fHealthUsed = (int)m_hActivator->TakeHealth(m_hActivator->m_rgItems[ITEM_HEALTHKIT], DMG_GENERIC);
+	CBasePlayer* m_hActivator = static_cast<CBasePlayer*>(pActivator);
+	int m_fHealthUsed = static_cast<int>(m_hActivator->TakeHealth(m_hActivator->m_rgItems[ITEM_HEALTHKIT], DMG_GENERIC)
+	);
 	//Actually give the health
 	m_hActivator->m_rgItems[ITEM_HEALTHKIT] -= m_fHealthUsed; //increment/decrement counter by this ammount
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, m_hActivator->pev); //msg change inventory
+	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, nullptr, m_hActivator->pev); //msg change inventory
 	WRITE_SHORT((ITEM_HEALTHKIT)); //which item to change
 	WRITE_SHORT(m_hActivator->m_rgItems[ITEM_HEALTHKIT]); //set counter to this ammount
 	MESSAGE_END();
@@ -536,7 +534,7 @@ void CItemMedicalKit::ItemTouch(CBaseEntity* pOther)
 		return;
 	}
 
-	CBasePlayer* pPlayer = (CBasePlayer*)pOther;
+	CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
 
 	// ok, a player is touching this item, but can he have it?
 	if (!g_pGameRules->CanHaveItem(pPlayer, this))
@@ -576,7 +574,7 @@ BOOL CItemAntiRad::MyTouch(CBasePlayer* pPlayer)
 	pPlayer->SetSuitUpdate("!HEV_DET5", FALSE, SUIT_NEXT_IN_1MIN); //TODO: find right suit notifcation
 
 	pPlayer->m_rgItems[ITEM_ANTIRAD] += 1;
-	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev); //AJH msg change inventory
+	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, nullptr, pPlayer->pev); //AJH msg change inventory
 	WRITE_SHORT((ITEM_ANTIRAD)); //which item to change
 	WRITE_SHORT(pPlayer->m_rgItems[ITEM_ANTIRAD]); //set counter to this ammount
 	MESSAGE_END();
@@ -596,7 +594,7 @@ void CItemAntiRad::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 		return;
 	}
 
-	CBasePlayer* m_hActivator = (CBasePlayer*)pActivator;
+	CBasePlayer* m_hActivator = static_cast<CBasePlayer*>(pActivator);
 	ALERT(at_console, "HazardSuit: AntiRad shots remaining: %i\n", m_hActivator->m_rgItems[ITEM_ANTIRAD]);
 }
 
@@ -618,7 +616,7 @@ void CItemFlare::Precache(void)
 BOOL CItemFlare::MyTouch(CBasePlayer* pPlayer)
 {
 	pPlayer->m_rgItems[ITEM_FLARE] += 1;
-	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev); //AJH msg change inventory
+	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, nullptr, pPlayer->pev); //AJH msg change inventory
 	WRITE_SHORT((ITEM_FLARE)); //which item to change
 	WRITE_SHORT(pPlayer->m_rgItems[ITEM_FLARE]); //set counter to this ammount
 	MESSAGE_END();
@@ -639,13 +637,13 @@ void CItemFlare::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 		return;
 	}
 
-	CBasePlayer* m_hActivator = (CBasePlayer*)pActivator;
+	CBasePlayer* m_hActivator = static_cast<CBasePlayer*>(pActivator);
 
 	if (m_hActivator->m_rgItems[ITEM_FLARE] > 0)
 	{
 		m_hActivator->m_rgItems[ITEM_FLARE] --; //increment/decrement counter by one
 
-		MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, m_hActivator->pev); //msg change inventory
+		MESSAGE_BEGIN(MSG_ONE, gmsgInventory, nullptr, m_hActivator->pev); //msg change inventory
 		WRITE_SHORT((ITEM_FLARE)); //which item to change
 		WRITE_SHORT(m_hActivator->m_rgItems[ITEM_FLARE]); //set counter to this ammount
 		MESSAGE_END();
@@ -670,7 +668,7 @@ void CItemFlare::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 		}
 		if (pev->ltime)
 		{
-			WRITE_BYTE((int)(pev->ltime * 10)); // ltime = life time
+			WRITE_BYTE(static_cast<int>(pev->ltime * 10)); // ltime = life time
 		}
 		else
 		{
@@ -722,8 +720,8 @@ void CItemCamera::Spawn(void)
 	m_iobjectcaps = 0;
 	if (pev->targetname == NULL) pev->targetname = MAKE_STRING("item_camera");
 	m_state = 0;
-	m_pLastCamera = NULL;
-	m_pNextCamera = NULL;
+	m_pLastCamera = nullptr;
+	m_pNextCamera = nullptr;
 
 	pev->solid = SOLID_TRIGGER;
 	UTIL_SetOrigin(this, pev->origin);
@@ -758,7 +756,7 @@ void CItemCamera::ItemTouch(CBaseEntity* pOther)
 		return;
 	pev->dmgtime = gpGlobals->time + 0.5;
 
-	CBasePlayer* pPlayer = (CBasePlayer*)pOther;
+	CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
 
 	// ok, a player is touching this item, but can he have it?
 	if (!g_pGameRules->CanHaveItem(pPlayer, this))
@@ -783,9 +781,9 @@ void CItemCamera::ItemTouch(CBaseEntity* pOther)
 
 BOOL CItemCamera::MyTouch(CBasePlayer* pPlayer)
 {
-	if (pPlayer->m_rgItems[ITEM_CAMERA] < (int)CVAR_GET_FLOAT("max_cameras"))
+	if (pPlayer->m_rgItems[ITEM_CAMERA] < static_cast<int>(CVAR_GET_FLOAT("max_cameras")))
 	{
-		if (pPlayer->m_pItemCamera == NULL)
+		if (pPlayer->m_pItemCamera == nullptr)
 		{
 			pPlayer->m_pItemCamera = this;
 			pPlayer->m_pItemCamera->m_pLastCamera = this;
@@ -793,7 +791,7 @@ BOOL CItemCamera::MyTouch(CBasePlayer* pPlayer)
 		}
 		else
 		{
-			if (pPlayer->m_pItemCamera->m_pLastCamera == NULL)
+			if (pPlayer->m_pItemCamera->m_pLastCamera == nullptr)
 			{
 				ALERT(at_debug, "MYTOUCH: Null pointer in camera list!! (Impossible?!)\n"); //Shouldn't be here!
 				return FALSE;
@@ -802,7 +800,7 @@ BOOL CItemCamera::MyTouch(CBasePlayer* pPlayer)
 			pPlayer->m_pItemCamera->m_pLastCamera = this; //then set us as the last camera in the list.
 		}
 		pPlayer->m_rgItems[ITEM_CAMERA] += 1;
-		MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev); //AJH msg change inventory
+		MESSAGE_BEGIN(MSG_ONE, gmsgInventory, nullptr, pPlayer->pev); //AJH msg change inventory
 		WRITE_SHORT((ITEM_CAMERA)); //which item to change
 		WRITE_SHORT(pPlayer->m_rgItems[ITEM_CAMERA]); //set counter to this ammount
 		MESSAGE_END();
@@ -830,7 +828,7 @@ void CItemCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 		ALERT(at_debug, "DEBUG: Camera used by non-player\n");
 		return;
 	}
-	CBasePlayer* pPlayer = (CBasePlayer*)pActivator;
+	CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pActivator);
 	//m_hPlayer = pActivator;
 
 	if (pPlayer->m_rgItems[ITEM_CAMERA] <= 0)
@@ -847,7 +845,7 @@ void CItemCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 	}
 	else
 	{
-		m_state = (int)value;
+		m_state = static_cast<int>(value);
 	}
 
 	if (m_state == 0) //We are exiting the camera view, and moving the camera pointers to the next camera.
@@ -856,7 +854,7 @@ void CItemCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 		if (pPlayer->m_rgItems[ITEM_CAMERA] > 0)
 		{
 			pPlayer->m_rgItems[ITEM_CAMERA] --; //decrement counter by one
-			MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev); //msg change inventory
+			MESSAGE_BEGIN(MSG_ONE, gmsgInventory, nullptr, pPlayer->pev); //msg change inventory
 			WRITE_SHORT((ITEM_CAMERA)); //which item to change
 			WRITE_SHORT(pPlayer->m_rgItems[ITEM_CAMERA]); //set counter to this ammount
 			MESSAGE_END();
@@ -868,11 +866,11 @@ void CItemCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 
 			CLIENT_COMMAND(pPlayer->edict(), "hideplayer\n");
 
-			if (pPlayer->m_pItemCamera->m_pLastCamera == NULL || pPlayer->m_pItemCamera->m_pNextCamera == NULL ||
+			if (pPlayer->m_pItemCamera->m_pLastCamera == nullptr || pPlayer->m_pItemCamera->m_pNextCamera == nullptr ||
 				pPlayer->m_rgItems[ITEM_CAMERA] <= 0)
 			{
 				//the player is out of cameras
-				pPlayer->m_pItemCamera = NULL; // Tell the player they don't have any more cameras!
+				pPlayer->m_pItemCamera = nullptr; // Tell the player they don't have any more cameras!
 				ALERT(at_debug, "USE: Player has no more cameras.\n");
 			}
 			else //Set the next camera the player can use
@@ -886,8 +884,8 @@ void CItemCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 				pev->origin = pev->oldorigin; //Reset initial position;
 				m_iobjectcaps &= ~FCAP_ACROSS_TRANSITION;
 				pev->movetype = MOVETYPE_NONE;
-				pev->aiment = NULL;
-				pev->owner = NULL;
+				pev->aiment = nullptr;
+				pev->owner = nullptr;
 				pev->takedamage = DAMAGE_NO;
 				pev->dmg = 0;
 				Respawn();
@@ -900,7 +898,7 @@ void CItemCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 		}
 		return;
 	}
-	else if (m_state == 1) //Drop the camera at the current location
+	if (m_state == 1) //Drop the camera at the current location
 	{
 		if (pPlayer->m_rgItems[ITEM_CAMERA] > 0)
 		{
@@ -915,8 +913,8 @@ void CItemCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 
 			m_iobjectcaps &= ~FCAP_ACROSS_TRANSITION;
 			pev->movetype = MOVETYPE_NONE; // Stop following the player 
-			pev->aiment = NULL;
-			pev->owner = NULL;
+			pev->aiment = nullptr;
+			pev->owner = nullptr;
 			pev->takedamage = DAMAGE_YES;
 		}
 	}
@@ -942,8 +940,8 @@ void CItemCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 
 			m_iobjectcaps &= ~FCAP_ACROSS_TRANSITION;
 			pev->movetype = MOVETYPE_NONE; // Stop following the player 
-			pev->aiment = NULL;
-			pev->owner = NULL;
+			pev->aiment = nullptr;
+			pev->owner = nullptr;
 
 			pev->takedamage = DAMAGE_YES;
 
@@ -966,14 +964,13 @@ void CItemCamera::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 
 			m_iobjectcaps &= ~FCAP_ACROSS_TRANSITION;
 			pev->movetype = MOVETYPE_NONE; // Stop following the player 
-			pev->aiment = NULL;
-			pev->owner = NULL;
+			pev->aiment = nullptr;
+			pev->owner = nullptr;
 
 			pev->takedamage = DAMAGE_YES;
 
 			CLIENT_COMMAND(pPlayer->edict(), "hideplayer\n");
 		}
-		return;
 	}
 }
 
@@ -1017,8 +1014,8 @@ void CItemCamera::StripFromPlayer()
 	{
 		m_pNextCamera->StripFromPlayer();
 	}
-	m_pNextCamera = NULL;
-	m_pLastCamera = NULL;
+	m_pNextCamera = nullptr;
+	m_pLastCamera = nullptr;
 
 	if (g_pGameRules->ItemShouldRespawn(this))
 	{
@@ -1050,7 +1047,7 @@ int CItemCamera::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 
 	if (pev->health - pev->dmg <= 0)
 	{
-		CBaseEntity* pAttacker = CBaseEntity::Instance(pevAttacker);
+		CBaseEntity* pAttacker = Instance(pevAttacker);
 		ALERT(at_console, "Your camera has been destroyed!!\n");
 		Use(pAttacker, this, USE_SET, 0);
 		return 1;

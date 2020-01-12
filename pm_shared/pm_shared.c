@@ -299,7 +299,7 @@ char PM_FindTextureType(char* name)
 		{
 			return grgchTextureType[pivot];
 		}
-		else if (val > 0)
+		if (val > 0)
 		{
 			left = pivot + 1;
 		}
@@ -1187,9 +1187,6 @@ int PM_FlyMove(void)
 			// Did we go all the way through plane set
 			if (i != numplanes)
 			{
-				// go along this plane
-				// pmove->velocity is set in clipping call, no need to set again.
-				;
 			}
 			else
 			{

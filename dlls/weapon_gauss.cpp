@@ -100,7 +100,7 @@ int CGauss::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 		return TRUE;
@@ -113,7 +113,7 @@ int CGauss::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "uranium";
 	p->iMaxAmmo1 = MAX_CARRY_URANIUM;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = MAX_CLIP_NOCLIP;
 	p->iSlot = SLOT_GAUSS;
@@ -299,9 +299,6 @@ void CGauss::SecondaryAttack()
 			UTIL_ScreenFade(m_pPlayer, Vector(255, 128, 0), 2, 0.5, 128, FFADE_IN);
 #endif
 			SendWeaponAnim(GAUSS_IDLE);
-
-			// Player may have been killed and this weapon dropped, don't execute any more code after this!
-			return;
 		}
 	}
 }
@@ -419,9 +416,9 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 		if (tr.fAllSolid)
 			break;
 
-		CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
+		CBaseEntity* pEntity = Instance(tr.pHit);
 
-		if (pEntity == NULL)
+		if (pEntity == nullptr)
 			break;
 
 		if (fFirstBeam)
@@ -443,7 +440,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 		{
 			float n;
 
-			pentIgnore = NULL;
+			pentIgnore = nullptr;
 
 			n = -DotProduct(tr.vecPlaneNormal, vecDir);
 
@@ -510,8 +507,8 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 								damage_radius = flDamage * 2.5;
 							}
 
-							::RadiusDamage(beam_tr.vecEndPos + vecDir * 8, pev, m_pPlayer->pev, flDamage, damage_radius,
-							               CLASS_NONE, DMG_BLAST);
+							RadiusDamage(beam_tr.vecEndPos + vecDir * 8, pev, m_pPlayer->pev, flDamage, damage_radius,
+							             CLASS_NONE, DMG_BLAST);
 
 							CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, NORMAL_EXPLOSION_VOLUME, 3.0);
 
@@ -602,20 +599,20 @@ void CGauss::WeaponIdle(void)
 
 class CGaussAmmo : public CBasePlayerAmmo
 {
-	void Spawn(void)
+	void Spawn(void) override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_gaussammo.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
-	void Precache(void)
+	void Precache(void) override
 	{
 		PRECACHE_MODEL("models/w_gaussammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther)
+	BOOL AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium", MAX_CARRY_URANIUM) != -1)
 		{

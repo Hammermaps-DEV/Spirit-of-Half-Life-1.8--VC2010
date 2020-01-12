@@ -30,9 +30,9 @@
 Task_t tlFail[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_WAIT, (float)2},
-	{TASK_WAIT_PVS, (float)0},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT, static_cast<float>(2)},
+	{TASK_WAIT_PVS, static_cast<float>(0)},
 };
 
 Schedule_t slFail[] =
@@ -52,8 +52,8 @@ Schedule_t slFail[] =
 Task_t tlIdleStand1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_WAIT, (float)5},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT, static_cast<float>(5)},
 	// repick IDLESTAND every five seconds. gives us a chance to pick an active idle, fidget, etc.
 };
 
@@ -98,8 +98,8 @@ Schedule_t slIdleTrigger[] =
 
 Task_t tlIdleWalk1[] =
 {
-	{TASK_WALK_PATH, (float)9999},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
+	{TASK_WALK_PATH, static_cast<float>(9999)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
 };
 
 Schedule_t slIdleWalk[] =
@@ -131,8 +131,8 @@ Schedule_t slIdleWalk[] =
 Task_t tlAmbush[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_WAIT_INDEFINITE, (float)0},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT_INDEFINITE, static_cast<float>(0)},
 };
 
 Schedule_t slAmbush[] =
@@ -160,18 +160,18 @@ Schedule_t slAmbush[] =
 ///=========================================================
 Task_t tlActiveIdle[] =
 {
-	{TASK_FIND_HINTNODE, (float)0},
-	{TASK_GET_PATH_TO_HINTNODE, (float)0},
-	{TASK_STORE_LASTPOSITION, (float)0},
-	{TASK_WALK_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_FACE_HINTNODE, (float)0},
-	{TASK_PLAY_ACTIVE_IDLE, (float)0},
-	{TASK_GET_PATH_TO_LASTPOSITION, (float)0},
-	{TASK_WALK_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_CLEAR_LASTPOSITION, (float)0},
-	{TASK_CLEAR_HINTNODE, (float)0},
+	{TASK_FIND_HINTNODE, static_cast<float>(0)},
+	{TASK_GET_PATH_TO_HINTNODE, static_cast<float>(0)},
+	{TASK_STORE_LASTPOSITION, static_cast<float>(0)},
+	{TASK_WALK_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_FACE_HINTNODE, static_cast<float>(0)},
+	{TASK_PLAY_ACTIVE_IDLE, static_cast<float>(0)},
+	{TASK_GET_PATH_TO_LASTPOSITION, static_cast<float>(0)},
+	{TASK_WALK_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_CLEAR_LASTPOSITION, static_cast<float>(0)},
+	{TASK_CLEAR_HINTNODE, static_cast<float>(0)},
 };
 
 Schedule_t slActiveIdle[] =
@@ -199,9 +199,9 @@ Schedule_t slActiveIdle[] =
 Task_t tlWakeAngry1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_SOUND_WAKE, (float)0},
-	{TASK_FACE_IDEAL, (float)0},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_SOUND_WAKE, static_cast<float>(0)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
 };
 
 Schedule_t slWakeAngry[] =
@@ -221,8 +221,8 @@ Schedule_t slWakeAngry[] =
 Task_t tlAlertFace1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_FACE_IDEAL, (float)0},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
 };
 
 Schedule_t slAlertFace[] =
@@ -247,9 +247,9 @@ Schedule_t slAlertFace[] =
 Task_t tlAlertSmallFlinch[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_REMEMBER, (float)bits_MEMORY_FLINCHED},
-	{TASK_SMALL_FLINCH, (float)0},
-	{TASK_SET_SCHEDULE, (float)SCHED_ALERT_FACE},
+	{TASK_REMEMBER, static_cast<float>(bits_MEMORY_FLINCHED)},
+	{TASK_SMALL_FLINCH, static_cast<float>(0)},
+	{TASK_SET_SCHEDULE, static_cast<float>(SCHED_ALERT_FACE)},
 };
 
 Schedule_t slAlertSmallFlinch[] =
@@ -269,9 +269,9 @@ Schedule_t slAlertSmallFlinch[] =
 Task_t tlAlertStand1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_WAIT, (float)20},
-	{TASK_SUGGEST_STATE, (float)MONSTERSTATE_IDLE},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT, static_cast<float>(20)},
+	{TASK_SUGGEST_STATE, static_cast<float>(MONSTERSTATE_IDLE)},
 };
 
 Schedule_t slAlertStand[] =
@@ -307,18 +307,18 @@ Schedule_t slAlertStand[] =
 //=========================================================
 Task_t tlInvestigateSound[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_STORE_LASTPOSITION, (float)0},
-	{TASK_GET_PATH_TO_BESTSOUND, (float)0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_WALK_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_IDLE},
-	{TASK_WAIT, (float)10},
-	{TASK_GET_PATH_TO_LASTPOSITION, (float)0},
-	{TASK_WALK_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_CLEAR_LASTPOSITION, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_STORE_LASTPOSITION, static_cast<float>(0)},
+	{TASK_GET_PATH_TO_BESTSOUND, static_cast<float>(0)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_WALK_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT, static_cast<float>(10)},
+	{TASK_GET_PATH_TO_LASTPOSITION, static_cast<float>(0)},
+	{TASK_WALK_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_CLEAR_LASTPOSITION, static_cast<float>(0)},
 };
 
 Schedule_t slInvestigateSound[] =
@@ -343,8 +343,8 @@ Schedule_t slInvestigateSound[] =
 Task_t tlCombatStand1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_WAIT_INDEFINITE, (float)0},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT_INDEFINITE, static_cast<float>(0)},
 };
 
 Schedule_t slCombatStand[] =
@@ -368,8 +368,8 @@ Schedule_t slCombatStand[] =
 Task_t tlCombatFace1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_FACE_ENEMY, (float)0},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
 };
 
 Schedule_t slCombatFace[] =
@@ -392,9 +392,9 @@ Schedule_t slCombatFace[] =
 //=========================================================
 Task_t tlStandoff[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_WAIT_FACE_ENEMY, (float)2},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT_FACE_ENEMY, static_cast<float>(2)},
 };
 
 Schedule_t slStandoff[] =
@@ -419,7 +419,7 @@ Schedule_t slStandoff[] =
 Task_t tlArmWeapon[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_ARM}
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_ARM)}
 };
 
 Schedule_t slArmWeapon[] =
@@ -461,8 +461,8 @@ Schedule_t slReload[] =
 Task_t tlRangeAttack1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
 };
 
 Schedule_t slRangeAttack1[] =
@@ -487,8 +487,8 @@ Schedule_t slRangeAttack1[] =
 Task_t tlRangeAttack2[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_RANGE_ATTACK2, (float)0},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK2, static_cast<float>(0)},
 };
 
 Schedule_t slRangeAttack2[] =
@@ -512,8 +512,8 @@ Schedule_t slRangeAttack2[] =
 Task_t tlPrimaryMeleeAttack1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_MELEE_ATTACK1, (float)0},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_MELEE_ATTACK1, static_cast<float>(0)},
 };
 
 Schedule_t slPrimaryMeleeAttack[] =
@@ -535,8 +535,8 @@ Schedule_t slPrimaryMeleeAttack[] =
 Task_t tlSecondaryMeleeAttack1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_MELEE_ATTACK2, (float)0},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_MELEE_ATTACK2, static_cast<float>(0)},
 };
 
 Schedule_t slSecondaryMeleeAttack[] =
@@ -558,8 +558,8 @@ Schedule_t slSecondaryMeleeAttack[] =
 Task_t tlSpecialAttack1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_SPECIAL_ATTACK1, (float)0},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_SPECIAL_ATTACK1, static_cast<float>(0)},
 };
 
 Schedule_t slSpecialAttack1[] =
@@ -584,8 +584,8 @@ Schedule_t slSpecialAttack1[] =
 Task_t tlSpecialAttack2[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_SPECIAL_ATTACK2, (float)0},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_SPECIAL_ATTACK2, static_cast<float>(0)},
 };
 
 Schedule_t slSpecialAttack2[] =
@@ -609,10 +609,10 @@ Schedule_t slSpecialAttack2[] =
 // Chase enemy schedule
 Task_t tlChaseEnemy1[] =
 {
-	{TASK_SET_FAIL_SCHEDULE, (float)SCHED_CHASE_ENEMY_FAILED},
-	{TASK_GET_PATH_TO_ENEMY, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
+	{TASK_SET_FAIL_SCHEDULE, static_cast<float>(SCHED_CHASE_ENEMY_FAILED)},
+	{TASK_GET_PATH_TO_ENEMY, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
 };
 
 Schedule_t slChaseEnemy[] =
@@ -637,15 +637,15 @@ Schedule_t slChaseEnemy[] =
 // Chase enemy failure schedule
 Task_t tlChaseEnemyFailed[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_WAIT, (float)0.2},
-	{TASK_FIND_COVER_FROM_ENEMY, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_REMEMBER, (float)bits_MEMORY_INCOVER},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_WAIT, static_cast<float>(0.2)},
+	{TASK_FIND_COVER_FROM_ENEMY, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_REMEMBER, static_cast<float>(bits_MEMORY_INCOVER)},
 	//	{ TASK_TURN_LEFT,				(float)179					},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_WAIT, (float)1},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_WAIT, static_cast<float>(1)},
 };
 
 Schedule_t slChaseEnemyFailed[] =
@@ -671,7 +671,7 @@ Schedule_t slChaseEnemyFailed[] =
 //=========================================================
 Task_t tlSmallFlinch[] =
 {
-	{TASK_REMEMBER, (float)bits_MEMORY_FLINCHED},
+	{TASK_REMEMBER, static_cast<float>(bits_MEMORY_FLINCHED)},
 	{TASK_STOP_MOVING, 0},
 	{TASK_SMALL_FLINCH, 0},
 };
@@ -693,8 +693,8 @@ Schedule_t slSmallFlinch[] =
 Task_t tlDie1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SOUND_DIE, (float)0},
-	{TASK_DIE, (float)0},
+	{TASK_SOUND_DIE, static_cast<float>(0)},
+	{TASK_DIE, static_cast<float>(0)},
 };
 
 Schedule_t slDie[] =
@@ -714,8 +714,8 @@ Schedule_t slDie[] =
 Task_t tlVictoryDance[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_VICTORY_DANCE},
-	{TASK_WAIT, (float)0},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_VICTORY_DANCE)},
+	{TASK_WAIT, static_cast<float>(0)},
 };
 
 Schedule_t slVictoryDance[] =
@@ -737,9 +737,9 @@ Schedule_t slVictoryDance[] =
 Task_t tlBarnacleVictimGrab[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_BARNACLE_HIT},
-	{TASK_SET_ACTIVITY, (float)ACT_BARNACLE_PULL},
-	{TASK_WAIT_INDEFINITE, (float)0}, // just cycle barnacle pull anim while barnacle hoists. 
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_BARNACLE_HIT)},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_BARNACLE_PULL)},
+	{TASK_WAIT_INDEFINITE, static_cast<float>(0)}, // just cycle barnacle pull anim while barnacle hoists. 
 };
 
 Schedule_t slBarnacleVictimGrab[] =
@@ -761,9 +761,9 @@ Schedule_t slBarnacleVictimGrab[] =
 Task_t tlBarnacleVictimChomp[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_BARNACLE_CHOMP},
-	{TASK_SET_ACTIVITY, (float)ACT_BARNACLE_CHEW},
-	{TASK_WAIT_INDEFINITE, (float)0}, // just cycle barnacle pull anim while barnacle hoists. 
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_BARNACLE_CHOMP)},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_BARNACLE_CHEW)},
+	{TASK_WAIT_INDEFINITE, static_cast<float>(0)}, // just cycle barnacle pull anim while barnacle hoists. 
 };
 
 Schedule_t slBarnacleVictimChomp[] =
@@ -782,7 +782,7 @@ Schedule_t slBarnacleVictimChomp[] =
 Task_t tlError[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_WAIT_INDEFINITE, (float)0},
+	{TASK_WAIT_INDEFINITE, static_cast<float>(0)},
 };
 
 Schedule_t slError[] =
@@ -799,10 +799,10 @@ Schedule_t slError[] =
 //LRC
 Task_t tlScriptedTeleport[] =
 {
-	{TASK_PLANT_ON_SCRIPT, (float)0},
-	{TASK_WAIT_FOR_SCRIPT, (float)0},
-	{TASK_PLAY_SCRIPT, (float)0},
-	{TASK_END_SCRIPT, (float)0},
+	{TASK_PLANT_ON_SCRIPT, static_cast<float>(0)},
+	{TASK_WAIT_FOR_SCRIPT, static_cast<float>(0)},
+	{TASK_PLAY_SCRIPT, static_cast<float>(0)},
+	{TASK_END_SCRIPT, static_cast<float>(0)},
 };
 
 //LRC
@@ -819,15 +819,15 @@ Schedule_t slTeleportToScript[] =
 
 Task_t tlScriptedWalk[] =
 {
-	{TASK_WALK_TO_SCRIPT, (float)TARGET_MOVE_SCRIPTED},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_PLANT_ON_SCRIPT, (float)0},
-	{TASK_FACE_SCRIPT, (float)0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_ENABLE_SCRIPT, (float)0},
-	{TASK_WAIT_FOR_SCRIPT, (float)0},
-	{TASK_PLAY_SCRIPT, (float)0},
-	{TASK_END_SCRIPT, (float)0},
+	{TASK_WALK_TO_SCRIPT, static_cast<float>(TARGET_MOVE_SCRIPTED)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_PLANT_ON_SCRIPT, static_cast<float>(0)},
+	{TASK_FACE_SCRIPT, static_cast<float>(0)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_ENABLE_SCRIPT, static_cast<float>(0)},
+	{TASK_WAIT_FOR_SCRIPT, static_cast<float>(0)},
+	{TASK_PLAY_SCRIPT, static_cast<float>(0)},
+	{TASK_END_SCRIPT, static_cast<float>(0)},
 };
 
 Schedule_t slWalkToScript[] =
@@ -844,15 +844,15 @@ Schedule_t slWalkToScript[] =
 
 Task_t tlScriptedRun[] =
 {
-	{TASK_RUN_TO_SCRIPT, (float)TARGET_MOVE_SCRIPTED},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_PLANT_ON_SCRIPT, (float)0},
-	{TASK_FACE_SCRIPT, (float)0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_ENABLE_SCRIPT, (float)0},
-	{TASK_WAIT_FOR_SCRIPT, (float)0},
-	{TASK_PLAY_SCRIPT, (float)0},
-	{TASK_END_SCRIPT, (float)0},
+	{TASK_RUN_TO_SCRIPT, static_cast<float>(TARGET_MOVE_SCRIPTED)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_PLANT_ON_SCRIPT, static_cast<float>(0)},
+	{TASK_FACE_SCRIPT, static_cast<float>(0)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_ENABLE_SCRIPT, static_cast<float>(0)},
+	{TASK_WAIT_FOR_SCRIPT, static_cast<float>(0)},
+	{TASK_PLAY_SCRIPT, static_cast<float>(0)},
+	{TASK_END_SCRIPT, static_cast<float>(0)},
 };
 
 Schedule_t slRunToScript[] =
@@ -870,9 +870,9 @@ Task_t tlScriptedWait[] =
 {
 	{TASK_STOP_MOVING, 0},
 	//	{ TASK_ENABLE_SCRIPT,		(float)0		},
-	{TASK_WAIT_FOR_SCRIPT, (float)0},
-	{TASK_PLAY_SCRIPT, (float)0},
-	{TASK_END_SCRIPT, (float)0},
+	{TASK_WAIT_FOR_SCRIPT, static_cast<float>(0)},
+	{TASK_PLAY_SCRIPT, static_cast<float>(0)},
+	{TASK_END_SCRIPT, static_cast<float>(0)},
 };
 
 Schedule_t slWaitScript[] =
@@ -889,11 +889,11 @@ Schedule_t slWaitScript[] =
 Task_t tlScriptedFace[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_SCRIPT, (float)0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_WAIT_FOR_SCRIPT, (float)0},
-	{TASK_PLAY_SCRIPT, (float)0},
-	{TASK_END_SCRIPT, (float)0},
+	{TASK_FACE_SCRIPT, static_cast<float>(0)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_WAIT_FOR_SCRIPT, static_cast<float>(0)},
+	{TASK_PLAY_SCRIPT, static_cast<float>(0)},
+	{TASK_END_SCRIPT, static_cast<float>(0)},
 };
 
 Schedule_t slFaceScript[] =
@@ -914,7 +914,7 @@ Schedule_t slFaceScript[] =
 Task_t tlCower[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_COWER},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_COWER)},
 };
 
 Schedule_t slCower[] =
@@ -933,12 +933,12 @@ Schedule_t slCower[] =
 //=========================================================
 Task_t tlTakeCoverFromOrigin[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FIND_COVER_FROM_ORIGIN, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_REMEMBER, (float)bits_MEMORY_INCOVER},
-	{TASK_TURN_LEFT, (float)179},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FIND_COVER_FROM_ORIGIN, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_REMEMBER, static_cast<float>(bits_MEMORY_INCOVER)},
+	{TASK_TURN_LEFT, static_cast<float>(179)},
 };
 
 Schedule_t slTakeCoverFromOrigin[] =
@@ -957,12 +957,12 @@ Schedule_t slTakeCoverFromOrigin[] =
 //=========================================================
 Task_t tlTakeCoverFromBestSound[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FIND_COVER_FROM_BEST_SOUND, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_REMEMBER, (float)bits_MEMORY_INCOVER},
-	{TASK_TURN_LEFT, (float)179},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FIND_COVER_FROM_BEST_SOUND, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_REMEMBER, static_cast<float>(bits_MEMORY_INCOVER)},
+	{TASK_TURN_LEFT, static_cast<float>(179)},
 };
 
 Schedule_t slTakeCoverFromBestSound[] =
@@ -982,15 +982,15 @@ Schedule_t slTakeCoverFromBestSound[] =
 //=========================================================
 Task_t tlTakeCoverFromEnemy[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_WAIT, (float)0.2},
-	{TASK_FIND_COVER_FROM_ENEMY, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_REMEMBER, (float)bits_MEMORY_INCOVER},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_WAIT, static_cast<float>(0.2)},
+	{TASK_FIND_COVER_FROM_ENEMY, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_REMEMBER, static_cast<float>(bits_MEMORY_INCOVER)},
 	//	{ TASK_TURN_LEFT,				(float)179					},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_WAIT, (float)1},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_WAIT, static_cast<float>(1)},
 };
 
 Schedule_t slTakeCoverFromEnemy[] =
@@ -1059,7 +1059,7 @@ Schedule_t* CBaseMonster::ScheduleInList(const char* pName, Schedule_t** pList, 
 	if (!pName)
 	{
 		ALERT(at_debug, "%s set to unnamed schedule!\n", STRING(pev->classname));
-		return NULL;
+		return nullptr;
 	}
 
 
@@ -1073,7 +1073,7 @@ Schedule_t* CBaseMonster::ScheduleInList(const char* pName, Schedule_t** pList, 
 		if (_stricmp(pName, pList[i]->pName) == 0)
 			return pList[i];
 	}
-	return NULL;
+	return nullptr;
 }
 
 //=========================================================
@@ -1254,5 +1254,5 @@ Schedule_t* CBaseMonster::GetScheduleOfType(int Type)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }

@@ -29,10 +29,10 @@
 class CRat : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int Classify(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void SetYawSpeed(void) override;
+	int Classify(void) override;
 };
 
 LINK_ENTITY_TO_CLASS(monster_rat, CRat);

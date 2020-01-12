@@ -28,7 +28,7 @@
 
 extern edict_t* EntSelectSpawnPoint(CBaseEntity* pPlayer);
 
-DLL_GLOBAL CGameRules* g_pGameRules = NULL;
+DLL_GLOBAL CGameRules* g_pGameRules = nullptr;
 extern DLL_GLOBAL BOOL g_fGameOver;
 extern int gmsgDeathMsg; // client dll messages
 extern int gmsgMOTD;
@@ -120,7 +120,7 @@ void CGameRules::RefreshSkillData(void)
 {
 	int iSkill;
 
-	iSkill = (int)CVAR_GET_FLOAT("skill");
+	iSkill = static_cast<int>(CVAR_GET_FLOAT("skill"));
 	g_iSkillLevel = iSkill;
 
 	if (iSkill < 1)
@@ -328,26 +328,20 @@ CGameRules* InstallGameRules(void)
 		g_teamplay = 0;
 		return new CHalfLifeRules;
 	}
-	else
+	if (teamplay.value > 0)
 	{
-		if (teamplay.value > 0)
-		{
-			// teamplay
+		// teamplay
 
-			g_teamplay = 1;
-			return new CHalfLifeTeamplay;
-		}
-		if ((int)gpGlobals->deathmatch == 1)
-		{
-			// vanilla deathmatch
-			g_teamplay = 0;
-			return new CHalfLifeMultiplay;
-		}
-		else
-		{
-			// vanilla deathmatch??
-			g_teamplay = 0;
-			return new CHalfLifeMultiplay;
-		}
+		g_teamplay = 1;
+		return new CHalfLifeTeamplay;
 	}
+	if (static_cast<int>(gpGlobals->deathmatch) == 1)
+	{
+		// vanilla deathmatch
+		g_teamplay = 0;
+		return new CHalfLifeMultiplay;
+	}
+	// vanilla deathmatch??
+	g_teamplay = 0;
+	return new CHalfLifeMultiplay;
 }

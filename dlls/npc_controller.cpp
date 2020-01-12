@@ -42,32 +42,32 @@
 class CController : public CSquadMonster
 {
 public:
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int Classify(void);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void SetYawSpeed(void) override;
+	int Classify(void) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
-	void RunAI(void);
-	BOOL CheckRangeAttack1(float flDot, float flDist); // balls
-	BOOL CheckRangeAttack2(float flDot, float flDist); // head
-	BOOL CheckMeleeAttack1(float flDot, float flDist); // block, throw
-	Schedule_t* GetSchedule(void);
-	Schedule_t* GetScheduleOfType(int Type);
-	void StartTask(Task_t* pTask);
-	void RunTask(Task_t* pTask);
+	void RunAI(void) override;
+	BOOL CheckRangeAttack1(float flDot, float flDist) override; // balls
+	BOOL CheckRangeAttack2(float flDot, float flDist) override; // head
+	BOOL CheckMeleeAttack1(float flDot, float flDist) override; // block, throw
+	Schedule_t* GetSchedule(void) override;
+	Schedule_t* GetScheduleOfType(int Type) override;
+	void StartTask(Task_t* pTask) override;
+	void RunTask(Task_t* pTask) override;
 	CUSTOM_SCHEDULES;
 
-	void Stop(void);
-	void Move(float flInterval);
-	int CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pTarget, float* pflDist);
-	void MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, float flInterval);
-	void SetActivity(Activity NewActivity);
-	BOOL ShouldAdvanceRoute(float flWaypointDist);
+	void Stop(void) override;
+	void Move(float flInterval) override;
+	int CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pTarget, float* pflDist) override;
+	void MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, float flInterval) override;
+	void SetActivity(Activity NewActivity) override;
+	BOOL ShouldAdvanceRoute(float flWaypointDist) override;
 	int LookupFloat();
 
 	float m_flNextFlinch;
@@ -75,11 +75,11 @@ public:
 	float m_flShootTime;
 	float m_flShootEnd;
 
-	void PainSound(void);
-	void AlertSound(void);
-	void IdleSound(void);
+	void PainSound(void) override;
+	void AlertSound(void) override;
+	void IdleSound(void) override;
 	void AttackSound(void);
-	void DeathSound(void);
+	void DeathSound(void) override;
 
 	static const char* pAttackSounds[];
 	static const char* pIdleSounds[];
@@ -87,9 +87,9 @@ public:
 	static const char* pPainSounds[];
 	static const char* pDeathSounds[];
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	void Killed(entvars_t* pevAttacker, int iGib);
-	void GibMonster(void);
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void GibMonster(void) override;
 
 	CSprite* m_pBall[2]; // hand balls
 	int m_iBall[2]; // how bright it should be
@@ -203,12 +203,12 @@ void CController::Killed(entvars_t* pevAttacker, int iGib)
 	if (m_pBall[0])
 	{
 		m_pBall[0]->SUB_StartFadeOut();
-		m_pBall[0] = NULL;
+		m_pBall[0] = nullptr;
 	}
 	if (m_pBall[1])
 	{
 		m_pBall[1]->SUB_StartFadeOut();
-		m_pBall[1] = NULL;
+		m_pBall[1] = nullptr;
 	}
 
 	CSquadMonster::Killed(pevAttacker, iGib);
@@ -221,12 +221,12 @@ void CController::GibMonster(void)
 	if (m_pBall[0])
 	{
 		UTIL_Remove(m_pBall[0]);
-		m_pBall[0] = NULL;
+		m_pBall[0] = nullptr;
 	}
 	if (m_pBall[1])
 	{
 		UTIL_Remove(m_pBall[1]);
-		m_pBall[1] = NULL;
+		m_pBall[1] = nullptr;
 	}
 	CSquadMonster::GibMonster();
 }
@@ -315,7 +315,8 @@ void CController::HandleAnimEvent(MonsterEvent_t* pEvent)
 			WRITE_COORD(32); // decay
 			MESSAGE_END();
 
-			CBaseMonster* pBall = (CBaseMonster*)Create("controller_head_ball", vecStart, pev->angles, edict());
+			CBaseMonster* pBall = static_cast<CBaseMonster*>(Create("controller_head_ball", vecStart, pev->angles,
+			                                                        edict()));
 
 			pBall->pev->velocity = Vector(0, 0, 32);
 			if (m_pCine)
@@ -421,8 +422,8 @@ void CController::Precache()
 // Chase enemy schedule
 Task_t tlControllerChaseEnemy[] =
 {
-	{TASK_GET_PATH_TO_ENEMY, (float)128},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
+	{TASK_GET_PATH_TO_ENEMY, static_cast<float>(128)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
 
 };
 
@@ -441,10 +442,10 @@ Schedule_t slControllerChaseEnemy[] =
 
 Task_t tlControllerStrafe[] =
 {
-	{TASK_WAIT, (float)0.2},
-	{TASK_GET_PATH_TO_ENEMY, (float)128},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_WAIT, (float)1},
+	{TASK_WAIT, static_cast<float>(0.2)},
+	{TASK_GET_PATH_TO_ENEMY, static_cast<float>(128)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_WAIT, static_cast<float>(1)},
 };
 
 Schedule_t slControllerStrafe[] =
@@ -461,10 +462,10 @@ Schedule_t slControllerStrafe[] =
 
 Task_t tlControllerTakeCover[] =
 {
-	{TASK_WAIT, (float)0.2},
-	{TASK_FIND_COVER_FROM_ENEMY, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_WAIT, (float)1},
+	{TASK_WAIT, static_cast<float>(0.2)},
+	{TASK_FIND_COVER_FROM_ENEMY, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_WAIT, static_cast<float>(1)},
 };
 
 Schedule_t slControllerTakeCover[] =
@@ -482,9 +483,9 @@ Schedule_t slControllerTakeCover[] =
 Task_t tlControllerFail[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_WAIT, (float)2},
-	{TASK_WAIT_PVS, (float)0},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT, static_cast<float>(2)},
+	{TASK_WAIT_PVS, static_cast<float>(0)},
 };
 
 Schedule_t slControllerFail[] =
@@ -539,7 +540,7 @@ void CController::StartTask(Task_t* pTask)
 		{
 			CBaseEntity* pEnemy = m_hEnemy;
 
-			if (pEnemy == NULL)
+			if (pEnemy == nullptr)
 			{
 				TaskFail();
 				return;
@@ -619,23 +620,17 @@ int CController::LookupFloat()
 	{
 		if (x > 0)
 			return LookupSequence("forward");
-		else
-			return LookupSequence("backward");
+		return LookupSequence("backward");
 	}
-	else if (Vfabs(y) > Vfabs(z))
+	if (Vfabs(y) > Vfabs(z))
 	{
 		if (y > 0)
 			return LookupSequence("right");
-		else
-			return LookupSequence("left");
+		return LookupSequence("left");
 	}
-	else
-	{
-		if (z > 0)
-			return LookupSequence("up");
-		else
-			return LookupSequence("down");
-	}
+	if (z > 0)
+		return LookupSequence("up");
+	return LookupSequence("down");
 }
 
 
@@ -655,9 +650,9 @@ void CController::RunTask(Task_t* pTask)
 			Vector vecSrc = vecHand + pev->velocity * (m_flShootTime - gpGlobals->time);
 			Vector vecDir;
 
-			if (m_pCine != NULL || m_hEnemy != NULL)
+			if (m_pCine != nullptr || m_hEnemy != NULL)
 			{
-				if (m_pCine != NULL) // LRC- is this a script that's telling it to fire?
+				if (m_pCine != nullptr) // LRC- is this a script that's telling it to fire?
 				{
 					if (m_hTargetEnt != NULL && m_pCine->PreciseAttack())
 					{
@@ -688,7 +683,8 @@ void CController::RunTask(Task_t* pTask)
 				                         RANDOM_FLOAT(-delta, delta)) * gSkillData.controllerSpeedBall;
 
 				vecSrc = vecSrc + vecDir * (gpGlobals->time - m_flShootTime);
-				CBaseMonster* pBall = (CBaseMonster*)Create("controller_energy_ball", vecSrc, pev->angles, edict());
+				CBaseMonster* pBall = static_cast<CBaseMonster*>(Create("controller_energy_ball", vecSrc, pev->angles,
+				                                                        edict()));
 				pBall->pev->velocity = vecDir;
 			}
 			m_flShootTime += 0.2;
@@ -875,7 +871,7 @@ void CController::RunAI(void)
 
 	for (int i = 0; i < 2; i++)
 	{
-		if (m_pBall[i] == NULL)
+		if (m_pBall[i] == nullptr)
 		{
 			m_pBall[i] = CSprite::SpriteCreate("sprites/xspark4.spr", pev->origin, TRUE);
 			m_pBall[i]->SetTransparency(kRenderGlow, 255, 255, 255, 255, kRenderFxNoDissipation);
@@ -962,7 +958,7 @@ void CController::Move(float flInterval)
 
 	// if the monster is moving directly towards an entity (enemy for instance), we'll set this pointer
 	// to that entity for the CheckLocalMove and Triangulate functions.
-	pTargetEnt = NULL;
+	pTargetEnt = nullptr;
 
 	if (m_flGroundSpeed == 0)
 	{
@@ -1013,7 +1009,7 @@ void CController::Move(float flInterval)
 			// Can't move, stop
 			Stop();
 			// Blocking entity is in global trace_ent
-			pBlocker = CBaseEntity::Instance(gpGlobals->trace_ent);
+			pBlocker = Instance(gpGlobals->trace_ent);
 			if (pBlocker)
 			{
 				DispatchBlocked(edict(), pBlocker->edict());
@@ -1165,8 +1161,8 @@ void CController::MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, flo
 //=========================================================
 class CControllerHeadBall : public CBaseMonster
 {
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 	void EXPORT HuntThink(void);
 	void EXPORT DieThink(void);
 	void EXPORT BounceTouch(CBaseEntity* pOther);
@@ -1261,8 +1257,8 @@ void CControllerHeadBall::HuntThink(void)
 
 		UTIL_TraceLine(pev->origin, m_hEnemy->Center(), dont_ignore_monsters, ENT(pev), &tr);
 
-		CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
-		if (pEntity != NULL && pEntity->pev->takedamage)
+		CBaseEntity* pEntity = Instance(tr.pHit);
+		if (pEntity != nullptr && pEntity->pev->takedamage)
 		{
 			ClearMultiDamage();
 			pEntity->TraceAttack(m_hOwner->pev, gSkillData.controllerDmgZap, pev->velocity, &tr, DMG_SHOCK);
@@ -1367,8 +1363,8 @@ void CControllerHeadBall::BounceTouch(CBaseEntity* pOther)
 
 class CControllerZapBall : public CBaseMonster
 {
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 	void EXPORT AnimateThink(void);
 	void EXPORT ExplodeTouch(CBaseEntity* pOther);
 
@@ -1417,7 +1413,7 @@ void CControllerZapBall::AnimateThink(void)
 {
 	SetNextThink(0.1);
 
-	pev->frame = ((int)pev->frame + 1) % 11;
+	pev->frame = (static_cast<int>(pev->frame) + 1) % 11;
 
 	if (gpGlobals->time - pev->dmgtime > 5 || pev->velocity.Length() < 10)
 	{

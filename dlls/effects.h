@@ -38,10 +38,10 @@
 class CSprite : public CPointEntity
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 
-	int ObjectCaps(void)
+	int ObjectCaps(void) override
 	{
 		int flags = 0;
 		if (pev->spawnflags & SF_SPRITE_TEMPORARY)
@@ -51,14 +51,14 @@ public:
 
 	void EXPORT AnimateThink(void);
 	void EXPORT ExpandThink(void);
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	void Animate(float frames);
 	void Expand(float scaleSpeed, float fadeSpeed);
 	void SpriteInit(const char* pSpriteName, const Vector& origin);
 
-	virtual STATE GetState(void) { return (pev->effects & EF_NODRAW) ? STATE_OFF : STATE_ON; };
+	STATE GetState(void) override { return (pev->effects & EF_NODRAW) ? STATE_OFF : STATE_ON; };
 
-	inline void SetAttachment(edict_t* pEntity, int attachment)
+	void SetAttachment(edict_t* pEntity, int attachment)
 	{
 		if (pEntity)
 		{
@@ -71,9 +71,9 @@ public:
 
 	void TurnOff(void);
 	void TurnOn(void);
-	inline float Frames(void) { return m_maxFrame; }
+	float Frames(void) { return m_maxFrame; }
 
-	inline void SetTransparency(int rendermode, int r, int g, int b, int a, int fx)
+	void SetTransparency(int rendermode, int r, int g, int b, int a, int fx)
 	{
 		pev->rendermode = rendermode;
 		pev->rendercolor.x = r;
@@ -83,19 +83,19 @@ public:
 		pev->renderfx = fx;
 	}
 
-	inline void SetTexture(int spriteIndex) { pev->modelindex = spriteIndex; }
-	inline void SetScale(float scale) { pev->scale = scale; }
+	void SetTexture(int spriteIndex) { pev->modelindex = spriteIndex; }
+	void SetScale(float scale) { pev->scale = scale; }
 
-	inline void SetColor(int r, int g, int b)
+	void SetColor(int r, int g, int b)
 	{
 		pev->rendercolor.x = r;
 		pev->rendercolor.y = g;
 		pev->rendercolor.z = b;
 	}
 
-	inline void SetBrightness(int brightness) { pev->renderamt = brightness; }
+	void SetBrightness(int brightness) { pev->renderamt = brightness; }
 
-	inline void AnimateAndDie(float framerate)
+	void AnimateAndDie(float framerate)
 	{
 		SetThink(&CSprite ::AnimateUntilDead);
 		pev->framerate = framerate;
@@ -105,8 +105,8 @@ public:
 
 	void EXPORT AnimateUntilDead(void);
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 	static CSprite* SpriteCreate(const char* pSpriteName, const Vector& origin, BOOL animate);
 
@@ -120,10 +120,10 @@ public:
 class CBeam : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 
-	int ObjectCaps(void)
+	int ObjectCaps(void) override
 	{
 		int flags = 0;
 		if (pev->spawnflags & SF_BEAM_TEMPORARY)
@@ -135,52 +135,52 @@ public:
 
 	// These functions are here to show the way beams are encoded as entities.
 	// Encoding beams as entities simplifies their management in the client/server architecture
-	inline void SetType(int type) { pev->rendermode = (pev->rendermode & 0xF0) | (type & 0x0F); }
-	inline void SetFlags(int flags) { pev->rendermode = (pev->rendermode & 0x0F) | (flags & 0xF0); }
-	inline void SetStartPos(const Vector& pos) { pev->origin = pos; }
-	inline void SetEndPos(const Vector& pos) { pev->angles = pos; }
+	void SetType(int type) { pev->rendermode = (pev->rendermode & 0xF0) | (type & 0x0F); }
+	void SetFlags(int flags) { pev->rendermode = (pev->rendermode & 0x0F) | (flags & 0xF0); }
+	void SetStartPos(const Vector& pos) { pev->origin = pos; }
+	void SetEndPos(const Vector& pos) { pev->angles = pos; }
 	void SetStartEntity(int entityIndex);
 	void SetEndEntity(int entityIndex);
 
-	inline void SetStartAttachment(int attachment)
+	void SetStartAttachment(int attachment)
 	{
 		pev->sequence = (pev->sequence & 0x0FFF) | ((attachment & 0xF) << 12);
 	}
 
-	inline void SetEndAttachment(int attachment) { pev->skin = (pev->skin & 0x0FFF) | ((attachment & 0xF) << 12); }
+	void SetEndAttachment(int attachment) { pev->skin = (pev->skin & 0x0FFF) | ((attachment & 0xF) << 12); }
 
-	inline void SetTexture(int spriteIndex) { pev->modelindex = spriteIndex; }
-	inline void SetWidth(int width) { pev->scale = width; }
-	inline void SetNoise(int amplitude) { pev->body = amplitude; }
+	void SetTexture(int spriteIndex) { pev->modelindex = spriteIndex; }
+	void SetWidth(int width) { pev->scale = width; }
+	void SetNoise(int amplitude) { pev->body = amplitude; }
 
-	inline void SetColor(int r, int g, int b)
+	void SetColor(int r, int g, int b)
 	{
 		pev->rendercolor.x = r;
 		pev->rendercolor.y = g;
 		pev->rendercolor.z = b;
 	}
 
-	inline void SetBrightness(int brightness) { pev->renderamt = brightness; }
-	inline void SetFrame(float frame) { pev->frame = frame; }
-	inline void SetScrollRate(int speed) { pev->animtime = speed; }
+	void SetBrightness(int brightness) { pev->renderamt = brightness; }
+	void SetFrame(float frame) { pev->frame = frame; }
+	void SetScrollRate(int speed) { pev->animtime = speed; }
 
-	inline int GetType(void) { return pev->rendermode & 0x0F; }
-	inline int GetFlags(void) { return pev->rendermode & 0xF0; }
-	inline int GetStartEntity(void) { return pev->sequence & 0xFFF; }
-	inline int GetEndEntity(void) { return pev->skin & 0xFFF; }
+	int GetType(void) { return pev->rendermode & 0x0F; }
+	int GetFlags(void) { return pev->rendermode & 0xF0; }
+	int GetStartEntity(void) { return pev->sequence & 0xFFF; }
+	int GetEndEntity(void) { return pev->skin & 0xFFF; }
 
 	const Vector& GetStartPos(void);
 	const Vector& GetEndPos(void);
 
-	Vector Center(void) { return (GetStartPos() + GetEndPos()) * 0.5; }; // center point of beam
+	Vector Center(void) override { return (GetStartPos() + GetEndPos()) * 0.5; }; // center point of beam
 
-	inline int GetTexture(void) { return pev->modelindex; }
-	inline int GetWidth(void) { return pev->scale; }
-	inline int GetNoise(void) { return pev->body; }
+	int GetTexture(void) { return pev->modelindex; }
+	int GetWidth(void) { return pev->scale; }
+	int GetNoise(void) { return pev->body; }
 	// inline void GetColor( int r, int g, int b ) { pev->rendercolor.x = r; pev->rendercolor.y = g; pev->rendercolor.z = b; }
-	inline int GetBrightness(void) { return pev->renderamt; }
-	inline int GetFrame(void) { return pev->frame; }
-	inline int GetScrollRate(void) { return pev->animtime; }
+	int GetBrightness(void) { return pev->renderamt; }
+	int GetFrame(void) { return pev->frame; }
+	int GetScrollRate(void) { return pev->animtime; }
 
 	CBaseEntity* GetTripEntity(TraceResult* ptr); //LRC
 
@@ -200,13 +200,13 @@ public:
 
 	static CBeam* BeamCreate(const char* pSpriteName, int width);
 
-	inline void LiveForTime(float time)
+	void LiveForTime(float time)
 	{
 		SetThink(&CBeam::SUB_Remove);
 		SetNextThink(time);
 	}
 
-	inline void BeamDamageInstant(TraceResult* ptr, float damage)
+	void BeamDamageInstant(TraceResult* ptr, float damage)
 	{
 		pev->dmg = damage;
 		pev->dmgtime = gpGlobals->time - 1;
@@ -222,21 +222,21 @@ public:
 class CLaser : public CBeam
 {
 public:
-	void Spawn(void);
-	void PostSpawn(void);
-	void Precache(void);
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn(void) override;
+	void PostSpawn(void) override;
+	void Precache(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
 
 	void TurnOn(void);
 	void TurnOff(void);
-	virtual STATE GetState(void) { return (pev->effects & EF_NODRAW) ? STATE_OFF : STATE_ON; };
+	STATE GetState(void) override { return (pev->effects & EF_NODRAW) ? STATE_OFF : STATE_ON; };
 
 	void FireAtPoint(Vector startpos, TraceResult& point);
 
 	void EXPORT StrikeThink(void);
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	EHANDLE m_hActivator; //AJH allow *locus start/end positions
@@ -255,13 +255,13 @@ public:
 class CRainSettings : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
 
-	int ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	int ObjectCaps(void) override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	float Rain_Distance;
@@ -271,14 +271,14 @@ public:
 class CRainModify : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void KeyValue(KeyValueData* pkvd);
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void Spawn(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	int ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	int ObjectCaps(void) override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int Rain_Drips;

@@ -65,7 +65,7 @@ int CHandGrenade::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "Hand Grenade";
 	p->iMaxAmmo1 = MAX_CARRY_HANDGRENADE;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = MAX_CLIP_NOCLIP;
 	p->iSlot = SLOT_HANDGRENADE;
@@ -185,7 +185,7 @@ void CHandGrenade::WeaponIdle(void)
 		}
 		return;
 	}
-	else if (m_flReleaseThrow > 0)
+	if (m_flReleaseThrow > 0)
 	{
 		// we've finished the throw, restart.
 		m_flStartThrow = 0;

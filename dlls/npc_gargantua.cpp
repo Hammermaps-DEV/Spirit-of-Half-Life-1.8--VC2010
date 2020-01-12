@@ -69,9 +69,9 @@ class CSmoker;
 class CSpiral : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Think(void);
-	int ObjectCaps(void) { return FCAP_DONT_SAVE; }
+	void Spawn(void) override;
+	void Think(void) override;
+	int ObjectCaps(void) override { return FCAP_DONT_SAVE; }
 	static CSpiral* Create(const Vector& origin, float height, float radius, float duration);
 };
 
@@ -81,8 +81,8 @@ LINK_ENTITY_TO_CLASS(streak_spiral, CSpiral);
 class CStomp : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Think(void);
+	void Spawn(void) override;
+	void Think(void) override;
 	static CStomp* StompCreate(const Vector& origin, const Vector& end, float speed);
 
 private:
@@ -94,7 +94,7 @@ LINK_ENTITY_TO_CLASS(garg_stomp, CStomp);
 
 CStomp* CStomp::StompCreate(const Vector& origin, const Vector& end, float speed)
 {
-	CStomp* pStomp = GetClassPtr((CStomp*)NULL);
+	CStomp* pStomp = GetClassPtr(static_cast<CStomp*>(nullptr));
 
 	pStomp->pev->origin = origin;
 	Vector dir = (end - origin);
@@ -137,7 +137,7 @@ void CStomp::Think(void)
 
 	if (tr.pHit && tr.pHit != pev->owner)
 	{
-		CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
+		CBaseEntity* pEntity = Instance(tr.pHit);
 		entvars_t* pevOwner = pev;
 		if (pev->owner)
 			pevOwner = VARS(pev->owner);
@@ -202,30 +202,31 @@ void StreakSplash(const Vector& origin, const Vector& direction, int color, int 
 class CGargantua : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int Classify(void);
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void SetYawSpeed(void) override;
+	int Classify(void) override;
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+	                 int bitsDamageType) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
-	BOOL CheckMeleeAttack1(float flDot, float flDist); // Swipe
-	BOOL CheckMeleeAttack2(float flDot, float flDist); // Flames
-	BOOL CheckRangeAttack1(float flDot, float flDist); // Stomp attack
-	void SetObjectCollisionBox(void)
+	BOOL CheckMeleeAttack1(float flDot, float flDist) override; // Swipe
+	BOOL CheckMeleeAttack2(float flDot, float flDist) override; // Flames
+	BOOL CheckRangeAttack1(float flDot, float flDist) override; // Stomp attack
+	void SetObjectCollisionBox(void) override
 	{
 		pev->absmin = pev->origin + Vector(-80, -80, 0);
 		pev->absmax = pev->origin + Vector(80, 80, 214);
 	}
 
-	Schedule_t* GetScheduleOfType(int Type);
-	void StartTask(Task_t* pTask);
-	void RunTask(Task_t* pTask);
+	Schedule_t* GetScheduleOfType(int Type) override;
+	void StartTask(Task_t* pTask) override;
+	void RunTask(Task_t* pTask) override;
 
-	void PrescheduleThink(void);
+	void PrescheduleThink(void) override;
 
-	void Killed(entvars_t* pevAttacker, int iGib);
+	void Killed(entvars_t* pevAttacker, int iGib) override;
 	void DeathEffect(void);
 
 	void EyeOff(void);
@@ -237,13 +238,13 @@ public:
 	void FlameUpdate(void);
 	void FlameControls(float angleX, float angleY);
 	void FlameDestroy(void);
-	inline BOOL FlameIsOn(void) { return m_pFlame[0] != NULL; }
+	BOOL FlameIsOn(void) { return m_pFlame[0] != nullptr; }
 
 	void FlameDamage(Vector vecStart, Vector vecEnd, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage,
 	                 int iClassIgnore, int bitsDamageType);
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	CUSTOM_SCHEDULES;
@@ -396,13 +397,13 @@ enum
 
 Task_t tlGargFlame[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_SOUND_ATTACK, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_SOUND_ATTACK, static_cast<float>(0)},
 	// { TASK_PLAY_SEQUENCE,		(float)ACT_SIGNAL1	},
-	{TASK_SET_ACTIVITY, (float)ACT_MELEE_ATTACK2},
-	{TASK_FLAME_SWEEP, (float)4.5},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_MELEE_ATTACK2)},
+	{TASK_FLAME_SWEEP, static_cast<float>(4.5)},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
 };
 
 Schedule_t slGargFlame[] =
@@ -421,8 +422,8 @@ Schedule_t slGargFlame[] =
 Task_t tlGargSwipe[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_MELEE_ATTACK1, (float)0},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_MELEE_ATTACK1, static_cast<float>(0)},
 };
 
 Schedule_t slGargSwipe[] =
@@ -612,7 +613,7 @@ void CGargantua::FlameUpdate(void)
 void CGargantua::FlameDamage(Vector vecStart, Vector vecEnd, entvars_t* pevInflictor, entvars_t* pevAttacker,
                              float flDamage, int iClassIgnore, int bitsDamageType)
 {
-	CBaseEntity* pEntity = NULL;
+	CBaseEntity* pEntity = nullptr;
 	TraceResult tr;
 	float flAdjustedDamage;
 	Vector vecSpot;
@@ -624,7 +625,7 @@ void CGargantua::FlameDamage(Vector vecStart, Vector vecEnd, entvars_t* pevInfli
 	Vector vecAim = (vecEnd - vecStart).Normalize();
 
 	// iterate on all entities in the vicinity.
-	while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecMid, searchRadius)) != NULL)
+	while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecMid, searchRadius)) != nullptr)
 	{
 		if (pEntity->pev->takedamage != DAMAGE_NO)
 		{
@@ -692,7 +693,7 @@ void CGargantua::FlameDestroy(void)
 		if (m_pFlame[i])
 		{
 			UTIL_Remove(m_pFlame[i]);
-			m_pFlame[i] = NULL;
+			m_pFlame[i] = nullptr;
 		}
 	}
 }
@@ -911,7 +912,7 @@ void CGargantua::DeathEffect(void)
 		position.z += 15;
 	}
 
-	CBaseEntity* pSmoker = CBaseEntity::Create("env_smoker", pev->origin, g_vecZero, NULL);
+	CBaseEntity* pSmoker = Create("env_smoker", pev->origin, g_vecZero, nullptr);
 	pSmoker->pev->health = 1; // 1 smoke balls
 	pSmoker->pev->scale = 46; // 4.6X normal size
 	pSmoker->pev->dmg = 0; // 0 radial distribution
@@ -923,7 +924,7 @@ void CGargantua::Killed(entvars_t* pevAttacker, int iGib)
 {
 	EyeOff();
 	UTIL_Remove(m_pEyeGlow);
-	m_pEyeGlow = NULL;
+	m_pEyeGlow = nullptr;
 	CBaseMonster::Killed(pevAttacker, GIB_NEVER);
 }
 
@@ -1015,7 +1016,7 @@ void CGargantua::HandleAnimEvent(MonsterEvent_t* pEvent)
 				               1.0, ATTN_NORM, 0, 50 + RANDOM_LONG(0, 15));
 
 			Vector forward;
-			UTIL_MakeVectorsPrivate(pev->angles, forward, NULL, NULL);
+			UTIL_MakeVectorsPrivate(pev->angles, forward, nullptr, nullptr);
 		}
 		break;
 
@@ -1068,7 +1069,7 @@ CBaseEntity* CGargantua::GargantuaCheckTraceHullAttack(float flDist, int iDamage
 
 	if (tr.pHit)
 	{
-		CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
+		CBaseEntity* pEntity = Instance(tr.pHit);
 
 		if (iDamage > 0)
 		{
@@ -1078,7 +1079,7 @@ CBaseEntity* CGargantua::GargantuaCheckTraceHullAttack(float flDist, int iDamage
 		return pEntity;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 
@@ -1152,74 +1153,75 @@ void CGargantua::RunTask(Task_t* pTask)
 	switch (pTask->iTask)
 	{
 	case TASK_DIE:
-		if (gpGlobals->time > m_flWaitFinished)
 		{
-			pev->renderfx = kRenderFxExplode;
-			pev->rendercolor.x = 255;
-			pev->rendercolor.y = 0;
-			pev->rendercolor.z = 0;
-			StopAnimation();
-			SetNextThink(0.15);
-			SetThink(&CGargantua:: SUB_Remove);
-			int i;
-			int parts = MODEL_FRAMES(gGargGibModel);
-			for (i = 0; i < 10; i++)
+			if (gpGlobals->time > m_flWaitFinished)
 			{
-				CGib* pGib = GetClassPtr((CGib*)NULL);
+				pev->renderfx = kRenderFxExplode;
+				pev->rendercolor.x = 255;
+				pev->rendercolor.y = 0;
+				pev->rendercolor.z = 0;
+				StopAnimation();
+				SetNextThink(0.15);
+				SetThink(&CGargantua:: SUB_Remove);
+				int i;
+				int parts = MODEL_FRAMES(gGargGibModel);
+				for (i = 0; i < 10; i++)
+				{
+					CGib* pGib = GetClassPtr(static_cast<CGib*>(nullptr));
 
-				pGib->Spawn(GARG_GIB_MODEL);
+					pGib->Spawn(GARG_GIB_MODEL);
 
-				int bodyPart = 0;
-				if (parts > 1)
-					bodyPart = RANDOM_LONG(0, pev->body - 1);
+					int bodyPart = 0;
+					if (parts > 1)
+						bodyPart = RANDOM_LONG(0, pev->body - 1);
 
-				pGib->pev->body = bodyPart;
-				pGib->m_bloodColor = BLOOD_COLOR_YELLOW;
-				pGib->m_material = matNone;
-				pGib->pev->origin = pev->origin;
-				pGib->pev->velocity = UTIL_RandomBloodVector() * RANDOM_FLOAT(300, 500);
-				pGib->SetNextThink(1.25);
-				pGib->SetThink(&CGib:: SUB_FadeOut);
+					pGib->pev->body = bodyPart;
+					pGib->m_bloodColor = BLOOD_COLOR_YELLOW;
+					pGib->m_material = matNone;
+					pGib->pev->origin = pev->origin;
+					pGib->pev->velocity = UTIL_RandomBloodVector() * RANDOM_FLOAT(300, 500);
+					pGib->SetNextThink(1.25);
+					pGib->SetThink(&CGib:: SUB_FadeOut);
+				}
+				MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+				WRITE_BYTE(TE_BREAKMODEL);
+
+				// position
+				WRITE_COORD(pev->origin.x);
+				WRITE_COORD(pev->origin.y);
+				WRITE_COORD(pev->origin.z);
+
+				// size
+				WRITE_COORD(200);
+				WRITE_COORD(200);
+				WRITE_COORD(128);
+
+				// velocity
+				WRITE_COORD(0);
+				WRITE_COORD(0);
+				WRITE_COORD(0);
+
+				// randomization
+				WRITE_BYTE(200);
+
+				// Model
+				WRITE_SHORT(gGargGibModel); //model id#
+
+				// # of shards
+				WRITE_BYTE(50);
+
+				// duration
+				WRITE_BYTE(20); // 3.0 seconds
+
+				// flags
+
+				WRITE_BYTE(BREAK_FLESH);
+				MESSAGE_END();
+
+				return;
 			}
-			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-			WRITE_BYTE(TE_BREAKMODEL);
-
-			// position
-			WRITE_COORD(pev->origin.x);
-			WRITE_COORD(pev->origin.y);
-			WRITE_COORD(pev->origin.z);
-
-			// size
-			WRITE_COORD(200);
-			WRITE_COORD(200);
-			WRITE_COORD(128);
-
-			// velocity
-			WRITE_COORD(0);
-			WRITE_COORD(0);
-			WRITE_COORD(0);
-
-			// randomization
-			WRITE_BYTE(200);
-
-			// Model
-			WRITE_SHORT(gGargGibModel); //model id#
-
-			// # of shards
-			WRITE_BYTE(50);
-
-			// duration
-			WRITE_BYTE(20); // 3.0 seconds
-
-			// flags
-
-			WRITE_BYTE(BREAK_FLESH);
-			MESSAGE_END();
-
-			return;
-		}
-		else
 			CBaseMonster::RunTask(pTask);
+		}
 		break;
 
 	case TASK_PLAY_SCRIPT:
@@ -1301,8 +1303,8 @@ void CGargantua::RunTask(Task_t* pTask)
 class CSmoker : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Think(void);
+	void Spawn(void) override;
+	void Think(void) override;
 };
 
 LINK_ENTITY_TO_CLASS(env_smoker, CSmoker);
@@ -1353,9 +1355,9 @@ void CSpiral::Spawn(void)
 CSpiral* CSpiral::Create(const Vector& origin, float height, float radius, float duration)
 {
 	if (duration <= 0)
-		return NULL;
+		return nullptr;
 
-	CSpiral* pSpiral = GetClassPtr((CSpiral*)NULL);
+	CSpiral* pSpiral = GetClassPtr(static_cast<CSpiral*>(nullptr));
 	pSpiral->Spawn();
 	pSpiral->pev->dmgtime = pSpiral->m_fNextThink;
 	pSpiral->pev->origin = origin;
@@ -1413,7 +1415,7 @@ void SpawnExplosion(Vector center, float randomRange, float time, int magnitude)
 	center.x += RANDOM_FLOAT(-randomRange, randomRange);
 	center.y += RANDOM_FLOAT(-randomRange, randomRange);
 
-	CBaseEntity* pExplosion = CBaseEntity::Create("env_explosion", center, g_vecZero, NULL);
+	CBaseEntity* pExplosion = CBaseEntity::Create("env_explosion", center, g_vecZero, nullptr);
 	sprintf_s(buf, "%3d", magnitude);
 	kvd.szKeyName = "iMagnitude";
 	kvd.szValue = buf;

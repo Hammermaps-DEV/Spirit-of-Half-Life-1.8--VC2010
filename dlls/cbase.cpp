@@ -135,7 +135,7 @@ int GetEntityAPI2(DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion)
 
 int DispatchSpawn(edict_t* pent)
 {
-	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pent);
+	CBaseEntity* pEntity = static_cast<CBaseEntity*>(GET_PRIVATE(pent));
 
 	if (pEntity)
 	{
@@ -148,7 +148,7 @@ int DispatchSpawn(edict_t* pent)
 		// Try to get the pointer again, in case the spawn function deleted the entity.
 		// UNDONE: Spawn() should really return a code to ask that the entity be deleted, but
 		// that would touch too much code for me to do that right now.
-		pEntity = (CBaseEntity*)GET_PRIVATE(pent);
+		pEntity = static_cast<CBaseEntity*>(GET_PRIVATE(pent));
 
 		if (pEntity)
 		{
@@ -200,11 +200,11 @@ void DispatchKeyValue(edict_t* pentKeyvalue, KeyValueData* pkvd)
 
 	// If the key was an entity variable, or there's no class set yet, don't look for the object, it may
 	// not exist yet.
-	if (pkvd->fHandled || pkvd->szClassName == NULL)
+	if (pkvd->fHandled || pkvd->szClassName == nullptr)
 		return;
 
 	// Get the actualy entity object
-	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pentKeyvalue);
+	CBaseEntity* pEntity = static_cast<CBaseEntity*>(GET_PRIVATE(pentKeyvalue));
 
 	if (!pEntity)
 		return;
@@ -221,8 +221,8 @@ void DispatchTouch(edict_t* pentTouched, edict_t* pentOther)
 	if (gTouchDisabled)
 		return;
 
-	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pentTouched);
-	CBaseEntity* pOther = (CBaseEntity*)GET_PRIVATE(pentOther);
+	CBaseEntity* pEntity = static_cast<CBaseEntity*>(GET_PRIVATE(pentTouched));
+	CBaseEntity* pOther = static_cast<CBaseEntity*>(GET_PRIVATE(pentOther));
 
 	if (pEntity && pOther && !((pEntity->pev->flags | pOther->pev->flags) & FL_KILLME))
 		pEntity->Touch(pOther);
@@ -230,8 +230,8 @@ void DispatchTouch(edict_t* pentTouched, edict_t* pentOther)
 
 void DispatchUse(edict_t* pentUsed, edict_t* pentOther)
 {
-	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pentUsed);
-	CBaseEntity* pOther = (CBaseEntity*)GET_PRIVATE(pentOther);
+	CBaseEntity* pEntity = static_cast<CBaseEntity*>(GET_PRIVATE(pentUsed));
+	CBaseEntity* pOther = static_cast<CBaseEntity*>(GET_PRIVATE(pentOther));
 
 	if (pEntity && !(pEntity->pev->flags & FL_KILLME))
 		pEntity->Use(pOther, pOther, USE_TOGGLE, 0);
@@ -239,7 +239,7 @@ void DispatchUse(edict_t* pentUsed, edict_t* pentOther)
 
 void DispatchThink(edict_t* pent)
 {
-	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pent);
+	CBaseEntity* pEntity = static_cast<CBaseEntity*>(GET_PRIVATE(pent));
 
 	if (pEntity)
 	{
@@ -253,8 +253,8 @@ void DispatchThink(edict_t* pent)
 
 void DispatchBlocked(edict_t* pentBlocked, edict_t* pentOther)
 {
-	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pentBlocked);
-	CBaseEntity* pOther = (CBaseEntity*)GET_PRIVATE(pentOther);
+	CBaseEntity* pEntity = static_cast<CBaseEntity*>(GET_PRIVATE(pentBlocked));
+	CBaseEntity* pOther = static_cast<CBaseEntity*>(GET_PRIVATE(pentOther));
 
 	if (pEntity)
 		pEntity->Blocked(pOther);
@@ -262,7 +262,7 @@ void DispatchBlocked(edict_t* pentBlocked, edict_t* pentOther)
 
 void DispatchSave(edict_t* pent, SAVERESTOREDATA* pSaveData)
 {
-	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pent);
+	CBaseEntity* pEntity = static_cast<CBaseEntity*>(GET_PRIVATE(pent));
 
 	if (pEntity && pSaveData)
 	{
@@ -307,7 +307,7 @@ CBaseEntity* FindGlobalEntity(string_t classname, string_t globalname)
 		{
 			ALERT(at_debug, "Global entity found %s, wrong class %s\n", STRING(globalname),
 			      STRING(pReturn->pev->classname));
-			
+
 			pReturn = nullptr;
 		}
 	}
@@ -317,7 +317,7 @@ CBaseEntity* FindGlobalEntity(string_t classname, string_t globalname)
 
 int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 {
-	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pent);
+	CBaseEntity* pEntity = static_cast<CBaseEntity*>(GET_PRIVATE(pent));
 
 	if (pEntity && pSaveData)
 	{
@@ -378,7 +378,7 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 		}
 
 		// Again, could be deleted, get the pointer again.
-		pEntity = (CBaseEntity*)GET_PRIVATE(pent);
+		pEntity = static_cast<CBaseEntity*>(GET_PRIVATE(pent));
 		if (pEntity) pEntity->pev->colormap = ENTINDEX(pent);
 #if 0
 		if (pEntity && pEntity->pev->globalname && globalEntity)
@@ -423,13 +423,13 @@ int DispatchRestore(edict_t* pent, SAVERESTOREDATA* pSaveData, int globalEntity)
 			}
 		}
 	}
-	
+
 	return 0;
 }
 
 void DispatchObjectCollsionBox(edict_t* pent)
 {
-	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pent);
+	CBaseEntity* pEntity = static_cast<CBaseEntity*>(GET_PRIVATE(pent));
 	if (pEntity)
 	{
 		pEntity->SetObjectCollisionBox();
@@ -458,10 +458,9 @@ edict_t* EHANDLE::Get(void)
 	{
 		if (m_pent->serialnumber == m_serialnumber)
 			return m_pent;
-		else
-			return NULL;
+		return nullptr;
 	}
-	return NULL;
+	return nullptr;
 };
 
 edict_t* EHANDLE::Set(edict_t* pent)
@@ -474,7 +473,7 @@ edict_t* EHANDLE::Set(edict_t* pent)
 
 EHANDLE::operator CBaseEntity*()
 {
-	return (CBaseEntity*)GET_PRIVATE(Get());
+	return static_cast<CBaseEntity*>(GET_PRIVATE(Get()));
 };
 
 CBaseEntity* EHANDLE::operator =(CBaseEntity* pEntity)
@@ -487,7 +486,7 @@ CBaseEntity* EHANDLE::operator =(CBaseEntity* pEntity)
 	}
 	else
 	{
-		m_pent = NULL;
+		m_pent = nullptr;
 		m_serialnumber = 0;
 	}
 	return pEntity;
@@ -495,12 +494,12 @@ CBaseEntity* EHANDLE::operator =(CBaseEntity* pEntity)
 
 EHANDLE::operator int()
 {
-	return Get() != NULL;
+	return Get() != nullptr;
 }
 
 CBaseEntity* EHANDLE::operator ->()
 {
-	return (CBaseEntity*)GET_PRIVATE(Get());
+	return static_cast<CBaseEntity*>(GET_PRIVATE(Get()));
 }
 
 //LRC
@@ -515,7 +514,7 @@ void CBaseEntity::Activate(void)
 	//LRC - and the aliaslist too
 	if (m_iLFlags & LF_ALIASLIST)
 	{
-		UTIL_AddToAliasList((CBaseMutableAlias*)this);
+		UTIL_AddToAliasList(static_cast<CBaseMutableAlias*>(this));
 	}
 
 	if (m_activated) return;
@@ -550,14 +549,14 @@ void CBaseEntity::SetParent(int m_iNewParent, int m_iAttachment)
 			{
 				m_iAttachment = atoi(c + 1);
 				name[strlen(name) - 2] = 0;
-				pParent = UTIL_FindEntityByTargetname(NULL, name);
+				pParent = UTIL_FindEntityByTargetname(nullptr, name);
 				SetParent(pParent, m_iAttachment);
 				return;
 			}
 		}
 	}
 
-	pParent = UTIL_FindEntityByTargetname(NULL, STRING(m_iNewParent));
+	pParent = UTIL_FindEntityByTargetname(nullptr, STRING(m_iNewParent));
 	SetParent(pParent, m_iAttachment); //check pointer to valid later
 }
 
@@ -610,7 +609,7 @@ void CBaseEntity::SetParent(CBaseEntity* pParent, int m_iAttachment)
 			}
 			return;
 		}
-		
+
 		//appllayed to origin
 		if (pev->movetype == MOVETYPE_NONE)
 		{
@@ -625,7 +624,7 @@ void CBaseEntity::SetParent(CBaseEntity* pParent, int m_iAttachment)
 			SetBits(m_iLFlags, LF_POSTORG); //copy pos from parent every frame
 			pev->solid = SOLID_NOT; //set non solid
 		}
-		
+
 		m_vecParentOrigin = m_pMoveWith->pev->origin;
 		m_vecParentAngles = m_pMoveWith->pev->angles;
 
@@ -674,13 +673,13 @@ void CBaseEntity::ResetParent(void)
 	}
 
 	//LRC - remove this from the AssistList.
-	for (pTemp = g_pWorld; pTemp->m_pAssistLink != NULL; pTemp = pTemp->m_pAssistLink)
+	for (pTemp = g_pWorld; pTemp->m_pAssistLink != nullptr; pTemp = pTemp->m_pAssistLink)
 	{
 		if (this == pTemp->m_pAssistLink)
 		{
 			//			ALERT(at_console,"REMOVE: %s removed from the Assist List.\n", STRING(pev->classname));
 			pTemp->m_pAssistLink = this->m_pAssistLink;
-			this->m_pAssistLink = NULL;
+			this->m_pAssistLink = nullptr;
 			break;
 		}
 	}
@@ -714,16 +713,16 @@ void CBaseEntity::ResetParent(void)
 	{
 		CBaseEntity* pCur = m_pChildMoveWith;
 		CBaseEntity* pNext;
-		while (pCur != NULL)
+		while (pCur != nullptr)
 		{
 			pNext = pCur->m_pSiblingMoveWith;
-			
+
 			// bring children to a stop
 			UTIL_SetMoveWithVelocity(pCur, g_vecZero, 100);
 			UTIL_SetMoveWithAvelocity(pCur, g_vecZero, 100);
-			
-			pCur->m_pMoveWith = NULL;
-			pCur->m_pSiblingMoveWith = NULL;
+
+			pCur->m_pMoveWith = nullptr;
+			pCur->m_pSiblingMoveWith = nullptr;
 			pCur = pNext;
 		}
 	}
@@ -733,7 +732,7 @@ void CBaseEntity::ResetParent(void)
 void CBaseEntity::DontThink(void)
 {
 	m_fNextThink = 0;
-	if (m_pMoveWith == NULL && m_pChildMoveWith == NULL)
+	if (m_pMoveWith == nullptr && m_pChildMoveWith == nullptr)
 	{
 		pev->nextthink = 0;
 		m_fPevNextThink = 0;
@@ -754,7 +753,7 @@ void CBaseEntity::SetEternalThink(void)
 	}
 
 	CBaseEntity* pChild;
-	for (pChild = m_pChildMoveWith; pChild != NULL; pChild = pChild->m_pSiblingMoveWith)
+	for (pChild = m_pChildMoveWith; pChild != nullptr; pChild = pChild->m_pSiblingMoveWith)
 		pChild->SetEternalThink();
 }
 
@@ -855,7 +854,7 @@ int CBaseEntity::TakeArmor(float flArmor)
 		return 0;
 
 	const float flOldArmor = pev->armorvalue;
-	
+
 	pev->armorvalue += flArmor;
 
 	if (pev->armorvalue > MAX_NORMAL_BATTERY)
@@ -903,7 +902,7 @@ int CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 
 		if (flForce > 1000.0)
 			flForce = 1000.0;
-		
+
 		pev->velocity = pev->velocity + vecDir * flForce;
 	}
 
@@ -929,7 +928,7 @@ CBaseEntity* CBaseEntity::GetNextTarget(void)
 {
 	if (FStringNull(pev->target))
 		return nullptr;
-	
+
 	return UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
 }
 
@@ -971,7 +970,7 @@ int CBaseEntity::Save(CSave& save)
 	{
 		if (pev->targetname)
 			return save.WriteFields(STRING(pev->targetname), "BASE", this, m_SaveData, ARRAYSIZE(m_SaveData));
-	
+
 		return save.WriteFields(STRING(pev->classname), "BASE", this, m_SaveData, ARRAYSIZE(m_SaveData));
 	}
 
@@ -981,7 +980,7 @@ int CBaseEntity::Save(CSave& save)
 int CBaseEntity::Restore(CRestore& restore)
 {
 	int status = restore.ReadEntVars("ENTVARS", pev);
-	
+
 	if (status)
 		status = restore.ReadFields("BASE", this, m_SaveData, ARRAYSIZE(m_SaveData));
 
@@ -1018,8 +1017,8 @@ void SetObjectCollisionBox(entvars_t* pev)
 		}
 		for (i = 0; i < 3; i++)
 		{
-			((float*)pev->absmin)[i] = ((float*)pev->origin)[i] - max;
-			((float*)pev->absmax)[i] = ((float*)pev->origin)[i] + max;
+			static_cast<float*>(pev->absmin)[i] = static_cast<float*>(pev->origin)[i] - max;
+			static_cast<float*>(pev->absmax)[i] = static_cast<float*>(pev->origin)[i] + max;
 		}
 	}
 	else
@@ -1059,16 +1058,16 @@ void CBaseEntity::MakeDormant(void)
 
 	// Don't touch
 	pev->solid = SOLID_NOT;
-	
+
 	// Don't move
 	pev->movetype = MOVETYPE_NONE;
-	
+
 	// Don't draw
 	SetBits(pev->effects, EF_NODRAW);
-	
+
 	// Don't think
 	DontThink();
-	
+
 	// Relink
 	UTIL_SetOrigin(this, pev->origin);
 }
@@ -1087,7 +1086,7 @@ BOOL CBaseEntity::IsInWorld(void)
 	if (pev->origin.x <= -4096) return FALSE;
 	if (pev->origin.y <= -4096) return FALSE;
 	if (pev->origin.z <= -4096) return FALSE;
-	
+
 	// speed
 	if (pev->velocity.x >= 2000) return FALSE;
 	if (pev->velocity.y >= 2000) return FALSE;
@@ -1106,7 +1105,7 @@ BOOL CBaseEntity::ShouldToggle(USE_TYPE useType, BOOL currentState)
 		if ((currentState && useType == USE_ON) || (!currentState && useType == USE_OFF))
 			return FALSE;
 	}
-	
+
 	return TRUE;
 }
 
@@ -1119,12 +1118,12 @@ BOOL CBaseEntity::ShouldToggle(USE_TYPE useType)
 		{
 		case STATE_ON:
 		case STATE_TURN_ON:
-			if (useType == USE_ON) 
+			if (useType == USE_ON)
 				return FALSE;
 			break;
 		case STATE_OFF:
 		case STATE_TURN_OFF:
-			if (useType == USE_OFF) 
+			if (useType == USE_OFF)
 				return FALSE;
 			break;
 		}
@@ -1152,15 +1151,15 @@ CBaseEntity* CBaseEntity::Create(char* szName, const Vector& vecOrigin, const Ve
 	if (FNullEnt(pent))
 	{
 		ALERT(at_debug, "NULL Ent in Create!\n");
-		return NULL;
+		return nullptr;
 	}
-	
+
 	CBaseEntity* pEntity = Instance(pent);
 	pEntity->pev->owner = pentOwner;
 	pEntity->pev->origin = vecOrigin;
 	pEntity->pev->angles = vecAngles;
-	
+
 	DispatchSpawn(pEntity->edict());
-	
+
 	return pEntity;
 }

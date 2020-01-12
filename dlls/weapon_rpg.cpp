@@ -53,7 +53,7 @@ LINK_ENTITY_TO_CLASS(laser_spot, CLaserSpot);
 //=========================================================
 CLaserSpot* CLaserSpot::CreateSpot(void)
 {
-	CLaserSpot* pSpot = GetClassPtr((CLaserSpot*)NULL);
+	CLaserSpot* pSpot = GetClassPtr(static_cast<CLaserSpot*>(nullptr));
 	pSpot->Spawn();
 
 	pSpot->pev->classname = MAKE_STRING("laser_spot");
@@ -126,7 +126,7 @@ LINK_ENTITY_TO_CLASS(rpg_rocket, CRpgRocket);
 //=========================================================
 CRpgRocket* CRpgRocket::CreateRpgRocket(Vector vecOrigin, Vector vecAngles, CBaseEntity* pOwner, CRpg* pLauncher)
 {
-	CRpgRocket* pRocket = GetClassPtr((CRpgRocket*)NULL);
+	CRpgRocket* pRocket = GetClassPtr(static_cast<CRpgRocket*>(nullptr));
 
 	UTIL_SetOrigin(pRocket, vecOrigin);
 	pRocket->pev->angles = vecAngles;
@@ -228,7 +228,7 @@ void CRpgRocket::IgniteThink(void)
 
 void CRpgRocket::FollowThink(void)
 {
-	CBaseEntity* pOther = NULL;
+	CBaseEntity* pOther = nullptr;
 	Vector vecTarget;
 	Vector vecDir;
 	float flDist, flMax, flDot;
@@ -240,7 +240,7 @@ void CRpgRocket::FollowThink(void)
 	flMax = 4096;
 
 	// Examine all entities within a reasonable radius
-	while ((pOther = UTIL_FindEntityByClassname(pOther, "laser_spot")) != NULL)
+	while ((pOther = UTIL_FindEntityByClassname(pOther, "laser_spot")) != nullptr)
 	{
 		UTIL_TraceLine(pev->origin, pOther->pev->origin, dont_ignore_monsters, ENT(pev), &tr);
 		// ALERT( at_console, "%f\n", tr.flFraction );
@@ -398,7 +398,7 @@ int CRpg::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "rockets";
 	p->iMaxAmmo1 = MAX_CARRY_ROCKET;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_CLIP_NOCLIP;
 	p->iMaxClip = MAX_CLIP_RPG;
 	p->iSlot = SLOT_RPG;
@@ -414,7 +414,7 @@ int CRpg::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 		return TRUE;
@@ -458,8 +458,8 @@ void CRpg::Holster(int skiplocal /* = 0 */)
 #ifndef CLIENT_DLL
 	if (m_pSpot)
 	{
-		m_pSpot->Killed(NULL, GIB_NEVER);
-		m_pSpot = NULL;
+		m_pSpot->Killed(nullptr, GIB_NEVER);
+		m_pSpot = nullptr;
 	}
 #endif
 }
@@ -519,8 +519,8 @@ void CRpg::SecondaryAttack()
 #ifndef CLIENT_DLL
 	if (!m_fSpotActive && m_pSpot)
 	{
-		m_pSpot->Killed(NULL, GIB_NORMAL);
-		m_pSpot = NULL;
+		m_pSpot->Killed(nullptr, GIB_NORMAL);
+		m_pSpot = nullptr;
 	}
 #endif
 
@@ -580,7 +580,7 @@ void CRpg::UpdateSpot(void)
 		}
 
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
-		Vector vecSrc = m_pPlayer->GetGunPosition();;
+		Vector vecSrc = m_pPlayer->GetGunPosition();
 		Vector vecAiming = gpGlobals->v_forward;
 
 		TraceResult tr;
@@ -594,20 +594,20 @@ void CRpg::UpdateSpot(void)
 
 class CRpgAmmo : public CBasePlayerAmmo
 {
-	void Spawn(void)
+	void Spawn(void) override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_rpgammo.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
-	void Precache(void)
+	void Precache(void) override
 	{
 		PRECACHE_MODEL("models/w_rpgammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther)
+	BOOL AddAmmo(CBaseEntity* pOther) override
 	{
 		int iGive;
 

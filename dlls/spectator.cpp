@@ -37,7 +37,7 @@ void CBaseSpectator::SpectatorConnect(void)
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NOCLIP;
 
-	m_pGoalEnt = NULL;
+	m_pGoalEnt = nullptr;
 }
 
 /*
@@ -60,7 +60,7 @@ Called by SpectatorThink if the spectator entered an impulse
 */
 void CBaseSpectator::SpectatorImpulseCommand(void)
 {
-	static edict_t* pGoal = NULL;
+	static edict_t* pGoal = nullptr;
 	CBaseEntity* pPreviousGoal;
 	CBaseEntity* pCurrentGoal;
 	BOOL bFound;
@@ -70,12 +70,12 @@ void CBaseSpectator::SpectatorImpulseCommand(void)
 	case 1:
 		// teleport the spectator to the next spawn point; note that if the spectator is
 		// tracking, this doesn't do much
-		pPreviousGoal = (CBaseEntity*)GET_PRIVATE(pGoal);
-		pCurrentGoal = (CBaseEntity*)GET_PRIVATE(pGoal);
+		pPreviousGoal = static_cast<CBaseEntity*>(GET_PRIVATE(pGoal));
+		pCurrentGoal = static_cast<CBaseEntity*>(GET_PRIVATE(pGoal));
 		// Start at the current goal, skip the world, and stop if we looped back around
 
 		bFound = FALSE;
-		while (1)
+		while (true)
 		{
 			pCurrentGoal = UTIL_FindEntityByClassname(pCurrentGoal, "info_player_deathmatch");
 			// Looped around, failure
@@ -143,5 +143,5 @@ void CBaseSpectator::Spawn()
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NOCLIP;
 
-	m_pGoalEnt = NULL;
+	m_pGoalEnt = nullptr;
 }

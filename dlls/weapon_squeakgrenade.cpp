@@ -46,17 +46,17 @@ enum squeak_e
 
 class CSqueakGrenade : public CGrenade
 {
-	void Spawn(void);
-	void Precache(void);
-	int Classify(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int Classify(void) override;
 	void EXPORT SuperBounceTouch(CBaseEntity* pOther);
 	void EXPORT HuntThink(void);
-	int BloodColor(void) { return BLOOD_COLOR_YELLOW; }
-	void Killed(entvars_t* pevAttacker, int iGib);
-	void GibMonster(void);
+	int BloodColor(void) override { return BLOOD_COLOR_YELLOW; }
+	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void GibMonster(void) override;
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -245,7 +245,7 @@ void CSqueakGrenade::HuntThink(void)
 
 	m_flNextHunt = gpGlobals->time + 2.0;
 
-	CBaseEntity* pOther = NULL;
+	CBaseEntity* pOther = nullptr;
 	Vector vecDir;
 	TraceResult tr;
 
@@ -332,7 +332,7 @@ void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)
 		return;
 
 	// at least until we've bounced once
-	pev->owner = NULL;
+	pev->owner = nullptr;
 
 	pev->angles.x = 0;
 	pev->angles.z = 0;
@@ -366,7 +366,8 @@ void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)
 				// m_flDie += 2.0; // add more life
 
 				// make bite sound
-				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "squeek/sqk_deploy1.wav", 1.0, ATTN_NORM, 0, (int)flpitch);
+				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "squeek/sqk_deploy1.wav", 1.0, ATTN_NORM, 0,
+				               static_cast<int>(flpitch));
 				m_flNextAttack = gpGlobals->time + 0.5;
 			}
 		}
@@ -395,11 +396,11 @@ void CSqueakGrenade::SuperBounceTouch(CBaseEntity* pOther)
 		float flRndSound = RANDOM_FLOAT(0, 1);
 
 		if (flRndSound <= 0.33)
-			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "squeek/sqk_hunt1.wav", 1, ATTN_NORM, 0, (int)flpitch);
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "squeek/sqk_hunt1.wav", 1, ATTN_NORM, 0, static_cast<int>(flpitch));
 		else if (flRndSound <= 0.66)
-			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "squeek/sqk_hunt2.wav", 1, ATTN_NORM, 0, (int)flpitch);
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "squeek/sqk_hunt2.wav", 1, ATTN_NORM, 0, static_cast<int>(flpitch));
 		else
-			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "squeek/sqk_hunt3.wav", 1, ATTN_NORM, 0, (int)flpitch);
+			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "squeek/sqk_hunt3.wav", 1, ATTN_NORM, 0, static_cast<int>(flpitch));
 		CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 256, 0.25);
 	}
 	else
@@ -450,7 +451,7 @@ int CSqueak::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "Snarks";
 	p->iMaxAmmo1 = MAX_CARRY_SNARK;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = MAX_CLIP_NOCLIP;
 	p->iSlot = SLOT_SNARK;
@@ -489,7 +490,6 @@ void CSqueak::Holster(int skiplocal /* = 0 */)
 		m_pPlayer->pev->weapons &= ~(1 << WEAPON_SNARK);
 		SetThink(&CSqueak:: DestroyItem);
 		SetNextThink(0.1);
-		return;
 	}
 }
 
@@ -512,7 +512,7 @@ void CSqueak::PrimaryAttack()
 
 		// find place to toss monster
 		UTIL_TraceLine(trace_origin + gpGlobals->v_forward * 20, trace_origin + gpGlobals->v_forward * 64,
-		               dont_ignore_monsters, NULL, &tr);
+		               dont_ignore_monsters, nullptr, &tr);
 
 		int flags;
 #ifdef CLIENT_WEAPONS
@@ -530,8 +530,8 @@ void CSqueak::PrimaryAttack()
 			m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
 #ifndef CLIENT_DLL
-			CBaseEntity* pSqueak = CBaseEntity::Create("monster_snark", tr.vecEndPos, m_pPlayer->pev->v_angle,
-			                                           m_pPlayer->edict());
+			CBaseEntity* pSqueak = Create("monster_snark", tr.vecEndPos, m_pPlayer->pev->v_angle,
+			                              m_pPlayer->edict());
 			pSqueak->pev->velocity = gpGlobals->v_forward * 200 + m_pPlayer->pev->velocity;
 #endif
 

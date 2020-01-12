@@ -52,7 +52,7 @@ int CGlock::AddToPlayer(CBasePlayer* pPlayer) //Fix old Half-life bug. G-Cont
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 		return TRUE;
@@ -91,7 +91,7 @@ int CGlock::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "9mm";
 	p->iMaxAmmo1 = MAX_CARRY_9MM;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = MAX_CLIP_GLOCK;
 	p->iSlot = SLOT_GLOCK;
@@ -133,7 +133,7 @@ void CGlock::GlockFire(float flSpread, float flCycleTime, BOOL fUseAutoAim)
 
 	m_iClip--;
 
-	m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
+	m_pPlayer->pev->effects = static_cast<int>(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 
 	int flags;
 
@@ -245,20 +245,20 @@ void CGlock::WeaponIdle()
 
 class CGlockAmmo : public CBasePlayerAmmo
 {
-	void Spawn(void)
+	void Spawn(void) override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_9mmclip.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
-	void Precache(void)
+	void Precache(void) override
 	{
 		PRECACHE_MODEL("models/w_9mmclip.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther)
+	BOOL AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(DEFAULT_GIVE_GLOCK, "9mm", MAX_CARRY_9MM) != -1)
 		{

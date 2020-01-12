@@ -50,7 +50,7 @@ void CPointEntity::Spawn(void)
 class CNullEntity : public CBaseEntity
 {
 public:
-	void Spawn(void);
+	void Spawn(void) override;
 };
 
 
@@ -67,8 +67,8 @@ LINK_ENTITY_TO_CLASS(info_compile_parameters, CNullEntity);
 class CBaseDMStart : public CPointEntity
 {
 public:
-	void KeyValue(KeyValueData* pkvd);
-	STATE GetState(CBaseEntity* pEntity);
+	void KeyValue(KeyValueData* pkvd) override;
+	STATE GetState(CBaseEntity* pEntity) override;
 
 private:
 };
@@ -94,8 +94,7 @@ STATE CBaseDMStart::GetState(CBaseEntity* pEntity)
 {
 	if (UTIL_IsMasterTriggered(pev->netname, pEntity))
 		return STATE_ON;
-	else
-		return STATE_OFF;
+	return STATE_OFF;
 }
 
 // This updates global tables that need to know about entities being removed
@@ -114,7 +113,7 @@ void CBaseEntity::UpdateOnRemove(void)
 			if (WorldGraph.m_pLinkPool[i].m_pLinkEnt == pev)
 			{
 				// if this link has a link ent which is the same ent that is removing itself, remove it!
-				WorldGraph.m_pLinkPool[i].m_pLinkEnt = NULL;
+				WorldGraph.m_pLinkPool[i].m_pLinkEnt = nullptr;
 			}
 		}
 	}
@@ -218,7 +217,7 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 {
 	const char* inputTargetName = targetName;
 	CBaseEntity* inputActivator = pActivator;
-	CBaseEntity* pTarget = NULL;
+	CBaseEntity* pTarget = nullptr;
 	int i, j, found = false;
 	char szBuf[80];
 
@@ -269,7 +268,7 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 				sprintf(szBuf, targetName);
 				szBuf[i] = 0;
 				targetName = szBuf;
-				pTarget = UTIL_FindEntityByTargetname(NULL, targetName, inputActivator);
+				pTarget = UTIL_FindEntityByTargetname(nullptr, targetName, inputActivator);
 				break;
 			}
 		}
@@ -287,7 +286,7 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 						{
 							strncpy(szBuf, targetName + i, j - i);
 							szBuf[j - i] = 0;
-							pActivator = UTIL_FindEntityByTargetname(NULL, szBuf, inputActivator);
+							pActivator = UTIL_FindEntityByTargetname(nullptr, szBuf, inputActivator);
 							if (!pActivator) return; //it's a locus specifier, but the locus is invalid.
 							found = true;
 							break;
@@ -303,7 +302,7 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 			strncpy(szBuf, targetName, i - 1);
 			szBuf[i - 1] = 0;
 			targetName = szBuf;
-			pTarget = UTIL_FindEntityByTargetname(NULL, targetName, inputActivator);
+			pTarget = UTIL_FindEntityByTargetname(nullptr, targetName, inputActivator);
 
 			if (!pTarget)return; // it's a locus specifier all right, but the target's invalid.
 		}
@@ -351,7 +350,7 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 	if (m_flDelay != 0)
 	{
 		// create a temp object to fire at a later time
-		CBaseDelay* pTemp = GetClassPtr((CBaseDelay*)NULL);
+		CBaseDelay* pTemp = GetClassPtr(static_cast<CBaseDelay*>(nullptr));
 		pTemp->pev->classname = MAKE_STRING("DelayedUse");
 
 		pTemp->SetNextThink(m_flDelay);
@@ -359,7 +358,7 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 		pTemp->SetThink(&CBaseDelay:: DelayThink);
 
 		// Save the useType
-		pTemp->pev->button = (int)useType;
+		pTemp->pev->button = static_cast<int>(useType);
 		pTemp->m_iszKillTarget = m_iszKillTarget;
 		pTemp->m_flDelay = 0; // prevent "recursion"
 		pTemp->pev->target = pev->target;
@@ -378,7 +377,7 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 
 	if (m_iszKillTarget)
 	{
-		edict_t* pentKillTarget = NULL;
+		edict_t* pentKillTarget = nullptr;
 
 		ALERT(at_aiconsole, "KillTarget: %s\n", STRING(m_iszKillTarget));
 		//LRC- now just USE_KILLs its killtarget, for consistency.
@@ -418,25 +417,22 @@ Vector GetMovedir(Vector vecAngles)
 	{
 		return Vector(0, 0, 1);
 	}
-	else if (vecAngles == Vector(0, -2, 0))
+	if (vecAngles == Vector(0, -2, 0))
 	{
 		return Vector(0, 0, -1);
 	}
-	else
-	{
-		UTIL_MakeVectors(vecAngles);
-		return gpGlobals->v_forward;
-	}
+	UTIL_MakeVectors(vecAngles);
+	return gpGlobals->v_forward;
 }
 
 
 void CBaseDelay::DelayThink(void)
 {
-	CBaseEntity* pActivator = NULL;
+	CBaseEntity* pActivator = nullptr;
 
 	// The use type is cached (and stashed) in pev->button
 	//LRC - now using m_hActivator.
-	SUB_UseTargets(m_hActivator, (USE_TYPE)pev->button, 0);
+	SUB_UseTargets(m_hActivator, static_cast<USE_TYPE>(pev->button), 0);
 	REMOVE_ENTITY(ENT(pev));
 }
 
@@ -772,8 +768,7 @@ BOOL CBaseToggle::IsLockedByMaster(void)
 {
 	if (UTIL_IsMasterTriggered(m_sMaster, m_hActivator))
 		return FALSE;
-	else
-		return TRUE;
+	return TRUE;
 }
 
 //LRC- mapping toggle-states to global states
@@ -956,11 +951,11 @@ FEntIsVisible(
 class CInfoMoveWith : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	void Spawn(void) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+	int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	STATE GetState() { return (pev->spawnflags & SF_IMW_INACTIVE) ? STATE_OFF : STATE_ON; }
+	STATE GetState() override { return (pev->spawnflags & SF_IMW_INACTIVE) ? STATE_OFF : STATE_ON; }
 };
 
 LINK_ENTITY_TO_CLASS(info_movewith, CInfoMoveWith);
@@ -1010,8 +1005,8 @@ void CInfoMoveWith::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 				return;
 			}
 		}
-		m_pMoveWith = NULL;
-		m_pSiblingMoveWith = NULL;
+		m_pMoveWith = nullptr;
+		m_pSiblingMoveWith = nullptr;
 	}
 
 	if (pev->spawnflags & SF_IMW_INACTIVE)
@@ -1032,7 +1027,7 @@ void CInfoMoveWith::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 		return;
 	}
 
-	m_pMoveWith = UTIL_FindEntityByTargetname(NULL, STRING(m_MoveWith));
+	m_pMoveWith = UTIL_FindEntityByTargetname(nullptr, STRING(m_MoveWith));
 	if (!m_pMoveWith)
 	{
 		ALERT(at_debug, "Missing movewith entity %s\n", STRING(m_MoveWith));

@@ -48,23 +48,23 @@
 class CGenericMonster : public CTalkMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int Classify(void);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
-	int ISoundMask(void);
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void SetYawSpeed(void) override;
+	int Classify(void) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	int ISoundMask(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
 	void Torch(void);
 	void MakeGas(void);
 	void UpdateGas(void);
 	void KillGas(void);
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	virtual int HasCustomGibs(void) { return m_iszGibModel; }
+	int HasCustomGibs(void) override { return m_iszGibModel; }
 
 	CBeam* m_pBeam;
 	int m_iszGibModel;
@@ -152,14 +152,14 @@ void CGenericMonster::HandleAnimEvent(MonsterEvent_t* pEvent)
 			int gas = 1;
 			MakeGas();
 			UpdateGas();
-		};
+		}
 		break;
 
 	case HTORCH_AE_OFFGAS:
 		{
 			int gas = 0;
 			KillGas();
-		};
+		}
 		break;
 
 	default:
@@ -333,7 +333,7 @@ void CGenericMonster::KillGas(void)
 	if (m_pBeam)
 	{
 		UTIL_Remove(m_pBeam);
-		m_pBeam = NULL;
+		m_pBeam = nullptr;
 	}
 }
 
@@ -343,16 +343,16 @@ void CGenericMonster::KillGas(void)
 class CDeadGenericMonster : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	int Classify(void) { return CLASS_PLAYER_ALLY; }
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int Classify(void) override { return CLASS_PLAYER_ALLY; }
+	void KeyValue(KeyValueData* pkvd) override;
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	virtual int HasCustomGibs(void) { return m_iszGibModel; }
+	int HasCustomGibs(void) override { return m_iszGibModel; }
 
 	int m_iszGibModel;
 };

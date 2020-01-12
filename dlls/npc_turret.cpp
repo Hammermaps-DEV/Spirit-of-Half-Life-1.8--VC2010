@@ -54,19 +54,19 @@ typedef enum
 class CBaseTurret : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	virtual void Precache(void);
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
 	void EXPORT TurretUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-	virtual void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
-	                         int bitsDamageType);
-	virtual int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	virtual int Classify(void);
+	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+	                 int bitsDamageType) override;
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	int Classify(void) override;
 
-	int BloodColor(void) { return DONT_BLEED; }
+	int BloodColor(void) override { return DONT_BLEED; }
 
-	void GibMonster(void)
+	void GibMonster(void) override
 	{
 	} // UNDONE: Throw turret gibs?
 
@@ -95,8 +95,8 @@ public:
 	virtual void EyeOn(void);
 	virtual void EyeOff(void);
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -126,7 +126,7 @@ public:
 	virtual STATE getState()
 	{
 		if (m_iOn) { return STATE_ON; }
-		else { return STATE_OFF; }
+		return STATE_OFF;
 	}
 
 	int m_fBeserk; // Sometimes this bitch will just freak out
@@ -186,19 +186,19 @@ IMPLEMENT_SAVERESTORE(CBaseTurret, CBaseMonster);
 class CTurret : public CBaseTurret
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 	// Think functions
-	void SpinUpCall(void);
-	void SpinDownCall(void);
+	void SpinUpCall(void) override;
+	void SpinDownCall(void) override;
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
 	// other functions
-	void Shoot(Vector& vecSrc, Vector& vecDirToEnemy);
+	void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) override;
 
 private:
 	int m_iStartSpin;
@@ -215,10 +215,10 @@ IMPLEMENT_SAVERESTORE(CTurret, CBaseTurret);
 class CMiniTurret : public CBaseTurret
 {
 public:
-	void Spawn();
-	void Precache(void);
+	void Spawn() override;
+	void Precache(void) override;
 	// other functions
-	void Shoot(Vector& vecSrc, Vector& vecDirToEnemy);
+	void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) override;
 };
 
 
@@ -427,7 +427,7 @@ void CBaseTurret::TurretUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 
 	if (m_iOn)
 	{
-		m_hEnemy = NULL;
+		m_hEnemy = nullptr;
 		SetNextThink(0.1);
 		m_iAutoStart = FALSE; // switching off a turret disables autostart
 		//!!!! this should spin down first!!BUGBUG
@@ -502,7 +502,7 @@ void CBaseTurret::ActiveThink(void)
 
 	if ((!m_iOn) || (m_hEnemy == NULL))
 	{
-		m_hEnemy = NULL;
+		m_hEnemy = nullptr;
 		m_flLastSight = gpGlobals->time + m_flMaxWait;
 		SetThink(&CBaseTurret::SearchThink);
 		return;
@@ -519,7 +519,7 @@ void CBaseTurret::ActiveThink(void)
 		{
 			if (gpGlobals->time > m_flLastSight)
 			{
-				m_hEnemy = NULL;
+				m_hEnemy = nullptr;
 				m_flLastSight = gpGlobals->time + m_flMaxWait;
 				SetThink(&CBaseTurret::SearchThink);
 				return;
@@ -548,7 +548,7 @@ void CBaseTurret::ActiveThink(void)
 			// Should we look for a new target?
 			if (gpGlobals->time > m_flLastSight)
 			{
-				m_hEnemy = NULL;
+				m_hEnemy = nullptr;
 				m_flLastSight = gpGlobals->time + m_flMaxWait;
 				SetThink(&CBaseTurret::SearchThink);
 				return;
@@ -874,7 +874,7 @@ void CBaseTurret::SearchThink(void)
 	if (m_hEnemy != NULL)
 	{
 		if (!m_hEnemy->IsAlive())
-			m_hEnemy = NULL; // Dead enemy forces a search for new one
+			m_hEnemy = nullptr; // Dead enemy forces a search for new one
 	}
 
 
@@ -932,7 +932,7 @@ void CBaseTurret::AutoSearchThink(void)
 	if (m_hEnemy != NULL)
 	{
 		if (!m_hEnemy->IsAlive())
-			m_hEnemy = NULL; // Dead enemy forces a search for new one
+			m_hEnemy = nullptr; // Dead enemy forces a search for new one
 	}
 
 	// Acquire Target
@@ -1069,7 +1069,7 @@ int CBaseTurret::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 
 	if (pev->health <= 10)
 	{
-		if (m_iOn && (1 || RANDOM_LONG(0, 0x7FFF) > 800))
+		if (m_iOn && (true || RANDOM_LONG(0, 0x7FFF) > 800))
 		{
 			m_fBeserk = 1;
 			SetThink(&CBaseTurret::SearchThink);
@@ -1179,11 +1179,11 @@ int CBaseTurret::Classify(void)
 class CSentry : public CBaseTurret
 {
 public:
-	void Spawn();
-	void Precache(void);
+	void Spawn() override;
+	void Precache(void) override;
 	// other functions
-	void Shoot(Vector& vecSrc, Vector& vecDirToEnemy);
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) override;
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void EXPORT SentryTouch(CBaseEntity* pOther);
 	void EXPORT SentryDeath(void);
 };

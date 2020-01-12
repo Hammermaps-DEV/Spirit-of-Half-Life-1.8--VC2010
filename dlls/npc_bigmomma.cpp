@@ -36,8 +36,8 @@
 class CInfoBM : public CPointEntity
 {
 public:
-	void Spawn(void);
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
 
 	// name in pev->targetname
 	// next in pev->target
@@ -47,8 +47,8 @@ public:
 	// Reach delay in pev->speed
 	// Reach sequence in pev->netname
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_preSequence;
@@ -105,14 +105,14 @@ void CInfoBM::KeyValue(KeyValueData* pkvd)
 class CBMortar : public CBaseEntity
 {
 public:
-	void Spawn(void);
+	void Spawn(void) override;
 
 	static CBMortar* Shoot(edict_t* pOwner, Vector vecStart, Vector vecVelocity);
-	void Touch(CBaseEntity* pOther);
+	void Touch(CBaseEntity* pOther) override;
 	void EXPORT Animate(void);
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_maxFrame;
@@ -177,26 +177,27 @@ void MortarSpray(const Vector& position, const Vector& direction, int spriteMode
 class CBigMomma : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void KeyValue(KeyValueData* pkvd);
-	void Activate(void);
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void KeyValue(KeyValueData* pkvd) override;
+	void Activate(void) override;
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-	void RunTask(Task_t* pTask);
-	void StartTask(Task_t* pTask);
-	Schedule_t* GetSchedule(void);
-	Schedule_t* GetScheduleOfType(int Type);
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
-	void SetActivity(Activity NewActivity);
+	void RunTask(Task_t* pTask) override;
+	void StartTask(Task_t* pTask) override;
+	Schedule_t* GetSchedule(void) override;
+	Schedule_t* GetScheduleOfType(int Type) override;
+	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+	                 int bitsDamageType) override;
+	void SetActivity(Activity NewActivity) override;
 
 	void NodeStart(int iszNextNode);
 	void NodeReach(void);
 	BOOL ShouldGoToNode(void);
 
-	void SetYawSpeed(void);
-	int Classify(void);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
+	void SetYawSpeed(void) override;
+	int Classify(void) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void LayHeadcrab(void);
 
 	int GetNodeSequence(void)
@@ -212,7 +213,7 @@ public:
 
 	int GetNodePresequence(void)
 	{
-		CInfoBM* pTarget = (CInfoBM*)(CBaseEntity*)m_hTargetEnt;
+		CInfoBM* pTarget = static_cast<CInfoBM*>(static_cast<CBaseEntity*>(m_hTargetEnt));
 		if (pTarget)
 		{
 			return pTarget->m_preSequence;
@@ -252,12 +253,12 @@ public:
 	}
 
 	// Restart the crab count on each new level
-	void OverrideReset(void)
+	void OverrideReset(void) override
 	{
 		m_crabCount = 0;
 	}
 
-	void DeathNotice(entvars_t* pevChild);
+	void DeathNotice(entvars_t* pevChild) override;
 
 	BOOL CanLayCrab(void)
 	{
@@ -282,18 +283,18 @@ public:
 
 	void LaunchMortar(void);
 
-	void SetObjectCollisionBox(void)
+	void SetObjectCollisionBox(void) override
 	{
 		pev->absmin = pev->origin + Vector(-95, -95, 0);
 		pev->absmax = pev->origin + Vector(95, 95, 190);
 	}
 
-	BOOL CheckMeleeAttack1(float flDot, float flDist); // Slash
-	BOOL CheckMeleeAttack2(float flDot, float flDist); // Lay a crab
-	BOOL CheckRangeAttack1(float flDot, float flDist); // Mortar launch
+	BOOL CheckMeleeAttack1(float flDot, float flDist) override; // Slash
+	BOOL CheckMeleeAttack2(float flDot, float flDist) override; // Lay a crab
+	BOOL CheckRangeAttack1(float flDot, float flDist) override; // Mortar launch
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	static const char* pChildDieSounds[];
@@ -447,7 +448,7 @@ void CBigMomma::HandleAnimEvent(MonsterEvent_t* pEvent)
 		{
 			Vector forward, right;
 
-			UTIL_MakeVectorsPrivate(pev->angles, forward, right, NULL);
+			UTIL_MakeVectorsPrivate(pev->angles, forward, right, nullptr);
 
 			Vector center = pev->origin + forward * 128;
 			Vector mins = center - Vector(64, 64, 0);
@@ -455,7 +456,7 @@ void CBigMomma::HandleAnimEvent(MonsterEvent_t* pEvent)
 
 			CBaseEntity* pList[8];
 			int count = UTIL_EntitiesInBox(pList, 8, mins, maxs, FL_MONSTER | FL_CLIENT);
-			CBaseEntity* pHurt = NULL;
+			CBaseEntity* pHurt = nullptr;
 
 			for (int i = 0; i < count && !pHurt; i++)
 			{
@@ -606,7 +607,7 @@ int CBigMomma::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float
 
 void CBigMomma::LayHeadcrab(void)
 {
-	CBaseEntity* pChild = CBaseEntity::Create(BIG_CHILDCLASS, pev->origin, pev->angles, edict());
+	CBaseEntity* pChild = Create(BIG_CHILDCLASS, pev->origin, pev->angles, edict());
 
 	pChild->pev->spawnflags |= SF_MONSTER_FALL_TO_GROUND;
 
@@ -744,11 +745,11 @@ void CBigMomma::NodeStart(int iszNextNode)
 {
 	pev->netname = iszNextNode;
 
-	CBaseEntity* pTarget = NULL;
+	CBaseEntity* pTarget = nullptr;
 
 	if (pev->netname)
 	{
-		edict_t* pentTarget = FIND_ENTITY_BY_TARGETNAME(NULL, STRING(pev->netname));
+		edict_t* pentTarget = FIND_ENTITY_BY_TARGETNAME(nullptr, STRING(pev->netname));
 
 		if (!FNullEnt(pentTarget))
 			pTarget = Instance(pentTarget);
@@ -862,18 +863,18 @@ enum
 
 Task_t tlBigNode[] =
 {
-	{TASK_SET_FAIL_SCHEDULE, (float)SCHED_NODE_FAIL},
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FIND_NODE, (float)0}, // Find my next node
-	{TASK_PLAY_NODE_PRESEQUENCE, (float)0}, // Play the pre-approach sequence if any
-	{TASK_MOVE_TO_NODE_RANGE, (float)0}, // Move within node range
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_NODE_YAW, (float)0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_WAIT_NODE, (float)0}, // Wait for node delay
-	{TASK_PLAY_NODE_SEQUENCE, (float)0}, // Play the sequence if one exists
-	{TASK_PROCESS_NODE, (float)0}, // Fire targets, etc.
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+	{TASK_SET_FAIL_SCHEDULE, static_cast<float>(SCHED_NODE_FAIL)},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FIND_NODE, static_cast<float>(0)}, // Find my next node
+	{TASK_PLAY_NODE_PRESEQUENCE, static_cast<float>(0)}, // Play the pre-approach sequence if any
+	{TASK_MOVE_TO_NODE_RANGE, static_cast<float>(0)}, // Move within node range
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_NODE_YAW, static_cast<float>(0)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_WAIT_NODE, static_cast<float>(0)}, // Wait for node delay
+	{TASK_PLAY_NODE_SEQUENCE, static_cast<float>(0)}, // Play the sequence if one exists
+	{TASK_PROCESS_NODE, static_cast<float>(0)}, // Fire targets, etc.
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
 };
 
 Schedule_t slBigNode[] =
@@ -890,8 +891,8 @@ Schedule_t slBigNode[] =
 
 Task_t tlNodeFail[] =
 {
-	{TASK_NODE_DELAY, (float)10}, // Try to do something else for 10 seconds
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+	{TASK_NODE_DELAY, static_cast<float>(10)}, // Try to do something else for 10 seconds
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
 };
 
 Schedule_t slNodeFail[] =
@@ -1240,7 +1241,7 @@ void CBMortar::Spawn(void)
 
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
 
-	m_maxFrame = (float)MODEL_FRAMES(pev->modelindex) - 1;
+	m_maxFrame = static_cast<float>(MODEL_FRAMES(pev->modelindex)) - 1;
 	pev->dmgtime = gpGlobals->time + 0.4;
 }
 
@@ -1264,7 +1265,7 @@ void CBMortar::Animate(void)
 
 CBMortar* CBMortar::Shoot(edict_t* pOwner, Vector vecStart, Vector vecVelocity)
 {
-	CBMortar* pSpit = GetClassPtr((CBMortar*)NULL);
+	CBMortar* pSpit = GetClassPtr(static_cast<CBMortar*>(nullptr));
 	pSpit->Spawn();
 
 	UTIL_SetOrigin(pSpit, vecStart);
@@ -1312,7 +1313,7 @@ void CBMortar::Touch(CBaseEntity* pOther)
 	// make some flecks
 	MortarSpray(tr.vecEndPos, tr.vecPlaneNormal, gSpitSprite, 24);
 
-	entvars_t* pevOwner = NULL;
+	entvars_t* pevOwner = nullptr;
 	if (pev->owner)
 		pevOwner = VARS(pev->owner);
 

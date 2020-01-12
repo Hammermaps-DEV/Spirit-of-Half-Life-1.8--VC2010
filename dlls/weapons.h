@@ -26,7 +26,7 @@ void DeactivateSatchels(CBasePlayer* pOwner);
 class CGrenade : public CBaseMonster
 {
 public:
-	void Spawn(void);
+	void Spawn(void) override;
 
 	typedef enum { SATCHEL_DETONATE = 0, SATCHEL_RELEASE } SATCHELCODE;
 
@@ -49,8 +49,8 @@ public:
 	void EXPORT TumbleThink(void);
 
 	virtual void BounceSound(void);
-	virtual int BloodColor(void) { return DONT_BLEED; }
-	virtual void Killed(entvars_t* pevAttacker, int iGib);
+	int BloodColor(void) override { return DONT_BLEED; }
+	void Killed(entvars_t* pevAttacker, int iGib) override;
 
 	BOOL m_fRegisteredSound; // whether or not this grenade has issued its DANGER sound to the world sound list yet.
 };
@@ -298,13 +298,13 @@ typedef struct
 class CBasePlayerItem : public CBaseAnimating
 {
 public:
-	virtual void SetObjectCollisionBox(void);
+	void SetObjectCollisionBox(void) override;
 #ifndef CLIENT_DLL 								//AJH for lockable weapons
-	virtual void KeyValue(KeyValueData* pkvd); //
+	void KeyValue(KeyValueData* pkvd) override; //
 #endif											//
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -319,7 +319,7 @@ public:
 	void EXPORT Materialize(void); // make a weapon visible and tangible
 	void EXPORT AttemptToMaterialize(void);
 	// the weapon desires to become visible and tangible, if the game rules allow for it
-	CBaseEntity* Respawn(void); // copy a weapon
+	CBaseEntity* Respawn(void) override; // copy a weapon
 	void FallInit(void);
 	void CheckRespawn(void);
 	virtual int GetItemInfo(ItemInfo* p) { return 0; }; // returns 0 if struct not filled out
@@ -332,10 +332,17 @@ public:
 
 	virtual BOOL CanHolster(void) { return TRUE; }; // can this weapon be put away right now?
 	virtual void Holster(int skiplocal = 0);
-	virtual void UpdateItemInfo(void) { return; };
 
-	virtual void ItemPreFrame(void) { return; } // called each frame by the player PreThink
-	virtual void ItemPostFrame(void) { return; } // called each frame by the player PostThink
+	virtual void UpdateItemInfo(void)
+	{
+	};
+
+	virtual void ItemPreFrame(void)
+	{
+	} // called each frame by the player PreThink
+	virtual void ItemPostFrame(void)
+	{
+	} // called each frame by the player PostThink
 
 	virtual void Drop(void);
 	virtual void Kill(void);
@@ -346,7 +353,7 @@ public:
 
 	virtual int UpdateClientData(CBasePlayer* pPlayer) { return 0; }
 
-	virtual CBasePlayerItem* GetWeaponPtr(void) { return NULL; };
+	virtual CBasePlayerItem* GetWeaponPtr(void) { return nullptr; };
 
 	static ItemInfo ItemInfoArray[ MAX_WEAPONS ];
 	static AmmoInfo AmmoInfoArray[ MAX_AMMO_SLOTS ];
@@ -357,15 +364,15 @@ public:
 	CBasePlayerItem* m_pNext;
 	int m_iId; // WEAPON_???
 #ifndef CLIENT_DLL//AJH Test Debug
-	virtual void Spawn(void);
+	void Spawn(void) override;
 #endif//AJH
 	virtual int iItemSlot(void)
 	{
 		ItemInfo II;
 		if (GetItemInfo(&II))
 			return II.iSlot + 1;
-		else
-			return 0; // return 0 to MAX_ITEMS_SLOTS, used in hud
+		return 0;
+		// return 0 to MAX_ITEMS_SLOTS, used in hud
 	}
 
 	int iItemPosition(void) { return ItemInfoArray[m_iId].iPosition; }
@@ -387,16 +394,16 @@ public:
 class CBasePlayerWeapon : public CBasePlayerItem
 {
 public:
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	virtual void SetNextThink(float delay); //LRC
+	void SetNextThink(float delay) override; //LRC
 
 	// generic weapon versions of CBasePlayerItem calls
-	virtual int AddToPlayer(CBasePlayer* pPlayer);
-	virtual int AddDuplicate(CBasePlayerItem* pItem);
+	int AddToPlayer(CBasePlayer* pPlayer) override;
+	int AddDuplicate(CBasePlayerItem* pItem) override;
 
 	virtual int ExtractAmmo(CBasePlayerWeapon* pWeapon);
 	//{ return TRUE; };			// Return TRUE if you can add ammo to yourself when picked up
@@ -413,7 +420,7 @@ public:
 	BOOL AddPrimaryAmmo(int iCount, char* szName, int iMaxClip, int iMaxCarry);
 	BOOL AddSecondaryAmmo(int iCount, char* szName, int iMaxCarry);
 
-	virtual void UpdateItemInfo(void)
+	void UpdateItemInfo(void) override
 	{
 	}; // updates HUD state
 
@@ -426,34 +433,42 @@ public:
 	virtual void SendWeaponAnim(int iAnim, int skiplocal = 1, int body = 0);
 	// skiplocal is 1 if client is predicting weapon animations
 
-	virtual BOOL CanDeploy(void);
+	BOOL CanDeploy(void) override;
 	virtual BOOL IsUseable(void);
 	BOOL DefaultDeploy(char* szViewModel, char* szWeaponModel, int iAnim, char* szAnimExt, int skiplocal = 0,
 	                   int body = 0);
 	int DefaultReload(int iClipSize, int iAnim, float fDelay, int body = 0);
 
-	virtual void ItemPostFrame(void); // called each frame by the player PostThink
+	void ItemPostFrame(void) override; // called each frame by the player PostThink
 	// called by CBasePlayerWeapons ItemPostFrame()
-	virtual void PrimaryAttack(void) { return; } // do "+ATTACK"
-	virtual void SecondaryAttack(void) { return; } // do "+ATTACK2"
-	virtual void Reload(void) { return; } // do "+RELOAD"
-	virtual void WeaponIdle(void) { return; } // called when no buttons pressed
-	virtual int UpdateClientData(CBasePlayer* pPlayer); // sends hud info to client dll, if things have changed
+	virtual void PrimaryAttack(void)
+	{
+	} // do "+ATTACK"
+	virtual void SecondaryAttack(void)
+	{
+	} // do "+ATTACK2"
+	virtual void Reload(void)
+	{
+	} // do "+RELOAD"
+	virtual void WeaponIdle(void)
+	{
+	} // called when no buttons pressed
+	int UpdateClientData(CBasePlayer* pPlayer) override; // sends hud info to client dll, if things have changed
 	virtual void RetireWeapon(void);
 	virtual BOOL ShouldWeaponIdle(void) { return FALSE; };
-	virtual void Holster(int skiplocal = 0);
+	void Holster(int skiplocal = 0) override;
 	virtual BOOL UseDecrement(void) { return FALSE; };
 
 	//LRC - used by weaponstrip
 	void DrainClip(CBasePlayer* pPlayer, BOOL keep, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock,
 	               int iUranium, int iSatchel, int iSnark, int iTrip, int iGren);
 
-	int PrimaryAmmoIndex();
-	int SecondaryAmmoIndex();
+	int PrimaryAmmoIndex() override;
+	int SecondaryAmmoIndex() override;
 
 	void PrintState(void);
 
-	virtual CBasePlayerItem* GetWeaponPtr(void) { return (CBasePlayerItem*)this; };
+	CBasePlayerItem* GetWeaponPtr(void) override { return static_cast<CBasePlayerItem*>(this); };
 
 	float m_flPumpTime;
 	int m_fInSpecialReload; // Are we in the middle of a reload for the shotguns
@@ -476,11 +491,11 @@ class CBasePlayerAmmo : public CBasePlayerItem //AJH
 	//class CBasePlayerAmmo : public CBaseEntity
 {
 public:
-	virtual void Spawn(void);
+	void Spawn(void) override;
 	void EXPORT DefaultTouch(CBaseEntity* pOther); // default weapon touch
 	virtual BOOL AddAmmo(CBaseEntity* pOther) { return TRUE; };
 
-	CBaseEntity* Respawn(void);
+	CBaseEntity* Respawn(void) override;
 	void EXPORT Materialize(void);
 };
 
@@ -550,18 +565,18 @@ extern MULTIDAMAGE gMultiDamage;
 //=========================================================
 class CWeaponBox : public CBaseEntity
 {
-	void Precache(void);
-	void Spawn(void);
-	void Touch(CBaseEntity* pOther);
-	void KeyValue(KeyValueData* pkvd);
+	void Precache(void) override;
+	void Spawn(void) override;
+	void Touch(CBaseEntity* pOther) override;
+	void KeyValue(KeyValueData* pkvd) override;
 	BOOL IsEmpty(void);
-	int GiveAmmo(int iCount, char* szName, int iMax, int* pIndex = NULL);
-	void SetObjectCollisionBox(void);
+	int GiveAmmo(int iCount, char* szName, int iMax, int* pIndex = nullptr);
+	void SetObjectCollisionBox(void) override;
 
 public:
 	void EXPORT Kill(void);
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	BOOL HasWeapon(CBasePlayerItem* pCheckItem);
@@ -584,20 +599,20 @@ void LoadVModel ( char *szViewModel, CBasePlayer *m_pPlayer );
 class CGlock : public CBasePlayerWeapon
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo* p);
-	int AddToPlayer(CBasePlayer* pPlayer);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int GetItemInfo(ItemInfo* p) override;
+	int AddToPlayer(CBasePlayer* pPlayer) override;
 
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
+	void PrimaryAttack(void) override;
+	void SecondaryAttack(void) override;
 	void GlockFire(float flSpread, float flCycleTime, BOOL fUseAutoAim);
-	BOOL Deploy(void);
-	void Holster(int skiplocal = 0);
-	void Reload(void);
-	void WeaponIdle(void);
+	BOOL Deploy(void) override;
+	void Holster(int skiplocal = 0) override;
+	void Reload(void) override;
+	void WeaponIdle(void) override;
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -617,20 +632,20 @@ private:
 class CCrowbar : public CBasePlayerWeapon
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 	void EXPORT SwingAgain(void);
 	void EXPORT Smack(void);
-	int GetItemInfo(ItemInfo* p);
+	int GetItemInfo(ItemInfo* p) override;
 
-	void PrimaryAttack(void);
+	void PrimaryAttack(void) override;
 	int Swing(int fFirst);
-	BOOL Deploy(void);
-	void Holster(int skiplocal = 0);
+	BOOL Deploy(void) override;
+	void Holster(int skiplocal = 0) override;
 	int m_iSwing;
 	TraceResult m_trHit;
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -643,21 +658,21 @@ public:
 class CPython : public CBasePlayerWeapon
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo* p);
-	int AddToPlayer(CBasePlayer* pPlayer);
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	BOOL Deploy(void);
-	void Holster(int skiplocal = 0);
-	void Reload(void);
-	void WeaponIdle(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int GetItemInfo(ItemInfo* p) override;
+	int AddToPlayer(CBasePlayer* pPlayer) override;
+	void PrimaryAttack(void) override;
+	void SecondaryAttack(void) override;
+	BOOL Deploy(void) override;
+	void Holster(int skiplocal = 0) override;
+	void Reload(void) override;
+	void WeaponIdle(void) override;
 	float m_flSoundDelay;
 
 	BOOL m_fInZoom; // don't save this. 
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -673,22 +688,22 @@ private:
 class CMP5 : public CBasePlayerWeapon
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo* p);
-	int AddToPlayer(CBasePlayer* pPlayer);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int GetItemInfo(ItemInfo* p) override;
+	int AddToPlayer(CBasePlayer* pPlayer) override;
 
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	int SecondaryAmmoIndex(void);
-	BOOL Deploy(void);
-	void Holster(int skiplocal /* = 0 */);
-	void Reload(void);
-	void WeaponIdle(void);
+	void PrimaryAttack(void) override;
+	void SecondaryAttack(void) override;
+	int SecondaryAmmoIndex(void) override;
+	BOOL Deploy(void) override;
+	void Holster(int skiplocal /* = 0 */) override;
+	void Reload(void) override;
+	void WeaponIdle(void) override;
 	float m_flNextAnimTime;
 	int m_iShell;
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -705,23 +720,23 @@ private:
 class CCrossbow : public CBasePlayerWeapon
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo* p);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int GetItemInfo(ItemInfo* p) override;
 
 	void FireBolt(void);
 	void FireSniperBolt(void);
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	int AddToPlayer(CBasePlayer* pPlayer);
-	BOOL Deploy();
-	void Holster(int skiplocal = 0);
-	void Reload(void);
-	void WeaponIdle(void);
+	void PrimaryAttack(void) override;
+	void SecondaryAttack(void) override;
+	int AddToPlayer(CBasePlayer* pPlayer) override;
+	BOOL Deploy() override;
+	void Holster(int skiplocal = 0) override;
+	void Reload(void) override;
+	void WeaponIdle(void) override;
 
 	int m_fInZoom; // don't save this
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -740,30 +755,30 @@ class CShotgun : public CBasePlayerWeapon
 public:
 
 #ifndef CLIENT_DLL
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
 
 
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo* p);
-	int AddToPlayer(CBasePlayer* pPlayer);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int GetItemInfo(ItemInfo* p) override;
+	int AddToPlayer(CBasePlayer* pPlayer) override;
 
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	BOOL Deploy();
-	void Holster(int skiplocal = 0);
-	void Reload(void);
+	void PrimaryAttack(void) override;
+	void SecondaryAttack(void) override;
+	BOOL Deploy() override;
+	void Holster(int skiplocal = 0) override;
+	void Reload(void) override;
 	void Charge(bool m_BeginAttack);
-	void WeaponIdle(void);
+	void WeaponIdle(void) override;
 	int m_fInReload;
 	float m_flNextReload;
 	int m_iShell;
 	float m_flTimeWeaponIdleLock;
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -779,10 +794,10 @@ private:
 
 class CLaserSpot : public CBaseEntity
 {
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 
-	int ObjectCaps(void) { return FCAP_DONT_SAVE; }
+	int ObjectCaps(void) override { return FCAP_DONT_SAVE; }
 
 public:
 	void Suspend(float flSuspendTime);
@@ -797,32 +812,32 @@ class CRpg : public CBasePlayerWeapon
 public:
 
 #ifndef CLIENT_DLL
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
 
-	void Spawn(void);
-	void Precache(void);
-	void Reload(void);
-	int GetItemInfo(ItemInfo* p);
-	int AddToPlayer(CBasePlayer* pPlayer);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void Reload(void) override;
+	int GetItemInfo(ItemInfo* p) override;
+	int AddToPlayer(CBasePlayer* pPlayer) override;
 
-	BOOL Deploy(void);
-	BOOL CanHolster(void);
-	void Holster(int skiplocal = 0);
+	BOOL Deploy(void) override;
+	BOOL CanHolster(void) override;
+	void Holster(int skiplocal = 0) override;
 
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	void WeaponIdle(void);
+	void PrimaryAttack(void) override;
+	void SecondaryAttack(void) override;
+	void WeaponIdle(void) override;
 	void UpdateSpot(void);
-	BOOL ShouldWeaponIdle(void) { return TRUE; };
+	BOOL ShouldWeaponIdle(void) override { return TRUE; };
 
 	CLaserSpot* m_pSpot;
 	int m_fSpotActive;
 	int m_cActiveRockets; // how many missiles in flight from this launcher right now?
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -838,11 +853,11 @@ private:
 class CRpgRocket : public CGrenade
 {
 public:
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 	void EXPORT FollowThink(void);
 	void EXPORT IgniteThink(void);
 	void EXPORT RocketTouch(CBaseEntity* pOther);
@@ -858,22 +873,22 @@ class CGauss : public CBasePlayerWeapon
 public:
 
 #ifndef CLIENT_DLL
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
 
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo* p);
-	int AddToPlayer(CBasePlayer* pPlayer);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int GetItemInfo(ItemInfo* p) override;
+	int AddToPlayer(CBasePlayer* pPlayer) override;
 
-	BOOL Deploy(void);
-	void Holster(int skiplocal = 0);
+	BOOL Deploy(void) override;
+	void Holster(int skiplocal = 0) override;
 
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	void WeaponIdle(void);
+	void PrimaryAttack(void) override;
+	void SecondaryAttack(void) override;
+	void WeaponIdle(void) override;
 
 	void StartFire(void);
 	void Fire(Vector vecOrigSrc, Vector vecDirShooting, float flDamage);
@@ -887,7 +902,7 @@ public:
 	// we need to know so we can pick the right set of effects. 
 	BOOL m_fPrimaryFire;
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -905,18 +920,18 @@ class CEgon : public CBasePlayerWeapon
 {
 public:
 #ifndef CLIENT_DLL
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
 
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo* p);
-	int AddToPlayer(CBasePlayer* pPlayer);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int GetItemInfo(ItemInfo* p) override;
+	int AddToPlayer(CBasePlayer* pPlayer) override;
 
-	BOOL Deploy(void);
-	void Holster(int skiplocal = 0);
+	BOOL Deploy(void) override;
+	void Holster(int skiplocal = 0) override;
 
 	void UpdateEffect(const Vector& startPoint, const Vector& endPoint, float timeBlend);
 
@@ -925,8 +940,8 @@ public:
 
 	void EndAttack(void);
 	void Attack(void);
-	void PrimaryAttack(void);
-	void WeaponIdle(void);
+	void PrimaryAttack(void) override;
+	void WeaponIdle(void) override;
 
 	float m_flAmmoUseTime; // since we use < 1 point of ammo per update, we subtract ammo on a timer.
 
@@ -945,7 +960,7 @@ public:
 	CBeam* m_pNoise;
 	CSprite* m_pSprite;
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -968,25 +983,25 @@ private:
 class CHgun : public CBasePlayerWeapon
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo* p);
-	int AddToPlayer(CBasePlayer* pPlayer);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int GetItemInfo(ItemInfo* p) override;
+	int AddToPlayer(CBasePlayer* pPlayer) override;
 
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	BOOL Deploy(void);
-	BOOL IsUseable(void);
-	void Holster(int skiplocal = 0);
-	void Reload(void);
-	void WeaponIdle(void);
+	void PrimaryAttack(void) override;
+	void SecondaryAttack(void) override;
+	BOOL Deploy(void) override;
+	BOOL IsUseable(void) override;
+	void Holster(int skiplocal = 0) override;
+	void Reload(void) override;
+	void WeaponIdle(void) override;
 	float m_flNextAnimTime;
 
 	float m_flRechargeTime;
 
 	int m_iFirePhase; // don't save me.
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -1003,17 +1018,17 @@ private:
 class CHandGrenade : public CBasePlayerWeapon
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo* p);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int GetItemInfo(ItemInfo* p) override;
 
-	void PrimaryAttack(void);
-	BOOL Deploy(void);
-	BOOL CanHolster(void);
-	void Holster(int skiplocal = 0);
-	void WeaponIdle(void);
+	void PrimaryAttack(void) override;
+	BOOL Deploy(void) override;
+	BOOL CanHolster(void) override;
+	void Holster(int skiplocal = 0) override;
+	void WeaponIdle(void) override;
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -1028,27 +1043,27 @@ class CSatchel : public CBasePlayerWeapon
 public:
 
 #ifndef CLIENT_DLL
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 #endif
 
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo* p);
-	int AddToPlayer(CBasePlayer* pPlayer);
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	int AddDuplicate(CBasePlayerItem* pOriginal);
-	BOOL CanDeploy(void);
-	BOOL Deploy(void);
-	BOOL IsUseable(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int GetItemInfo(ItemInfo* p) override;
+	int AddToPlayer(CBasePlayer* pPlayer) override;
+	void PrimaryAttack(void) override;
+	void SecondaryAttack(void) override;
+	int AddDuplicate(CBasePlayerItem* pOriginal) override;
+	BOOL CanDeploy(void) override;
+	BOOL Deploy(void) override;
+	BOOL IsUseable(void) override;
 
-	void Holster(int skiplocal = 0);
-	void WeaponIdle(void);
+	void Holster(int skiplocal = 0) override;
+	void WeaponIdle(void) override;
 	void Throw(void);
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -1062,23 +1077,23 @@ public:
 class CTripmine : public CBasePlayerWeapon
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo* p);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int GetItemInfo(ItemInfo* p) override;
 
-	void SetObjectCollisionBox(void)
+	void SetObjectCollisionBox(void) override
 	{
 		//!!!BUGBUG - fix the model!
 		pev->absmin = pev->origin + Vector(-16, -16, -5);
 		pev->absmax = pev->origin + Vector(16, 16, 28);
 	}
 
-	void PrimaryAttack(void);
-	BOOL Deploy(void);
-	void Holster(int skiplocal = 0);
-	void WeaponIdle(void);
+	void PrimaryAttack(void) override;
+	BOOL Deploy(void) override;
+	void Holster(int skiplocal = 0) override;
+	void WeaponIdle(void) override;
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -1094,18 +1109,18 @@ private:
 class CSqueak : public CBasePlayerWeapon
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo* p);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int GetItemInfo(ItemInfo* p) override;
 
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	BOOL Deploy(void);
-	void Holster(int skiplocal = 0);
-	void WeaponIdle(void);
+	void PrimaryAttack(void) override;
+	void SecondaryAttack(void) override;
+	BOOL Deploy(void) override;
+	void Holster(int skiplocal = 0) override;
+	void WeaponIdle(void) override;
 	int m_fJustThrown;
 
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -1121,17 +1136,17 @@ private:
 class CWpnGeneric : public CBasePlayerWeapon
 {
 public:
-	void Spawn(void);
-	int GetItemInfo(ItemInfo* p);
-	int AddToPlayer(CBasePlayer* pPlayer);
+	void Spawn(void) override;
+	int GetItemInfo(ItemInfo* p) override;
+	int AddToPlayer(CBasePlayer* pPlayer) override;
 
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	BOOL Deploy(void);
-	void Holster(int skiplocal = 0);
-	void WeaponIdle(void);
-	void Precache(void);
-	void Reload(void);
+	void PrimaryAttack(void) override;
+	void SecondaryAttack(void) override;
+	BOOL Deploy(void) override;
+	void Holster(int skiplocal = 0) override;
+	void WeaponIdle(void) override;
+	void Precache(void) override;
+	void Reload(void) override;
 private:
 	int m_iShell;
 
@@ -1146,7 +1161,7 @@ public:
 		int m_fSpotActive;
 		void UpdateSpot( void );
 	*/
-	virtual BOOL UseDecrement(void)
+	BOOL UseDecrement(void) override
 	{
 #if defined( CLIENT_WEAPONS )
 		return TRUE;

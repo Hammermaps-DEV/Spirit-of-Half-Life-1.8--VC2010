@@ -29,18 +29,18 @@ extern DLL_GLOBAL int g_iSkillLevel;
 
 class CApache : public CBaseMonster
 {
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn(void);
-	void Precache(void);
-	int Classify(void) { return CLASS_HUMAN_MILITARY; };
-	int BloodColor(void) { return DONT_BLEED; }
-	void Killed(entvars_t* pevAttacker, int iGib);
-	void GibMonster(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int Classify(void) override { return CLASS_HUMAN_MILITARY; };
+	int BloodColor(void) override { return DONT_BLEED; }
+	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void GibMonster(void) override;
 
-	void SetObjectCollisionBox(void)
+	void SetObjectCollisionBox(void) override
 	{
 		pev->absmin = pev->origin + Vector(-300, -300, -172);
 		pev->absmax = pev->origin + Vector(300, 300, 8);
@@ -58,8 +58,9 @@ class CApache : public CBaseMonster
 	void FireRocket(void);
 	BOOL FireGun(void);
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+	                 int bitsDamageType) override;
 
 	int m_iRockets;
 	float m_flForce;
@@ -297,11 +298,9 @@ void CApache::DyingThink(void)
 		SetNextThink(0.2);
 		return;
 	}
-	else
-	{
-		Vector vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
+	Vector vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
 
-		/*
+	/*
 		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
 			WRITE_BYTE( TE_EXPLOSION);		// This just makes a dynamic light now
 			WRITE_COORD( vecSpot.x );
@@ -313,105 +312,104 @@ void CApache::DyingThink(void)
 		MESSAGE_END();
 		*/
 
-		// fireball
-		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
-		WRITE_BYTE(TE_SPRITE);
-		WRITE_COORD(vecSpot.x);
-		WRITE_COORD(vecSpot.y);
-		WRITE_COORD(vecSpot.z + 256);
-		WRITE_SHORT(m_iExplode);
-		WRITE_BYTE(120); // scale * 10
-		WRITE_BYTE(255); // brightness
-		MESSAGE_END();
+	// fireball
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
+	WRITE_BYTE(TE_SPRITE);
+	WRITE_COORD(vecSpot.x);
+	WRITE_COORD(vecSpot.y);
+	WRITE_COORD(vecSpot.z + 256);
+	WRITE_SHORT(m_iExplode);
+	WRITE_BYTE(120); // scale * 10
+	WRITE_BYTE(255); // brightness
+	MESSAGE_END();
 
-		// big smoke
-		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
-		WRITE_BYTE(TE_SMOKE);
-		WRITE_COORD(vecSpot.x);
-		WRITE_COORD(vecSpot.y);
-		WRITE_COORD(vecSpot.z + 512);
-		WRITE_SHORT(g_sModelIndexSmoke);
-		WRITE_BYTE(250); // scale * 10
-		WRITE_BYTE(5); // framerate
-		MESSAGE_END();
+	// big smoke
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
+	WRITE_BYTE(TE_SMOKE);
+	WRITE_COORD(vecSpot.x);
+	WRITE_COORD(vecSpot.y);
+	WRITE_COORD(vecSpot.z + 512);
+	WRITE_SHORT(g_sModelIndexSmoke);
+	WRITE_BYTE(250); // scale * 10
+	WRITE_BYTE(5); // framerate
+	MESSAGE_END();
 
-		// blast circle
-		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-		WRITE_BYTE(TE_BEAMCYLINDER);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z + 2000); // reach damage radius over .2 seconds
-		WRITE_SHORT(m_iSpriteTexture);
-		WRITE_BYTE(0); // startframe
-		WRITE_BYTE(0); // framerate
-		WRITE_BYTE(4); // life
-		WRITE_BYTE(32); // width
-		WRITE_BYTE(0); // noise
-		WRITE_BYTE(255); // r, g, b
-		WRITE_BYTE(255); // r, g, b
-		WRITE_BYTE(192); // r, g, b
-		WRITE_BYTE(128); // brightness
-		WRITE_BYTE(0); // speed
-		MESSAGE_END();
+	// blast circle
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+	WRITE_BYTE(TE_BEAMCYLINDER);
+	WRITE_COORD(pev->origin.x);
+	WRITE_COORD(pev->origin.y);
+	WRITE_COORD(pev->origin.z);
+	WRITE_COORD(pev->origin.x);
+	WRITE_COORD(pev->origin.y);
+	WRITE_COORD(pev->origin.z + 2000); // reach damage radius over .2 seconds
+	WRITE_SHORT(m_iSpriteTexture);
+	WRITE_BYTE(0); // startframe
+	WRITE_BYTE(0); // framerate
+	WRITE_BYTE(4); // life
+	WRITE_BYTE(32); // width
+	WRITE_BYTE(0); // noise
+	WRITE_BYTE(255); // r, g, b
+	WRITE_BYTE(255); // r, g, b
+	WRITE_BYTE(192); // r, g, b
+	WRITE_BYTE(128); // brightness
+	WRITE_BYTE(0); // speed
+	MESSAGE_END();
 
-		EMIT_SOUND(ENT(pev), CHAN_STATIC, "weapons/mortarhit.wav", 1.0, 0.3);
+	EMIT_SOUND(ENT(pev), CHAN_STATIC, "weapons/mortarhit.wav", 1.0, 0.3);
 
-		RadiusDamage(pev->origin, pev, pev, 300, CLASS_NONE, DMG_BLAST);
+	RadiusDamage(pev->origin, pev, pev, 300, CLASS_NONE, DMG_BLAST);
 
-		if (/*!(pev->spawnflags & SF_NOWRECKAGE) && */(pev->flags & FL_ONGROUND))
-		{
-			CBaseEntity* pWreckage = Create("cycler_wreckage", pev->origin, pev->angles);
-			// SET_MODEL( ENT(pWreckage->pev), STRING(pev->model) );
-			UTIL_SetSize(pWreckage->pev, Vector(-200, -200, -128), Vector(200, 200, -32));
-			pWreckage->pev->frame = pev->frame;
-			pWreckage->pev->sequence = pev->sequence;
-			pWreckage->pev->framerate = 0;
-			pWreckage->pev->dmgtime = gpGlobals->time + 5;
-		}
-
-		// gibs
-		vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
-		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
-		WRITE_BYTE(TE_BREAKMODEL);
-
-		// position
-		WRITE_COORD(vecSpot.x);
-		WRITE_COORD(vecSpot.y);
-		WRITE_COORD(vecSpot.z + 64);
-
-		// size
-		WRITE_COORD(400);
-		WRITE_COORD(400);
-		WRITE_COORD(128);
-
-		// velocity
-		WRITE_COORD(0);
-		WRITE_COORD(0);
-		WRITE_COORD(200);
-
-		// randomization
-		WRITE_BYTE(30);
-
-		// Model
-		WRITE_SHORT(m_iBodyGibs); //model id#
-
-		// # of shards
-		WRITE_BYTE(200);
-
-		// duration
-		WRITE_BYTE(200); // 10.0 seconds
-
-		// flags
-
-		WRITE_BYTE(BREAK_METAL);
-		MESSAGE_END();
-
-		SetThink(&CApache :: SUB_Remove);
-		SetNextThink(0.1);
+	if (/*!(pev->spawnflags & SF_NOWRECKAGE) && */(pev->flags & FL_ONGROUND))
+	{
+		CBaseEntity* pWreckage = Create("cycler_wreckage", pev->origin, pev->angles);
+		// SET_MODEL( ENT(pWreckage->pev), STRING(pev->model) );
+		UTIL_SetSize(pWreckage->pev, Vector(-200, -200, -128), Vector(200, 200, -32));
+		pWreckage->pev->frame = pev->frame;
+		pWreckage->pev->sequence = pev->sequence;
+		pWreckage->pev->framerate = 0;
+		pWreckage->pev->dmgtime = gpGlobals->time + 5;
 	}
+
+	// gibs
+	vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
+	WRITE_BYTE(TE_BREAKMODEL);
+
+	// position
+	WRITE_COORD(vecSpot.x);
+	WRITE_COORD(vecSpot.y);
+	WRITE_COORD(vecSpot.z + 64);
+
+	// size
+	WRITE_COORD(400);
+	WRITE_COORD(400);
+	WRITE_COORD(128);
+
+	// velocity
+	WRITE_COORD(0);
+	WRITE_COORD(0);
+	WRITE_COORD(200);
+
+	// randomization
+	WRITE_BYTE(30);
+
+	// Model
+	WRITE_SHORT(m_iBodyGibs); //model id#
+
+	// # of shards
+	WRITE_BYTE(200);
+
+	// duration
+	WRITE_BYTE(200); // 10.0 seconds
+
+	// flags
+
+	WRITE_BYTE(BREAK_METAL);
+	MESSAGE_END();
+
+	SetThink(&CApache :: SUB_Remove);
+	SetNextThink(0.1);
 }
 
 
@@ -453,9 +451,9 @@ void CApache::HuntThink(void)
 
 	ShowDamage();
 
-	if (m_pGoalEnt == NULL && !FStringNull(pev->target)) // this monster has a target
+	if (m_pGoalEnt == nullptr && !FStringNull(pev->target)) // this monster has a target
 	{
-		m_pGoalEnt = UTIL_FindEntityByTargetname(NULL, STRING(pev->target));
+		m_pGoalEnt = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
 		if (m_pGoalEnt)
 		{
 			m_posDesired = m_pGoalEnt->pev->origin;
@@ -486,7 +484,7 @@ void CApache::HuntThink(void)
 		}
 		else
 		{
-			m_hEnemy = NULL;
+			m_hEnemy = nullptr;
 		}
 	}
 
@@ -500,7 +498,7 @@ void CApache::HuntThink(void)
 
 		if (flLength < 128)
 		{
-			m_pGoalEnt = UTIL_FindEntityByTargetname(NULL, STRING(m_pGoalEnt->pev->target));
+			m_pGoalEnt = UTIL_FindEntityByTargetname(nullptr, STRING(m_pGoalEnt->pev->target));
 			if (m_pGoalEnt)
 			{
 				m_posDesired = m_pGoalEnt->pev->origin;
@@ -720,16 +718,16 @@ void CApache::Flight(void)
 	}
 	else
 	{
-		CBaseEntity* pPlayer = NULL;
+		CBaseEntity* pPlayer = nullptr;
 
-		pPlayer = UTIL_FindEntityByClassname(NULL, "player");
+		pPlayer = UTIL_FindEntityByClassname(nullptr, "player");
 		// UNDONE: this needs to send different sounds to every player for multiplayer.	
 		if (pPlayer)
 		{
 			float pitch = DotProduct(pev->velocity - pPlayer->pev->velocity,
 			                         (pPlayer->pev->origin - pev->origin).Normalize());
 
-			pitch = (int)(100 + pitch / 50.0);
+			pitch = static_cast<int>(100 + pitch / 50.0);
 
 			if (pitch > 250)
 				pitch = 250;
@@ -787,7 +785,7 @@ void CApache::FireRocket(void)
 	WRITE_BYTE(12); // framerate
 	MESSAGE_END();
 
-	CBaseEntity* pRocket = CBaseEntity::Create("hvr_rocket", vecSrc, pev->angles, edict());
+	CBaseEntity* pRocket = Create("hvr_rocket", vecSrc, pev->angles, edict());
 	if (pRocket)
 		pRocket->pev->velocity = pev->velocity + gpGlobals->v_forward * 100;
 
@@ -867,13 +865,10 @@ BOOL CApache::FireGun()
 #endif
 		return TRUE;
 	}
-	else
+	if (m_pBeam)
 	{
-		if (m_pBeam)
-		{
-			UTIL_Remove(m_pBeam);
-			m_pBeam = NULL;
-		}
+		UTIL_Remove(m_pBeam);
+		m_pBeam = nullptr;
 	}
 	return FALSE;
 }
@@ -947,13 +942,13 @@ void CApache::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 
 class CApacheHVR : public CGrenade
 {
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 	void EXPORT IgniteThink(void);
 	void EXPORT AccelerateThink(void);
 
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_iTrail;

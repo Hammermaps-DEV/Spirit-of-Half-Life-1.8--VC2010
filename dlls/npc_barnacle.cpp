@@ -34,17 +34,17 @@
 class CBarnacle : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
 	CBaseEntity* TongueTouchEnt(float* pflLength);
-	int Classify(void);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
+	int Classify(void) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void EXPORT BarnacleThink(void);
 	void EXPORT WaitTillDead(void);
-	void Killed(entvars_t* pevAttacker, int iGib);
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	void Killed(entvars_t* pevAttacker, int iGib) override;
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flAltitude;
@@ -162,7 +162,7 @@ void CBarnacle::BarnacleThink(void)
 		{
 			// someone (maybe even the barnacle) killed the prey. Reset barnacle.
 			m_fLiftingPrey = FALSE; // indicate that we're not lifting prey.
-			m_hEnemy = NULL;
+			m_hEnemy = nullptr;
 			return;
 		}
 
@@ -171,7 +171,7 @@ void CBarnacle::BarnacleThink(void)
 			if (m_hEnemy != NULL && m_hEnemy->pev->deadflag != DEAD_NO)
 			{
 				// crap, someone killed the prey on the way up.
-				m_hEnemy = NULL;
+				m_hEnemy = nullptr;
 				m_fLiftingPrey = FALSE;
 				return;
 			}
@@ -279,7 +279,7 @@ void CBarnacle::BarnacleThink(void)
 
 		pTouchEnt = TongueTouchEnt(&flLength);
 
-		if (pTouchEnt != NULL && m_fTongueExtended)
+		if (pTouchEnt != nullptr && m_fTongueExtended)
 		{
 			// tongue is fully extended, and is touching someone.
 			if (pTouchEnt->FBecomeProne())
@@ -441,5 +441,5 @@ CBaseEntity* CBarnacle::TongueTouchEnt(float* pflLength)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }

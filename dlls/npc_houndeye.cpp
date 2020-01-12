@@ -76,31 +76,31 @@ enum
 class CHoundeye : public CSquadMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	int Classify(void);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
-	void SetYawSpeed(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int Classify(void) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	void SetYawSpeed(void) override;
 	void WarmUpSound(void);
-	void AlertSound(void);
-	void DeathSound(void);
+	void AlertSound(void) override;
+	void DeathSound(void) override;
 	void WarnSound(void);
-	void PainSound(void);
-	void IdleSound(void);
-	void StartTask(Task_t* pTask);
-	void RunTask(Task_t* pTask);
+	void PainSound(void) override;
+	void IdleSound(void) override;
+	void StartTask(Task_t* pTask) override;
+	void RunTask(Task_t* pTask) override;
 	void SonicAttack(void);
-	void PrescheduleThink(void);
-	void SetActivity(Activity NewActivity);
+	void PrescheduleThink(void) override;
+	void SetActivity(Activity NewActivity) override;
 	void WriteBeamColor(void);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	BOOL FValidateHintType(short sHint);
-	BOOL FCanActiveIdle(void);
-	Schedule_t* GetScheduleOfType(int Type);
-	Schedule_t* CHoundeye::GetSchedule(void);
+	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	BOOL FValidateHintType(short sHint) override;
+	BOOL FCanActiveIdle(void) override;
+	Schedule_t* GetScheduleOfType(int Type) override;
+	Schedule_t* CHoundeye::GetSchedule(void) override;
 
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
@@ -174,7 +174,7 @@ BOOL CHoundeye::FCanActiveIdle(void)
 		{
 			CSquadMonster* pMember = pSquadLeader->MySquadMember(i);
 
-			if (pMember != NULL && pMember != this && pMember->m_iHintNode != NO_NODE)
+			if (pMember != nullptr && pMember != this && pMember->m_iHintNode != NO_NODE)
 			{
 				// someone else in the group is active idling right now!
 				return FALSE;
@@ -624,9 +624,9 @@ void CHoundeye::SonicAttack(void)
 	MESSAGE_END();
 
 
-	CBaseEntity* pEntity = NULL;
+	CBaseEntity* pEntity = nullptr;
 	// iterate on all entities in the vicinity.
-	while ((pEntity = UTIL_FindEntityInSphere(pEntity, pev->origin, HOUNDEYE_MAX_ATTACK_RADIUS)) != NULL)
+	while ((pEntity = UTIL_FindEntityInSphere(pEntity, pev->origin, HOUNDEYE_MAX_ATTACK_RADIUS)) != nullptr)
 	{
 		if (pEntity->pev->takedamage != DAMAGE_NO)
 		{
@@ -908,8 +908,8 @@ void CHoundeye::PrescheduleThink(void)
 //=========================================================
 Task_t tlHoundGuardPack[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_GUARD, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_GUARD, static_cast<float>(0)},
 };
 
 Schedule_t slHoundGuardPack[] =
@@ -934,17 +934,17 @@ Schedule_t slHoundGuardPack[] =
 // primary range attack
 Task_t tlHoundYell1[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_SET_SCHEDULE, (float)SCHED_HOUND_AGITATED},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_SET_SCHEDULE, static_cast<float>(SCHED_HOUND_AGITATED)},
 };
 
 Task_t tlHoundYell2[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
 };
 
 Schedule_t slHoundRangeAttack[] =
@@ -970,14 +970,14 @@ Schedule_t slHoundRangeAttack[] =
 // lie down and fall asleep
 Task_t tlHoundSleep[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_WAIT_RANDOM, (float)5},
-	{TASK_PLAY_SEQUENCE, (float)ACT_CROUCH},
-	{TASK_SET_ACTIVITY, (float)ACT_CROUCHIDLE},
-	{TASK_HOUND_FALL_ASLEEP, (float)0},
-	{TASK_WAIT_RANDOM, (float)25},
-	{TASK_HOUND_CLOSE_EYE, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT_RANDOM, static_cast<float>(5)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_CROUCH)},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_CROUCHIDLE)},
+	{TASK_HOUND_FALL_ASLEEP, static_cast<float>(0)},
+	{TASK_WAIT_RANDOM, static_cast<float>(25)},
+	{TASK_HOUND_CLOSE_EYE, static_cast<float>(0)},
 	//{ TASK_WAIT,				(float)10				},
 	//{ TASK_WAIT_RANDOM,			(float)10				},
 };
@@ -1002,11 +1002,11 @@ Schedule_t slHoundSleep[] =
 // wake and stand up lazily
 Task_t tlHoundWakeLazy[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_HOUND_OPEN_EYE, (float)0},
-	{TASK_WAIT_RANDOM, (float)2.5},
-	{TASK_PLAY_SEQUENCE, (float)ACT_STAND},
-	{TASK_HOUND_WAKE_UP, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_HOUND_OPEN_EYE, static_cast<float>(0)},
+	{TASK_WAIT_RANDOM, static_cast<float>(2.5)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_STAND)},
+	{TASK_HOUND_WAKE_UP, static_cast<float>(0)},
 };
 
 Schedule_t slHoundWakeLazy[] =
@@ -1023,10 +1023,10 @@ Schedule_t slHoundWakeLazy[] =
 // wake and stand up with great urgency!
 Task_t tlHoundWakeUrgent[] =
 {
-	{TASK_HOUND_OPEN_EYE, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_HOP},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_HOUND_WAKE_UP, (float)0},
+	{TASK_HOUND_OPEN_EYE, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_HOP)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_HOUND_WAKE_UP, static_cast<float>(0)},
 };
 
 Schedule_t slHoundWakeUrgent[] =
@@ -1044,9 +1044,9 @@ Schedule_t slHoundWakeUrgent[] =
 Task_t tlHoundSpecialAttack1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_SPECIAL_ATTACK1, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_IDLE_ANGRY},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_SPECIAL_ATTACK1, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_IDLE_ANGRY)},
 };
 
 Schedule_t slHoundSpecialAttack1[] =
@@ -1087,7 +1087,7 @@ Task_t tlHoundHopRetreat[] =
 {
 	{TASK_STOP_MOVING, 0},
 	{TASK_HOUND_HOP_BACK, 0},
-	{TASK_SET_SCHEDULE, (float)SCHED_TAKE_COVER_FROM_ENEMY},
+	{TASK_SET_SCHEDULE, static_cast<float>(SCHED_TAKE_COVER_FROM_ENEMY)},
 };
 
 Schedule_t slHoundHopRetreat[] =
@@ -1106,7 +1106,7 @@ Task_t tlHoundCombatFailPVS[] =
 {
 	{TASK_STOP_MOVING, 0},
 	{TASK_HOUND_THREAT_DISPLAY, 0},
-	{TASK_WAIT_FACE_ENEMY, (float)1},
+	{TASK_WAIT_FACE_ENEMY, static_cast<float>(1)},
 };
 
 Schedule_t slHoundCombatFailPVS[] =
@@ -1127,8 +1127,8 @@ Task_t tlHoundCombatFailNoPVS[] =
 {
 	{TASK_STOP_MOVING, 0},
 	{TASK_HOUND_THREAT_DISPLAY, 0},
-	{TASK_WAIT_FACE_ENEMY, (float)2},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+	{TASK_WAIT_FACE_ENEMY, static_cast<float>(2)},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
 	{TASK_WAIT_PVS, 0},
 };
 
@@ -1189,17 +1189,13 @@ Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 			// sound was not loud enough to scare the bejesus out of houndeye
 			return &slHoundWakeLazy[0];
 		}
-		else if (HasConditions(bits_COND_NEW_ENEMY))
+		if (HasConditions(bits_COND_NEW_ENEMY))
 		{
 			// get up fast, to fight.
 			return &slHoundWakeUrgent[0];
 		}
-
-		else
-		{
-			// hound is waking up on its own
-			return &slHoundWakeLazy[0];
-		}
+		// hound is waking up on its own
+		return &slHoundWakeLazy[0];
 	}
 	switch (Type)
 	{
@@ -1210,10 +1206,7 @@ Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 			{
 				return &slHoundSleep[0];
 			}
-			else
-			{
-				return CSquadMonster::GetScheduleOfType(Type);
-			}
+			return CSquadMonster::GetScheduleOfType(Type);
 		}
 	case SCHED_RANGE_ATTACK1:
 		{
@@ -1252,16 +1245,10 @@ Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 					// client in PVS
 					return &slHoundCombatFailPVS[0];
 				}
-				else
-				{
-					// client has taken off! 
-					return &slHoundCombatFailNoPVS[0];
-				}
+				// client has taken off! 
+				return &slHoundCombatFailNoPVS[0];
 			}
-			else
-			{
-				return CSquadMonster::GetScheduleOfType(Type);
-			}
+			return CSquadMonster::GetScheduleOfType(Type);
 		}
 	default:
 		{

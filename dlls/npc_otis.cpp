@@ -62,42 +62,43 @@ enum { SCHED_OTIS_COVER_AND_RELOAD };
 class COtis : public CTalkMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int ISoundMask(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void SetYawSpeed(void) override;
+	int ISoundMask(void) override;
 	void Eagle(void);
-	void AlertSound(void);
-	int Classify(void);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
-	void CheckAmmo(void);
+	void AlertSound(void) override;
+	int Classify(void) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	void CheckAmmo(void) override;
 
-	void RunTask(Task_t* pTask);
-	void StartTask(Task_t* pTask);
+	void RunTask(Task_t* pTask) override;
+	void StartTask(Task_t* pTask) override;
 
-	virtual int ObjectCaps(void) { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	int ObjectCaps(void) override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	void KeyValue(KeyValueData* pkvd);
+	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	void KeyValue(KeyValueData* pkvd) override;
 
-	void DeclineFollowing(void);
+	void DeclineFollowing(void) override;
 
 	// Override these to set behavior
-	Schedule_t* GetScheduleOfType(int Type);
-	Schedule_t* GetSchedule(void);
-	MONSTERSTATE GetIdealState(void);
+	Schedule_t* GetScheduleOfType(int Type) override;
+	Schedule_t* GetSchedule(void) override;
+	MONSTERSTATE GetIdealState(void) override;
 
-	void DeathSound(void);
-	void PainSound(void);
+	void DeathSound(void) override;
+	void PainSound(void) override;
 
 	void TalkInit(void);
 
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
-	void Killed(entvars_t* pevAttacker, int iGib);
+	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+	                 int bitsDamageType) override;
+	void Killed(entvars_t* pevAttacker, int iGib) override;
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	BOOL m_fHostile;
@@ -162,8 +163,8 @@ void COtis::KeyValue(KeyValueData* pkvd)
 //=========================================================
 Task_t tlOtisFollow[] =
 {
-	{TASK_MOVE_TO_TARGET_RANGE, (float)128}, // Move within 128 of target ent (client)
-	{TASK_SET_SCHEDULE, (float)SCHED_TARGET_FACE},
+	{TASK_MOVE_TO_TARGET_RANGE, static_cast<float>(128)}, // Move within 128 of target ent (client)
+	{TASK_SET_SCHEDULE, static_cast<float>(SCHED_TARGET_FACE)},
 };
 
 Schedule_t slOtisFollow[] =
@@ -186,14 +187,14 @@ Schedule_t slOtisFollow[] =
 //=========================================================
 Task_t tlOtisHideReload[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_SET_FAIL_SCHEDULE, (float)SCHED_RELOAD},
-	{TASK_FIND_COVER_FROM_ENEMY, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_REMEMBER, (float)bits_MEMORY_INCOVER},
-	{TASK_FACE_ENEMY, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_RELOAD},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_SET_FAIL_SCHEDULE, static_cast<float>(SCHED_RELOAD)},
+	{TASK_FIND_COVER_FROM_ENEMY, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_REMEMBER, static_cast<float>(bits_MEMORY_INCOVER)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_RELOAD)},
 };
 
 Schedule_t slOtisHideReload[] =
@@ -216,7 +217,7 @@ Task_t tlOtisEnemyDraw[] =
 {
 	{TASK_STOP_MOVING, 0},
 	{TASK_FACE_ENEMY, 0},
-	{TASK_PLAY_SEQUENCE_FACE_ENEMY, (float)ACT_ARM},
+	{TASK_PLAY_SEQUENCE_FACE_ENEMY, static_cast<float>(ACT_ARM)},
 };
 
 Schedule_t slOtisEnemyDraw[] =
@@ -232,10 +233,10 @@ Schedule_t slOtisEnemyDraw[] =
 
 Task_t tlOtisFaceTarget[] =
 {
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_FACE_TARGET, (float)0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_SET_SCHEDULE, (float)SCHED_TARGET_CHASE},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_FACE_TARGET, static_cast<float>(0)},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_SET_SCHEDULE, static_cast<float>(SCHED_TARGET_CHASE)},
 };
 
 Schedule_t slOtisFaceTarget[] =
@@ -258,9 +259,9 @@ Schedule_t slOtisFaceTarget[] =
 Task_t tlIdleOtisStand[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_WAIT, (float)2}, // repick IDLESTAND every two seconds.
-	{TASK_TLK_HEADRESET, (float)0}, // reset head position
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_WAIT, static_cast<float>(2)}, // repick IDLESTAND every two seconds.
+	{TASK_TLK_HEADRESET, static_cast<float>(0)}, // reset head position
 };
 
 Schedule_t slIdleOtisStand[] =
@@ -351,8 +352,7 @@ int COtis::Classify(void)
 {
 	if (m_fHostile)
 		return CLASS_HUMAN_MILITARY;
-	else
-		return m_iClass ? m_iClass : CLASS_PLAYER_ALLY;
+	return m_iClass ? m_iClass : CLASS_PLAYER_ALLY;
 }
 
 //=========================================================
@@ -420,7 +420,7 @@ BOOL COtis::CheckRangeAttack1(float flDot, float flDist)
 			Vector shootTarget = ((pEnemy->BodyTarget(shootOrigin) - pEnemy->pev->origin) + m_vecEnemyLKP);
 			UTIL_TraceLine(shootOrigin, shootTarget, dont_ignore_monsters, ENT(pev), &tr);
 			m_checkAttackTime = gpGlobals->time + 1;
-			if (tr.flFraction == 1.0 || (tr.pHit != NULL && CBaseEntity::Instance(tr.pHit) == pEnemy))
+			if (tr.flFraction == 1.0 || (tr.pHit != nullptr && Instance(tr.pHit) == pEnemy))
 				m_lastAttackCheck = TRUE;
 			else
 				m_lastAttackCheck = FALSE;
@@ -612,8 +612,8 @@ void COtis::TalkInit()
 		m_szGrp[TLK_PLHURT2] = "!OT_CUREB";
 		m_szGrp[TLK_PLHURT3] = "!OT_CUREC";
 
-		m_szGrp[TLK_PHELLO] = NULL;
-		m_szGrp[TLK_PIDLE] = NULL;
+		m_szGrp[TLK_PHELLO] = nullptr;
+		m_szGrp[TLK_PIDLE] = nullptr;
 		m_szGrp[TLK_PQUESTION] = "OT_PQUEST";
 
 		m_szGrp[TLK_SMELL] = "OT_SMELL";
@@ -634,13 +634,12 @@ static BOOL IsFacing(entvars_t* pevTest, const Vector& reference)
 	Vector forward, angle;
 	angle = pevTest->v_angle;
 	angle.x = 0;
-	UTIL_MakeVectorsPrivate(angle, forward, NULL, NULL);
+	UTIL_MakeVectorsPrivate(angle, forward, nullptr, nullptr);
 
 	// He's facing me, he meant it
 	if (DotProduct(forward, vecDir) > 0.96) // +/- 15 degrees or so
 		return TRUE;
-	else
-		return FALSE;
+	return FALSE;
 }
 
 int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
@@ -818,8 +817,7 @@ Schedule_t* COtis::GetScheduleOfType(int Type)
 
 		if (psched == slIdleStand)
 			return slOtisFaceTarget; // override this for different target face behavior
-		else
-			return psched;
+		return psched;
 		break;
 	case SCHED_TARGET_CHASE:
 		return slOtisFollow;
@@ -829,8 +827,7 @@ Schedule_t* COtis::GetScheduleOfType(int Type)
 
 		if (psched == slIdleStand)
 			return slIdleOtisStand;
-		else
-			return psched;
+		return psched;
 		break;
 	}
 
@@ -906,13 +903,9 @@ Schedule_t* COtis::GetSchedule(void)
 				StopFollowing(FALSE);
 				break;
 			}
-			else
-			{
-				if (HasConditions(bits_COND_CLIENT_PUSH))
-					return GetScheduleOfType(SCHED_MOVE_AWAY_FOLLOW);
-				else
-					return GetScheduleOfType(SCHED_TARGET_FACE);
-			}
+			if (HasConditions(bits_COND_CLIENT_PUSH))
+				return GetScheduleOfType(SCHED_MOVE_AWAY_FOLLOW);
+			return GetScheduleOfType(SCHED_TARGET_FACE);
 		}
 
 		if (HasConditions(bits_COND_CLIENT_PUSH))
@@ -960,10 +953,10 @@ void COtis::CheckAmmo(void)
 class CDeadOtis : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	int Classify(void) { return CLASS_PLAYER_ALLY; }
+	void Spawn(void) override;
+	int Classify(void) override { return CLASS_PLAYER_ALLY; }
 
-	void KeyValue(KeyValueData* pkvd);
+	void KeyValue(KeyValueData* pkvd) override;
 
 	int m_iPose; // which sequence to display	-- temporary, don't need to save
 	static char* m_szPoses[3];

@@ -157,8 +157,8 @@ void CSquadMonster::SquadRemove(CSquadMonster* pRemove)
 			CSquadMonster* pMember = MySquadMember(i);
 			if (pMember)
 			{
-				pMember->m_hSquadLeader = NULL;
-				m_hSquadMember[i] = NULL;
+				pMember->m_hSquadLeader = nullptr;
+				m_hSquadMember[i] = nullptr;
 			}
 		}
 	}
@@ -171,14 +171,14 @@ void CSquadMonster::SquadRemove(CSquadMonster* pRemove)
 			{
 				if (pSquadLeader->m_hSquadMember[i] == this)
 				{
-					pSquadLeader->m_hSquadMember[i] = NULL;
+					pSquadLeader->m_hSquadMember[i] = nullptr;
 					break;
 				}
 			}
 		}
 	}
 
-	pRemove->m_hSquadLeader = NULL;
+	pRemove->m_hSquadLeader = nullptr;
 }
 
 //=========================================================
@@ -291,7 +291,7 @@ int CSquadMonster::SquadCount(void)
 	int squadCount = 0;
 	for (int i = 0; i < MAX_SQUAD_MEMBERS; i++)
 	{
-		if (pSquadLeader->MySquadMember(i) != NULL)
+		if (pSquadLeader->MySquadMember(i) != nullptr)
 			squadCount++;
 	}
 
@@ -322,7 +322,7 @@ int CSquadMonster::SquadRecruit(int searchRadius, int maxMembers)
 	m_hSquadLeader = this;
 	squadCount = 1;
 
-	CBaseEntity* pEntity = NULL;
+	CBaseEntity* pEntity = nullptr;
 
 	if (!FStringNull(pev->netname))
 	{
@@ -348,7 +348,7 @@ int CSquadMonster::SquadRecruit(int searchRadius, int maxMembers)
 	}
 	else
 	{
-		while ((pEntity = UTIL_FindEntityInSphere(pEntity, pev->origin, searchRadius)) != NULL)
+		while ((pEntity = UTIL_FindEntityInSphere(pEntity, pev->origin, searchRadius)) != nullptr)
 		{
 			CSquadMonster* pRecruit = pEntity->MySquadMonsterPointer();
 
@@ -378,7 +378,7 @@ int CSquadMonster::SquadRecruit(int searchRadius, int maxMembers)
 	// no single member squads
 	if (squadCount == 1)
 	{
-		m_hSquadLeader = NULL;
+		m_hSquadLeader = nullptr;
 	}
 
 	return squadCount;
@@ -394,7 +394,7 @@ int CSquadMonster::CheckEnemy(CBaseEntity* pEnemy)
 	iUpdatedLKP = CBaseMonster::CheckEnemy(m_hEnemy);
 
 	// communicate with squad members about the enemy IF this individual has the same enemy as the squad leader.
-	if (InSquad() && (CBaseEntity*)m_hEnemy == MySquadLeader()->m_hEnemy)
+	if (InSquad() && static_cast<CBaseEntity*>(m_hEnemy) == MySquadLeader()->m_hEnemy)
 	{
 		if (iUpdatedLKP)
 		{
@@ -594,7 +594,7 @@ BOOL CSquadMonster::SquadEnemySplit(void)
 	for (int i = 0; i < MAX_SQUAD_MEMBERS; i++)
 	{
 		CSquadMonster* pMember = pSquadLeader->MySquadMember(i);
-		if (pMember != NULL && pMember->m_hEnemy != NULL && pMember->m_hEnemy != pEnemy)
+		if (pMember != nullptr && pMember->m_hEnemy != NULL && pMember->m_hEnemy != pEnemy)
 		{
 			return TRUE;
 		}

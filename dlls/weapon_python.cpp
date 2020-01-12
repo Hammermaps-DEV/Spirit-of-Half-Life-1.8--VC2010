@@ -39,7 +39,7 @@ int CPython::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "357";
 	p->iMaxAmmo1 = MAX_CARRY_357;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = MAX_CLIP_PYTHON;
 	p->iFlags = 0;
@@ -55,7 +55,7 @@ int CPython::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 		return TRUE;
@@ -178,7 +178,7 @@ void CPython::PrimaryAttack()
 
 	m_iClip--;
 
-	m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
+	m_pPlayer->pev->effects = static_cast<int>(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 
 #ifndef CLIENT_DLL
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
@@ -301,20 +301,20 @@ void CPython::WeaponIdle()
 
 class CPythonAmmo : public CBasePlayerAmmo
 {
-	void Spawn()
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_357ammobox.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
-	void Precache()
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/w_357ammobox.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther)
+	BOOL AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_357BOX_GIVE, "357", MAX_CARRY_357) != -1)
 		{

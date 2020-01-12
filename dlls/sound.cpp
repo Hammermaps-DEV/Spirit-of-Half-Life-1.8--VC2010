@@ -118,19 +118,19 @@ dynpitchvol_t rgdpvpreset[CDPVPRESETMAX] =
 class CAmbientGeneric : public CBaseEntity
 {
 public:
-	void KeyValue(KeyValueData* pkvd);
-	void Spawn(void);
+	void KeyValue(KeyValueData* pkvd) override;
+	void Spawn(void) override;
 	//	void PostSpawn( void );
-	void Precache(void);
+	void Precache(void) override;
 	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT StartPlayFrom(void);
 	void EXPORT RampThink(void);
 	void InitModulationParms(void);
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
-	virtual int ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	int ObjectCaps(void) override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
 	float m_flAttenuation; // attenuation value
 	dynpitchvol_t m_dpv;
@@ -254,7 +254,7 @@ void CAmbientGeneric::Precache(void)
 
 	if (pev->target)
 	{
-		CBaseEntity* pTarget = UTIL_FindEntityByTargetname(NULL, STRING(pev->target));
+		CBaseEntity* pTarget = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
 		if (!pTarget)
 		{
 			ALERT(at_debug, "WARNING: ambient_generic \"%s\" can't find \"%s\", its entity to play from.\n",
@@ -509,7 +509,6 @@ void CAmbientGeneric::RampThink(void)
 
 	// update ramps at 5hz
 	SetNextThink(0.2);
-	return;
 }
 
 // Init all ramp params in preparation to 
@@ -724,7 +723,7 @@ void CAmbientGeneric::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, U
 
 		// AJH / MJB - [LN] volume field:
 		if (!FStringNull(pev->noise))
-			m_dpv.vol = CalcLocus_Number(this, STRING(pev->noise), 0);
+			m_dpv.vol = CalcLocus_Number(this, STRING(pev->noise), nullptr);
 
 		if (m_pPlayFrom)
 		{
@@ -945,13 +944,13 @@ void CAmbientGeneric::KeyValue(KeyValueData* pkvd)
 class CEnvSound : public CPointEntity
 {
 public:
-	void KeyValue(KeyValueData* pkvd);
-	void Spawn(void);
+	void KeyValue(KeyValueData* pkvd) override;
+	void Spawn(void) override;
 
-	void Think(void);
+	void Think(void) override;
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	float m_flRadius;
@@ -1032,7 +1031,7 @@ void CEnvSound::Think(void)
 	// cycle through visible clients on consecutive calls.
 
 	edict_t* pentPlayer = FIND_CLIENT_IN_PVS(edict());
-	CBasePlayer* pPlayer = NULL;
+	CBasePlayer* pPlayer = nullptr;
 
 	if (FNullEnt(pentPlayer))
 		goto env_sound_Think_slow; // no player in pvs of sound entity, slow it down
@@ -1058,24 +1057,18 @@ void CEnvSound::Think(void)
 				pPlayer->m_flSndRange = flRange;
 				goto env_sound_Think_fast;
 			}
-			else
-			{
-				// current sound entity affecting player is no longer valid,
-				// flag this state by clearing room_type and range.
-				// NOTE: we do not actually change the player's room_type
-				// NOTE: until we have a new valid room_type to change it to.
+			// current sound entity affecting player is no longer valid,
+			// flag this state by clearing room_type and range.
+			// NOTE: we do not actually change the player's room_type
+			// NOTE: until we have a new valid room_type to change it to.
 
-				pPlayer->m_flSndRange = 0;
-				pPlayer->m_flSndRoomtype = 0;
-				goto env_sound_Think_slow;
-			}
-		}
-		else
-		{
-			// entity is affecting player but is out of range,
-			// wait passively for another entity to usurp it...
+			pPlayer->m_flSndRange = 0;
+			pPlayer->m_flSndRoomtype = 0;
 			goto env_sound_Think_slow;
 		}
+		// entity is affecting player but is out of range,
+		// wait passively for another entity to usurp it...
+		goto env_sound_Think_slow;
 	}
 
 	// if we got this far, we're looking at an entity that is contending
@@ -1096,8 +1089,8 @@ void CEnvSound::Think(void)
 
 			//CLIENT_COMMAND(pentPlayer, "room_type %f", m_flRoomtype);
 
-			MESSAGE_BEGIN(MSG_ONE, SVC_ROOMTYPE, NULL, pentPlayer); // use the magic #1 for "one client"
-			WRITE_SHORT((short)m_flRoomtype); // sequence number
+			MESSAGE_BEGIN(MSG_ONE, SVC_ROOMTYPE, nullptr, pentPlayer); // use the magic #1 for "one client"
+			WRITE_SHORT(static_cast<short>(m_flRoomtype)); // sequence number
 			MESSAGE_END();
 
 			// crank up nextthink rate for new active sound entity
@@ -1117,7 +1110,6 @@ env_sound_Think_fast:
 
 env_sound_Think_slow:
 	SetNextThink(0.75);
-	return;
 }
 
 //
@@ -1137,14 +1129,14 @@ void CEnvSound::Spawn()
 class CTriggerSound : public CBaseDelay
 {
 public:
-	void KeyValue(KeyValueData* pkvd);
-	void Spawn(void);
-	void Touch(CBaseEntity* pOther);
+	void KeyValue(KeyValueData* pkvd) override;
+	void Spawn(void) override;
+	void Touch(CBaseEntity* pOther) override;
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
-	virtual int ObjectCaps(void) { return CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps(void) override { return CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	float m_flRoomtype;
 	string_t m_iszMaster;
@@ -1181,15 +1173,15 @@ void CTriggerSound::Touch(CBaseEntity* pOther)
 
 	if (pOther->IsPlayer())
 	{
-		CBasePlayer* pPlayer = (CBasePlayer*)pOther;
+		CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
 		if (pPlayer->m_pentSndLast != this->edict())
 		{
 			pPlayer->m_pentSndLast = ENT(pev);
 			pPlayer->m_flSndRoomtype = m_flRoomtype;
 			pPlayer->m_flSndRange = 0;
 
-			MESSAGE_BEGIN(MSG_ONE, SVC_ROOMTYPE, NULL, pPlayer->edict()); // use the magic #1 for "one client"
-			WRITE_SHORT((short)m_flRoomtype); // sequence number
+			MESSAGE_BEGIN(MSG_ONE, SVC_ROOMTYPE, nullptr, pPlayer->edict()); // use the magic #1 for "one client"
+			WRITE_SHORT(static_cast<short>(m_flRoomtype)); // sequence number
 			MESSAGE_END();
 
 			SUB_UseTargets(pPlayer, USE_TOGGLE, 0);
@@ -1241,7 +1233,7 @@ void USENTENCEG_InitLRU(unsigned char* plru, int count)
 		count = CSENTENCE_LRU_MAX;
 
 	for (i = 0; i < count; i++)
-		plru[i] = (unsigned char)i;
+		plru[i] = static_cast<unsigned char>(i);
 
 	// randomize array
 	for (i = 0; i < (count * 4); i++)
@@ -1291,8 +1283,7 @@ int USENTENCEG_PickSequential(int isentenceg, char* szfound, int ipick, int fres
 		if (freset)
 			// reset at end of list
 			return 0;
-		else
-			return count;
+		return count;
 	}
 
 	return ipick + 1;
@@ -1503,7 +1494,7 @@ void SENTENCEG_Init()
 		return;
 
 	// for each line in the file...
-	while (memfgets(pMemFile, fileSize, filePos, buffer, 511) != NULL)
+	while (memfgets(pMemFile, fileSize, filePos, buffer, 511) != nullptr)
 	{
 		// skip whitespace
 		i = 0;
@@ -1572,8 +1563,6 @@ void SENTENCEG_Init()
 			rgsentenceg[isentencegs].count = 1;
 
 			strcpy(szgroup, &(buffer[i]));
-
-			continue;
 		}
 		else
 		{
@@ -1704,10 +1693,10 @@ static char* memfgets(byte* pMemFile, int fileSize, int& filePos, char* pBuffer,
 {
 	// Bullet-proofing
 	if (!pMemFile || !pBuffer)
-		return NULL;
+		return nullptr;
 
 	if (filePos >= fileSize)
-		return NULL;
+		return nullptr;
 
 	int i = filePos;
 	int last = fileSize;
@@ -1745,7 +1734,7 @@ static char* memfgets(byte* pMemFile, int fileSize, int& filePos, char* pBuffer,
 	}
 
 	// No data read, bail
-	return NULL;
+	return nullptr;
 }
 
 
@@ -1770,7 +1759,7 @@ void TEXTURETYPE_Init()
 		return;
 
 	// for each line in the file...
-	while (memfgets(pMemFile, fileSize, filePos, buffer, 511) != NULL && (gcTextures < CTEXTURESMAX))
+	while (memfgets(pMemFile, fileSize, filePos, buffer, 511) != nullptr && (gcTextures < CTEXTURESMAX))
 	{
 		// skip whitespace
 		i = 0;
@@ -2021,17 +2010,17 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 class CSpeaker : public CBaseEntity
 {
 public:
-	void KeyValue(KeyValueData* pkvd);
-	void Spawn(void);
-	void Precache(void);
+	void KeyValue(KeyValueData* pkvd) override;
+	void Spawn(void) override;
+	void Precache(void) override;
 	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT SpeakerThink(void);
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	virtual int ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	int ObjectCaps(void) override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
 	int m_preset; // preset number
 };
@@ -2155,8 +2144,6 @@ void CSpeaker::SpeakerThink(void)
 		CTalkMonster::g_talkWaitTime = gpGlobals->time + 5;
 		// time delay until it's ok to speak: used so that two NPCs don't talk at once
 	}
-
-	return;
 }
 
 

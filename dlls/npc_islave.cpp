@@ -43,33 +43,34 @@ extern DLL_GLOBAL int g_iSkillLevel;
 class CISlave : public CSquadMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int ISoundMask(void);
-	int Classify(void);
-	int IRelationship(CBaseEntity* pTarget);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	BOOL CheckRangeAttack2(float flDot, float flDist);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void SetYawSpeed(void) override;
+	int ISoundMask(void) override;
+	int Classify(void) override;
+	int IRelationship(CBaseEntity* pTarget) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	BOOL CheckRangeAttack2(float flDot, float flDist) override;
 	void CallForHelp(char* szClassname, float flDist, EHANDLE hEnemy, Vector& vecLocation);
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+	                 int bitsDamageType) override;
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-	void DeathSound(void);
-	void PainSound(void);
-	void AlertSound(void);
-	void IdleSound(void);
+	void DeathSound(void) override;
+	void PainSound(void) override;
+	void AlertSound(void) override;
+	void IdleSound(void) override;
 
-	void Killed(entvars_t* pevAttacker, int iGib);
+	void Killed(entvars_t* pevAttacker, int iGib) override;
 
-	void StartTask(Task_t* pTask);
-	Schedule_t* GetSchedule(void);
-	Schedule_t* GetScheduleOfType(int Type);
+	void StartTask(Task_t* pTask) override;
+	Schedule_t* GetSchedule(void) override;
+	Schedule_t* GetScheduleOfType(int Type) override;
 	CUSTOM_SCHEDULES;
 
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	void ClearBeams();
@@ -168,9 +169,9 @@ void CISlave::CallForHelp(char* szClassname, float flDist, EHANDLE hEnemy, Vecto
 	if (FStringNull(pev->netname))
 		return;
 
-	CBaseEntity* pEntity = NULL;
+	CBaseEntity* pEntity = nullptr;
 
-	while ((pEntity = UTIL_FindEntityByString(pEntity, "netname", STRING(pev->netname))) != NULL)
+	while ((pEntity = UTIL_FindEntityByString(pEntity, "netname", STRING(pev->netname))) != nullptr)
 	{
 		float d = (pev->origin - pEntity->pev->origin).Length();
 		if (d < flDist)
@@ -455,11 +456,11 @@ BOOL CISlave::CheckRangeAttack2(float flDot, float flDist)
 		return FALSE;
 	}
 
-	m_hDead = NULL;
+	m_hDead = nullptr;
 	m_iBravery = 0;
 
-	CBaseEntity* pEntity = NULL;
-	while ((pEntity = UTIL_FindEntityByClassname(pEntity, "monster_alien_slave")) != NULL)
+	CBaseEntity* pEntity = nullptr;
+	while ((pEntity = UTIL_FindEntityByClassname(pEntity, "monster_alien_slave")) != nullptr)
 	{
 		TraceResult tr;
 
@@ -602,8 +603,8 @@ void CISlave::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 Task_t tlSlaveAttack1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
 };
 
 Schedule_t slSlaveAttack1[] =
@@ -695,7 +696,7 @@ Schedule_t* CISlave::GetScheduleOfType(int Type)
 	case SCHED_FAIL:
 		if (HasConditions(bits_COND_CAN_MELEE_ATTACK1))
 		{
-			return CSquadMonster::GetScheduleOfType(SCHED_MELEE_ATTACK1);;
+			return CSquadMonster::GetScheduleOfType(SCHED_MELEE_ATTACK1);
 		}
 		break;
 	case SCHED_RANGE_ATTACK1:
@@ -784,7 +785,7 @@ void CISlave::WackBeam(int side, CBaseEntity* pEntity)
 	if (m_iBeams >= ISLAVE_MAX_BEAMS)
 		return;
 
-	if (pEntity == NULL)
+	if (pEntity == nullptr)
 		return;
 
 	m_pBeam[m_iBeams] = CBeam::BeamCreate("sprites/lgtning.spr", 30);
@@ -831,8 +832,8 @@ void CISlave::ZapBeam(int side)
 	m_pBeam[m_iBeams]->SetNoise(20);
 	m_iBeams++;
 
-	pEntity = CBaseEntity::Instance(tr.pHit);
-	if (pEntity != NULL && pEntity->pev->takedamage)
+	pEntity = Instance(tr.pHit);
+	if (pEntity != nullptr && pEntity->pev->takedamage)
 	{
 		pEntity->TraceAttack(pev, gSkillData.slaveDmgZap, vecAim, &tr, DMG_SHOCK);
 	}
@@ -850,7 +851,7 @@ void CISlave::ClearBeams()
 		if (m_pBeam[i])
 		{
 			UTIL_Remove(m_pBeam[i]);
-			m_pBeam[i] = NULL;
+			m_pBeam[i] = nullptr;
 		}
 	}
 	m_iBeams = 0;

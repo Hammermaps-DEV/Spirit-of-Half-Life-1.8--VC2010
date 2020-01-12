@@ -34,7 +34,7 @@ extern CGraph WorldGraph;
 //=========================================================
 BOOL CBaseMonster::FHaveSchedule(void)
 {
-	if (m_pSchedule == NULL)
+	if (m_pSchedule == nullptr)
 	{
 		return FALSE;
 	}
@@ -49,7 +49,7 @@ BOOL CBaseMonster::FHaveSchedule(void)
 void CBaseMonster::ClearSchedule(void)
 {
 	m_iTaskStatus = TASKSTATUS_NEW;
-	m_pSchedule = NULL;
+	m_pSchedule = nullptr;
 	m_iScheduleIndex = 0;
 }
 
@@ -94,9 +94,9 @@ void CBaseMonster::ChangeSchedule(Schedule_t* pNewSchedule)
 	}
 
 #if _DEBUG
-	if ( !ScheduleFromName( pNewSchedule->pName ) )
+	if (!ScheduleFromName(pNewSchedule->pName))
 	{
-		ALERT( at_debug, "Schedule %s not in table!!!\n", pNewSchedule->pName );
+		ALERT(at_debug, "Schedule %s not in table!!!\n", pNewSchedule->pName);
 	}
 #endif
 
@@ -108,7 +108,7 @@ void CBaseMonster::ChangeSchedule(Schedule_t* pNewSchedule)
 
 		if (pTask)
 		{
-			const char* pName = NULL;
+			const char* pName = nullptr;
 
 			if (m_pSchedule)
 			{
@@ -169,7 +169,7 @@ int CBaseMonster::IScheduleFlags(void)
 //=========================================================
 BOOL CBaseMonster::FScheduleValid(void)
 {
-	if (m_pSchedule == NULL)
+	if (m_pSchedule == nullptr)
 	{
 		// schedule is empty, and therefore not valid.
 		return FALSE;
@@ -178,12 +178,12 @@ BOOL CBaseMonster::FScheduleValid(void)
 	if (HasConditions(m_pSchedule->iInterruptMask | bits_COND_SCHEDULE_DONE | bits_COND_TASK_FAILED))
 	{
 #ifdef DEBUG
-		if ( HasConditions ( bits_COND_TASK_FAILED ) && m_failSchedule == SCHED_NONE )
+		if (HasConditions(bits_COND_TASK_FAILED) && m_failSchedule == SCHED_NONE)
 		{
 			// fail! Send a visual indicator.
 			Vector tmp = pev->origin;
 			tmp.z = pev->absmax.z + 16;
-			UTIL_Sparks( tmp );
+			UTIL_Sparks(tmp);
 		}
 #endif // DEBUG
 
@@ -207,7 +207,7 @@ void CBaseMonster::MaintainSchedule(void)
 	// UNDONE: Tune/fix this 10... This is just here so infinite loops are impossible
 	for (i = 0; i < 10; i++)
 	{
-		if (m_pSchedule != NULL && TaskIsComplete())
+		if (m_pSchedule != nullptr && TaskIsComplete())
 		{
 			NextScheduledTask();
 		}
@@ -602,13 +602,13 @@ void CBaseMonster::StartTask(Task_t* pTask)
 		}
 	case TASK_REMEMBER:
 		{
-			Remember((int)pTask->flData);
+			Remember(static_cast<int>(pTask->flData));
 			TaskComplete();
 			break;
 		}
 	case TASK_FORGET:
 		{
-			Forget((int)pTask->flData);
+			Forget(static_cast<int>(pTask->flData));
 			TaskComplete();
 			break;
 		}
@@ -659,21 +659,21 @@ void CBaseMonster::StartTask(Task_t* pTask)
 	case TASK_PLAY_SEQUENCE_FACE_TARGET:
 	case TASK_PLAY_SEQUENCE:
 		{
-			m_IdealActivity = (Activity)(int)pTask->flData;
+			m_IdealActivity = static_cast<Activity>(static_cast<int>(pTask->flData));
 			break;
 		}
 	case TASK_PLAY_ACTIVE_IDLE:
 		{
 			// monsters verify that they have a sequence for the node's activity BEFORE
 			// moving towards the node, so it's ok to just set the activity without checking here.
-			m_IdealActivity = (Activity)WorldGraph.m_pNodes[m_iHintNode].m_sHintActivity;
+			m_IdealActivity = static_cast<Activity>(WorldGraph.m_pNodes[m_iHintNode].m_sHintActivity);
 			break;
 		}
 	case TASK_SET_SCHEDULE:
 		{
 			Schedule_t* pNewSchedule;
 
-			pNewSchedule = GetScheduleOfType((int)pTask->flData);
+			pNewSchedule = GetScheduleOfType(static_cast<int>(pTask->flData));
 
 			if (pNewSchedule)
 			{
@@ -918,7 +918,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 					TaskComplete();
 				else
 				{
-					if (m_pGoalEnt != NULL)
+					if (m_pGoalEnt != nullptr)
 					{
 						Vector vecDest;
 						vecDest = m_pGoalEnt->pev->origin;
@@ -989,13 +989,13 @@ void CBaseMonster::StartTask(Task_t* pTask)
 		}
 	case TASK_SET_ACTIVITY:
 		{
-			m_IdealActivity = (Activity)(int)pTask->flData;
+			m_IdealActivity = static_cast<Activity>(static_cast<int>(pTask->flData));
 			TaskComplete();
 			break;
 		}
 	case TASK_GET_PATH_TO_ENEMY_LKP:
 		{
-			if (BuildRoute(m_vecEnemyLKP, bits_MF_TO_LOCATION, NULL))
+			if (BuildRoute(m_vecEnemyLKP, bits_MF_TO_LOCATION, nullptr))
 			{
 				TaskComplete();
 			}
@@ -1015,7 +1015,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 		{
 			CBaseEntity* pEnemy = m_hEnemy;
 
-			if (pEnemy == NULL)
+			if (pEnemy == nullptr)
 			{
 				TaskFail();
 				return;
@@ -1041,7 +1041,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 	case TASK_GET_PATH_TO_ENEMY_CORPSE:
 		{
 			UTIL_MakeVectors(pev->angles);
-			if (BuildRoute(m_vecEnemyLKP - gpGlobals->v_forward * 64, bits_MF_TO_LOCATION, NULL))
+			if (BuildRoute(m_vecEnemyLKP - gpGlobals->v_forward * 64, bits_MF_TO_LOCATION, nullptr))
 			{
 				TaskComplete();
 			}
@@ -1054,7 +1054,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 		break;
 	case TASK_GET_PATH_TO_SPOT:
 		{
-			CBaseEntity* pPlayer = UTIL_FindEntityByClassname(NULL, "player");
+			CBaseEntity* pPlayer = UTIL_FindEntityByClassname(nullptr, "player");
 			if (BuildRoute(m_vecMoveGoal, bits_MF_TO_LOCATION, pPlayer))
 			{
 				TaskComplete();
@@ -1086,7 +1086,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 	case TASK_GET_PATH_TO_SCRIPT:
 		{
 			RouteClear();
-			if (m_pCine != NULL && MoveToLocation(m_movementActivity, 1, m_pCine->pev->origin))
+			if (m_pCine != nullptr && MoveToLocation(m_movementActivity, 1, m_pCine->pev->origin))
 			{
 				TaskComplete();
 			}
@@ -1296,7 +1296,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 			}
 			else if (!m_pCine->IsAction() && m_pCine->m_iszIdle)
 			{
-				m_pCine->StartSequence((CBaseMonster*)this, m_pCine->m_iszIdle, FALSE);
+				m_pCine->StartSequence(static_cast<CBaseMonster*>(this), m_pCine->m_iszIdle, FALSE);
 				if (FStrEq(STRING(m_pCine->m_iszIdle), STRING(m_pCine->m_iszPlay)))
 				{
 					pev->framerate = 0;
@@ -1345,7 +1345,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 			}
 			else
 			{
-				m_pCine->StartSequence((CBaseMonster*)this, m_pCine->m_iszPlay, TRUE);
+				m_pCine->StartSequence(static_cast<CBaseMonster*>(this), m_pCine->m_iszPlay, TRUE);
 				if (m_fSequenceFinished)
 					ClearSchedule();
 				pev->framerate = 1.0;
@@ -1369,7 +1369,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 		}
 	case TASK_PLANT_ON_SCRIPT:
 		{
-			if (m_pCine != NULL)
+			if (m_pCine != nullptr)
 			{
 				// Plant on script
 				// LRC - if it's a teleport script, do the turn too
@@ -1394,7 +1394,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 		}
 	case TASK_FACE_SCRIPT:
 		{
-			if (m_pCine != NULL && m_pCine->m_fMoveTo != 0) // movetype "no move" makes us ignore turntype
+			if (m_pCine != nullptr && m_pCine->m_fMoveTo != 0) // movetype "no move" makes us ignore turntype
 			{
 				switch (m_pCine->m_fTurnType)
 				{
@@ -1419,13 +1419,13 @@ void CBaseMonster::StartTask(Task_t* pTask)
 		}
 	case TASK_SUGGEST_STATE:
 		{
-			m_IdealMonsterState = (MONSTERSTATE)(int)pTask->flData;
+			m_IdealMonsterState = static_cast<MONSTERSTATE>(static_cast<int>(pTask->flData));
 			TaskComplete();
 			break;
 		}
 
 	case TASK_SET_FAIL_SCHEDULE:
-		m_failSchedule = (int)pTask->flData;
+		m_failSchedule = static_cast<int>(pTask->flData);
 		TaskComplete();
 		break;
 
@@ -1436,7 +1436,7 @@ void CBaseMonster::StartTask(Task_t* pTask)
 
 	default:
 		{
-			ALERT(at_aiconsole, "No StartTask entry for %d\n", (SHARED_TASKS)pTask->iTask);
+			ALERT(at_aiconsole, "No StartTask entry for %d\n", static_cast<SHARED_TASKS>(pTask->iTask));
 			break;
 		}
 	}
@@ -1451,12 +1451,9 @@ Task_t* CBaseMonster::GetTask(void)
 	if (m_iScheduleIndex < 0 || m_iScheduleIndex >= m_pSchedule->cTasks)
 	{
 		// m_iScheduleIndex is not within valid range for the monster's current schedule.
-		return NULL;
+		return nullptr;
 	}
-	else
-	{
-		return &m_pSchedule->pTasklist[m_iScheduleIndex];
-	}
+	return &m_pSchedule->pTasklist[m_iScheduleIndex];
 }
 
 //=========================================================
@@ -1485,16 +1482,13 @@ Schedule_t* CBaseMonster::GetSchedule(void)
 			{
 				return GetScheduleOfType(SCHED_ALERT_FACE);
 			}
-			else if (FRouteClear())
+			if (FRouteClear())
 			{
 				// no valid route!
 				return GetScheduleOfType(SCHED_IDLE_STAND);
 			}
-			else
-			{
-				// valid route. Get moving
-				return GetScheduleOfType(SCHED_IDLE_WALK);
-			}
+			// valid route. Get moving
+			return GetScheduleOfType(SCHED_IDLE_WALK);
 			break;
 		}
 	case MONSTERSTATE_ALERT:
@@ -1510,20 +1504,14 @@ Schedule_t* CBaseMonster::GetSchedule(void)
 				{
 					return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ORIGIN);
 				}
-				else
-				{
-					return GetScheduleOfType(SCHED_ALERT_SMALL_FLINCH);
-				}
+				return GetScheduleOfType(SCHED_ALERT_SMALL_FLINCH);
 			}
-
-			else if (HasConditions(bits_COND_HEAR_SOUND))
+			if (HasConditions(bits_COND_HEAR_SOUND))
 			{
 				return GetScheduleOfType(SCHED_ALERT_FACE);
 			}
-			else
-			{
-				return GetScheduleOfType(SCHED_ALERT_STAND);
-			}
+			return GetScheduleOfType(SCHED_ALERT_STAND);
+
 			break;
 		}
 	case MONSTERSTATE_COMBAT:
@@ -1531,29 +1519,26 @@ Schedule_t* CBaseMonster::GetSchedule(void)
 			if (HasConditions(bits_COND_ENEMY_DEAD))
 			{
 				// clear the current (dead) enemy and try to find another.
-				m_hEnemy = NULL;
+				m_hEnemy = nullptr;
 
 				if (GetEnemy())
 				{
 					ClearConditions(bits_COND_ENEMY_DEAD);
 					return GetSchedule();
 				}
-				else
-				{
-					SetState(MONSTERSTATE_ALERT);
-					return GetSchedule();
-				}
+				SetState(MONSTERSTATE_ALERT);
+				return GetSchedule();
 			}
 
 			if (HasConditions(bits_COND_NEW_ENEMY))
 			{
 				return GetScheduleOfType(SCHED_WAKE_ANGRY);
 			}
-			else if (HasConditions(bits_COND_LIGHT_DAMAGE) && !HasMemory(bits_MEMORY_FLINCHED))
+			if (HasConditions(bits_COND_LIGHT_DAMAGE) && !HasMemory(bits_MEMORY_FLINCHED))
 			{
 				return GetScheduleOfType(SCHED_SMALL_FLINCH);
 			}
-			else if (!HasConditions(bits_COND_SEE_ENEMY))
+			if (!HasConditions(bits_COND_SEE_ENEMY))
 			{
 				// we can't see the enemy
 				if (!HasConditions(bits_COND_ENEMY_OCCLUDED))
@@ -1562,46 +1547,37 @@ Schedule_t* CBaseMonster::GetSchedule(void)
 					// turn to face enemy
 					return GetScheduleOfType(SCHED_COMBAT_FACE);
 				}
-				else
-				{
-					// chase!
-					return GetScheduleOfType(SCHED_CHASE_ENEMY);
-				}
+				// chase!
+				return GetScheduleOfType(SCHED_CHASE_ENEMY);
 			}
-			else
+			// we can see the enemy
+			if (HasConditions(bits_COND_CAN_RANGE_ATTACK1))
 			{
-				// we can see the enemy
-				if (HasConditions(bits_COND_CAN_RANGE_ATTACK1))
-				{
-					return GetScheduleOfType(SCHED_RANGE_ATTACK1);
-				}
-				if (HasConditions(bits_COND_CAN_RANGE_ATTACK2))
-				{
-					return GetScheduleOfType(SCHED_RANGE_ATTACK2);
-				}
-				if (HasConditions(bits_COND_CAN_MELEE_ATTACK1))
-				{
-					return GetScheduleOfType(SCHED_MELEE_ATTACK1);
-				}
-				if (HasConditions(bits_COND_CAN_MELEE_ATTACK2))
-				{
-					return GetScheduleOfType(SCHED_MELEE_ATTACK2);
-				}
-				if (!HasConditions(bits_COND_CAN_RANGE_ATTACK1 | bits_COND_CAN_MELEE_ATTACK1))
-				{
-					// if we can see enemy but can't use either attack type, we must need to get closer to enemy
-					return GetScheduleOfType(SCHED_CHASE_ENEMY);
-				}
-				else if (!FacingIdeal())
-				{
-					//turn
-					return GetScheduleOfType(SCHED_COMBAT_FACE);
-				}
-				else
-				{
-					ALERT(at_aiconsole, "No suitable combat schedule!\n");
-				}
+				return GetScheduleOfType(SCHED_RANGE_ATTACK1);
 			}
+			if (HasConditions(bits_COND_CAN_RANGE_ATTACK2))
+			{
+				return GetScheduleOfType(SCHED_RANGE_ATTACK2);
+			}
+			if (HasConditions(bits_COND_CAN_MELEE_ATTACK1))
+			{
+				return GetScheduleOfType(SCHED_MELEE_ATTACK1);
+			}
+			if (HasConditions(bits_COND_CAN_MELEE_ATTACK2))
+			{
+				return GetScheduleOfType(SCHED_MELEE_ATTACK2);
+			}
+			if (!HasConditions(bits_COND_CAN_RANGE_ATTACK1 | bits_COND_CAN_MELEE_ATTACK1))
+			{
+				// if we can see enemy but can't use either attack type, we must need to get closer to enemy
+				return GetScheduleOfType(SCHED_CHASE_ENEMY);
+			}
+			if (!FacingIdeal())
+			{
+				//turn
+				return GetScheduleOfType(SCHED_COMBAT_FACE);
+			}
+			ALERT(at_aiconsole, "No suitable combat schedule!\n");
 			break;
 		}
 	case MONSTERSTATE_DEAD:

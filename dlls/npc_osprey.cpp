@@ -39,16 +39,16 @@ typedef struct
 class COsprey : public CBaseMonster
 {
 public:
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
-	int ObjectCaps(void) { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps(void) override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	void Spawn(void);
-	void Precache(void);
-	int Classify(void) { return CLASS_MACHINE; };
-	int BloodColor(void) { return DONT_BLEED; }
-	void Killed(entvars_t* pevAttacker, int iGib);
+	void Spawn(void) override;
+	void Precache(void) override;
+	int Classify(void) override { return CLASS_MACHINE; };
+	int BloodColor(void) override { return DONT_BLEED; }
+	void Killed(entvars_t* pevAttacker, int iGib) override;
 
 	void UpdateGoal(void);
 	BOOL HasDead(void);
@@ -64,7 +64,8 @@ public:
 	void EXPORT CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	// int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType );
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
+	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+	                 int bitsDamageType) override;
 	void ShowDamage(void);
 
 	CBaseEntity* m_pGoalEnt;
@@ -214,10 +215,10 @@ void COsprey::CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 
 void COsprey::FindAllThink(void)
 {
-	CBaseEntity* pEntity = NULL;
+	CBaseEntity* pEntity = nullptr;
 
 	m_iUnits = 0;
-	while (m_iUnits < MAX_CARRY && (pEntity = UTIL_FindEntityByClassname(pEntity, "monster_human_grunt")) != NULL)
+	while (m_iUnits < MAX_CARRY && (pEntity = UTIL_FindEntityByClassname(pEntity, "monster_human_grunt")) != nullptr)
 	{
 		if (pEntity->IsAlive())
 		{
@@ -280,10 +281,7 @@ BOOL COsprey::HasDead()
 		{
 			return TRUE;
 		}
-		else
-		{
-			m_vecOrigin[i] = m_hGrunt[i]->pev->origin; // send them to where they died
-		}
+		m_vecOrigin[i] = m_hGrunt[i]->pev->origin; // send them to where they died
 	}
 	return FALSE;
 }
@@ -297,7 +295,7 @@ CBaseMonster* COsprey::MakeGrunt(Vector vecSrc)
 	TraceResult tr;
 	UTIL_TraceLine(vecSrc, vecSrc + Vector(0, 0, -4096.0), dont_ignore_monsters, ENT(pev), &tr);
 	if (tr.pHit && Instance(tr.pHit)->pev->solid != SOLID_BSP)
-		return NULL;
+		return nullptr;
 
 	for (int i = 0; i < m_iUnits; i++)
 	{
@@ -327,7 +325,7 @@ CBaseMonster* COsprey::MakeGrunt(Vector vecSrc)
 		}
 	}
 	// ALERT( at_console, "none dead\n");
-	return NULL;
+	return nullptr;
 }
 
 
@@ -402,9 +400,9 @@ void COsprey::FlyThink(void)
 	StudioFrameAdvance();
 	SetNextThink(0.1);
 
-	if (m_pGoalEnt == NULL && !FStringNull(pev->target)) // this monster has a target
+	if (m_pGoalEnt == nullptr && !FStringNull(pev->target)) // this monster has a target
 	{
-		m_pGoalEnt = UTIL_FindEntityByTargetname(NULL, STRING(pev->target));
+		m_pGoalEnt = UTIL_FindEntityByTargetname(nullptr, STRING(pev->target));
 		UpdateGoal();
 	}
 
@@ -417,7 +415,7 @@ void COsprey::FlyThink(void)
 		int loopbreaker = 100; //LRC - <slap> don't loop indefinitely!
 		do
 		{
-			m_pGoalEnt = UTIL_FindEntityByTargetname(NULL, STRING(m_pGoalEnt->pev->target));
+			m_pGoalEnt = UTIL_FindEntityByTargetname(nullptr, STRING(m_pGoalEnt->pev->target));
 			loopbreaker--; //LRC
 		}
 		while (m_pGoalEnt->pev->speed < 400 && !HasDead() && loopbreaker > 0);
@@ -476,16 +474,16 @@ void COsprey::Flight()
 	}
 	else
 	{
-		CBaseEntity* pPlayer = NULL;
+		CBaseEntity* pPlayer = nullptr;
 
-		pPlayer = UTIL_FindEntityByClassname(NULL, "player");
+		pPlayer = UTIL_FindEntityByClassname(nullptr, "player");
 		// UNDONE: this needs to send different sounds to every player for multiplayer.	
 		if (pPlayer)
 		{
 			float pitch = DotProduct(m_velocity - pPlayer->pev->velocity,
 			                         (pPlayer->pev->origin - pev->origin).Normalize());
 
-			pitch = (int)(100 + pitch / 75.0);
+			pitch = static_cast<int>(100 + pitch / 75.0);
 
 			if (pitch > 250)
 				pitch = 250;
@@ -641,7 +639,6 @@ void COsprey::DyingThink(void)
 		// don't stop it we touch a entity
 		pev->flags &= ~FL_ONGROUND;
 		SetNextThink(0.2);
-		return;
 	}
 	else
 	{
@@ -794,8 +791,7 @@ void COsprey::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 	{
 		if (m_flRightHealth < 0)
 			return;
-		else
-			m_flRightHealth -= flDamage;
+		m_flRightHealth -= flDamage;
 		m_iDoLeftSmokePuff = 3 + (flDamage / 5.0);
 	}
 
@@ -803,8 +799,7 @@ void COsprey::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 	{
 		if (m_flLeftHealth < 0)
 			return;
-		else
-			m_flLeftHealth -= flDamage;
+		m_flLeftHealth -= flDamage;
 		m_iDoRightSmokePuff = 3 + (flDamage / 5.0);
 	}
 

@@ -30,12 +30,12 @@
 
 Task_t tlHCRangeAttack1[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_WAIT_RANDOM, (float)0.5},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_WAIT_RANDOM, static_cast<float>(0.5)},
 };
 
 Schedule_t slHCRangeAttack1[] =
@@ -52,10 +52,10 @@ Schedule_t slHCRangeAttack1[] =
 
 Task_t tlHCRangeAttack1Fast[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
 };
 
 Schedule_t slHCRangeAttack1Fast[] =
@@ -73,29 +73,29 @@ Schedule_t slHCRangeAttack1Fast[] =
 class CHeadCrab : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void RunTask(Task_t* pTask);
-	void StartTask(Task_t* pTask);
-	void SetYawSpeed(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void RunTask(Task_t* pTask) override;
+	void StartTask(Task_t* pTask) override;
+	void SetYawSpeed(void) override;
 	void EXPORT LeapTouch(CBaseEntity* pOther);
-	Vector Center(void);
-	Vector BodyTarget(const Vector& posSrc);
-	void PainSound(void);
-	void DeathSound(void);
-	void IdleSound(void);
-	void AlertSound(void);
-	void PrescheduleThink(void);
-	int Classify(void);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	BOOL CheckRangeAttack2(float flDot, float flDist);
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	Vector Center(void) override;
+	Vector BodyTarget(const Vector& posSrc) override;
+	void PainSound(void) override;
+	void DeathSound(void) override;
+	void IdleSound(void) override;
+	void AlertSound(void) override;
+	void PrescheduleThink(void) override;
+	int Classify(void) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	BOOL CheckRangeAttack2(float flDot, float flDist) override;
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	virtual float GetDamageAmount(void) { return gSkillData.headcrabDmgBite; }
 	virtual int GetVoicePitch(void) { return 100; }
 	virtual float GetSoundVolue(void) { return 1.0; }
-	Schedule_t* GetScheduleOfType(int Type);
+	Schedule_t* GetScheduleOfType(int Type) override;
 
 	CUSTOM_SCHEDULES;
 
@@ -501,14 +501,14 @@ Schedule_t* CHeadCrab::GetScheduleOfType(int Type)
 class CBabyCrab : public CHeadCrab
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	float GetDamageAmount(void) { return gSkillData.headcrabDmgBite * 0.3; }
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	Schedule_t* GetScheduleOfType(int Type);
-	virtual int GetVoicePitch(void) { return PITCH_NORM + RANDOM_LONG(40, 50); }
-	virtual float GetSoundVolue(void) { return 0.8; }
+	void Spawn(void) override;
+	void Precache(void) override;
+	void SetYawSpeed(void) override;
+	float GetDamageAmount(void) override { return gSkillData.headcrabDmgBite * 0.3; }
+	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	Schedule_t* GetScheduleOfType(int Type) override;
+	int GetVoicePitch(void) override { return PITCH_NORM + RANDOM_LONG(40, 50); }
+	float GetSoundVolue(void) override { return 0.8; }
 };
 
 LINK_ENTITY_TO_CLASS(monster_babycrab, CBabyCrab);

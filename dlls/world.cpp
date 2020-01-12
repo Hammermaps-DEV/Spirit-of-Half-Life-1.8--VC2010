@@ -139,11 +139,11 @@ void CDecal::TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	WRITE_COORD(pev->origin.x);
 	WRITE_COORD(pev->origin.y);
 	WRITE_COORD(pev->origin.z);
-	WRITE_SHORT((int)pev->skin);
-	entityIndex = (short)ENTINDEX(trace.pHit);
+	WRITE_SHORT(static_cast<int>(pev->skin));
+	entityIndex = static_cast<short>(ENTINDEX(trace.pHit));
 	WRITE_SHORT(entityIndex);
 	if (entityIndex)
-		WRITE_SHORT((int)VARS(trace.pHit)->modelindex);
+		WRITE_SHORT(static_cast<int>(VARS(trace.pHit)->modelindex));
 	MESSAGE_END();
 
 	SetThink(&CDecal :: SUB_Remove);
@@ -157,13 +157,13 @@ void CDecal::StaticDecal()
 
 	UTIL_TraceLine(pev->origin - Vector(5, 5, 5), pev->origin + Vector(5, 5, 5), ignore_monsters, ENT(pev), &trace);
 
-	int entityIndex = (short)ENTINDEX(trace.pHit);
+	int entityIndex = static_cast<short>(ENTINDEX(trace.pHit));
 	if (entityIndex)
-		modelIndex = (int)VARS(trace.pHit)->modelindex;
+		modelIndex = static_cast<int>(VARS(trace.pHit)->modelindex);
 	else
 		modelIndex = 0;
 
-	g_engfuncs.pfnStaticDecal(pev->origin, (int)pev->skin, entityIndex, modelIndex);
+	g_engfuncs.pfnStaticDecal(pev->origin, static_cast<int>(pev->skin), entityIndex, modelIndex);
 
 	SUB_Remove();
 }
@@ -186,7 +186,7 @@ void CDecal::KeyValue(KeyValueData* pkvd)
 // Body queue class here.... It's really just CBaseEntity
 class CCorpse : public CBaseEntity
 {
-	virtual int ObjectCaps() { return FCAP_DONT_SAVE; }
+	int ObjectCaps() override { return FCAP_DONT_SAVE; }
 };
 
 LINK_ENTITY_TO_CLASS(bodyque, CCorpse);
@@ -250,14 +250,14 @@ CGlobalState::CGlobalState()
 
 void CGlobalState::Reset()
 {
-	m_pList = NULL;
+	m_pList = nullptr;
 	m_listCount = 0;
 }
 
 globalentity_t* CGlobalState::Find(string_t globalname)
 {
 	if (!globalname)
-		return NULL;
+		return nullptr;
 
 	const char* pEntityName = STRING(globalname);
 
@@ -295,7 +295,7 @@ void CGlobalState::EntityAdd(string_t globalname, string_t mapName, GLOBALESTATE
 {
 	ASSERT(!Find(globalname));
 
-	globalentity_t* pNewEntity = (globalentity_t*)calloc(sizeof(globalentity_t), 1);
+	globalentity_t* pNewEntity = static_cast<globalentity_t*>(calloc(sizeof(globalentity_t), 1));
 	ASSERT(pNewEntity != NULL);
 	pNewEntity->pNext = m_pList;
 	m_pList = pNewEntity;
@@ -449,11 +449,11 @@ void CWorld::Precache()
 {
 	//LRC - set up the world lists
 	g_pWorld = this;
-	m_pAssistLink = NULL;
-	m_pFirstAlias = NULL;
+	m_pAssistLink = nullptr;
+	m_pFirstAlias = nullptr;
 	//	ALERT(at_console, "Clearing AssistList\n");
 
-	g_pLastSpawn = NULL;
+	g_pLastSpawn = nullptr;
 
 #if 1
 	CVAR_SET_STRING("sv_gravity", "800"); // 67ft/sec
@@ -490,7 +490,7 @@ void CWorld::Precache()
 
 	///!!!LATER - do we want a sound ent in deathmatch? (sjb)
 	//pSoundEnt = CBaseEntity::Create( "soundent", g_vecZero, g_vecZero, edict() );
-	pSoundEnt = GetClassPtr((CSoundEnt*)NULL);
+	pSoundEnt = GetClassPtr(static_cast<CSoundEnt*>(nullptr));
 	pSoundEnt->Spawn();
 
 	if (!pSoundEnt)
@@ -594,7 +594,7 @@ void CWorld::Precache()
 	if (pev->netname)
 	{
 		ALERT(at_aiconsole, "Chapter title: %s\n", STRING(pev->netname));
-		CBaseEntity* pEntity = Create("env_message", g_vecZero, g_vecZero, NULL);
+		CBaseEntity* pEntity = Create("env_message", g_vecZero, g_vecZero, nullptr);
 		if (pEntity)
 		{
 			pEntity->SetThink(&CWorld::SUB_CallUseToggle);

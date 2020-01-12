@@ -78,7 +78,7 @@ int CShotgun::AddToPlayer(CBasePlayer* pPlayer)
 {
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, nullptr, pPlayer->pev);
 		WRITE_BYTE(m_iId);
 		MESSAGE_END();
 		return TRUE;
@@ -91,7 +91,7 @@ int CShotgun::GetItemInfo(ItemInfo* p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "buckshot";
 	p->iMaxAmmo1 = MAX_CARRY_BUCKSHOT;
-	p->pszAmmo2 = NULL;
+	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = MAX_AMMO_NOCLIP;
 	p->iMaxClip = MAX_CLIP_SHOTGUN;
 	p->iSlot = SLOT_SHOTGUN;
@@ -150,7 +150,7 @@ void CShotgun::PrimaryAttack()
 		flags = 0;
 #endif
 
-		m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
+		m_pPlayer->pev->effects = static_cast<int>(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 
 		Vector vecSrc = m_pPlayer->GetGunPosition();
 		Vector vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_5DEGREES);
@@ -251,7 +251,7 @@ void CShotgun::SecondaryAttack()
 		flags = 0;
 #endif
 
-		m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
+		m_pPlayer->pev->effects = static_cast<int>(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 
 		// player "shoot" animation
 		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
@@ -451,20 +451,20 @@ void CShotgun::WeaponIdle()
 
 class CShotgunAmmo : public CBasePlayerAmmo
 {
-	void Spawn(void)
+	void Spawn(void) override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_shotbox.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
-	void Precache(void)
+	void Precache(void) override
 	{
 		PRECACHE_MODEL("models/w_shotbox.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther)
+	BOOL AddAmmo(CBaseEntity* pOther) override
 	{
 		if (pOther->GiveAmmo(AMMO_BUCKSHOTBOX_GIVE, "buckshot", MAX_CARRY_BUCKSHOT) != -1)
 		{

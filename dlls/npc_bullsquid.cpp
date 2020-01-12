@@ -60,14 +60,14 @@ enum
 class CSquidSpit : public CBaseEntity
 {
 public:
-	void Spawn(void);
+	void Spawn(void) override;
 
 	static void Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity);
-	void Touch(CBaseEntity* pOther);
+	void Touch(CBaseEntity* pOther) override;
 	void EXPORT Animate(void);
 
-	virtual int Save(CSave& save);
-	virtual int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
 	int m_maxFrame;
@@ -97,7 +97,7 @@ void CSquidSpit::Spawn(void)
 
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
 
-	m_maxFrame = (float)MODEL_FRAMES(pev->modelindex) - 1;
+	m_maxFrame = static_cast<float>(MODEL_FRAMES(pev->modelindex)) - 1;
 }
 
 void CSquidSpit::Animate(void)
@@ -115,7 +115,7 @@ void CSquidSpit::Animate(void)
 
 void CSquidSpit::Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity)
 {
-	CSquidSpit* pSpit = GetClassPtr((CSquidSpit*)NULL);
+	CSquidSpit* pSpit = GetClassPtr(static_cast<CSquidSpit*>(nullptr));
 	pSpit->Spawn();
 
 	UTIL_SetOrigin(pSpit, vecStart);
@@ -189,33 +189,33 @@ void CSquidSpit::Touch(CBaseEntity* pOther)
 class CBullsquid : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int ISoundMask(void);
-	int Classify(void);
-	void HandleAnimEvent(MonsterEvent_t* pEvent);
-	void IdleSound(void);
-	void PainSound(void);
-	void DeathSound(void);
-	void AlertSound(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void SetYawSpeed(void) override;
+	int ISoundMask(void) override;
+	int Classify(void) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	void IdleSound(void) override;
+	void PainSound(void) override;
+	void DeathSound(void) override;
+	void AlertSound(void) override;
 	void AttackSound(void);
-	void StartTask(Task_t* pTask);
-	void RunTask(Task_t* pTask);
-	BOOL CheckMeleeAttack1(float flDot, float flDist);
-	BOOL CheckMeleeAttack2(float flDot, float flDist);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	void RunAI(void);
-	BOOL FValidateHintType(short sHint);
-	Schedule_t* GetSchedule(void);
-	Schedule_t* GetScheduleOfType(int Type);
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	int IRelationship(CBaseEntity* pTarget);
-	int IgnoreConditions(void);
-	MONSTERSTATE GetIdealState(void);
+	void StartTask(Task_t* pTask) override;
+	void RunTask(Task_t* pTask) override;
+	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
+	BOOL CheckMeleeAttack2(float flDot, float flDist) override;
+	BOOL CheckRangeAttack1(float flDot, float flDist) override;
+	void RunAI(void) override;
+	BOOL FValidateHintType(short sHint) override;
+	Schedule_t* GetSchedule(void) override;
+	Schedule_t* GetScheduleOfType(int Type) override;
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+	int IRelationship(CBaseEntity* pTarget) override;
+	int IgnoreConditions(void) override;
+	MONSTERSTATE GetIdealState(void) override;
 
-	int Save(CSave& save);
-	int Restore(CRestore& restore);
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
 
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
@@ -832,9 +832,9 @@ void CBullsquid::RunAI(void)
 Task_t tlSquidRangeAttack1[] =
 {
 	{TASK_STOP_MOVING, 0},
-	{TASK_FACE_IDEAL, (float)0},
-	{TASK_RANGE_ATTACK1, (float)0},
-	{TASK_SET_ACTIVITY, (float)ACT_IDLE},
+	{TASK_FACE_IDEAL, static_cast<float>(0)},
+	{TASK_RANGE_ATTACK1, static_cast<float>(0)},
+	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
 };
 
 Schedule_t slSquidRangeAttack1[] =
@@ -855,10 +855,11 @@ Schedule_t slSquidRangeAttack1[] =
 // Chase enemy schedule
 Task_t tlSquidChaseEnemy1[] =
 {
-	{TASK_SET_FAIL_SCHEDULE, (float)SCHED_RANGE_ATTACK1}, // !!!OEM - this will stop nasty squid oscillation.
-	{TASK_GET_PATH_TO_ENEMY, (float)0},
-	{TASK_RUN_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
+	{TASK_SET_FAIL_SCHEDULE, static_cast<float>(SCHED_RANGE_ATTACK1)},
+	// !!!OEM - this will stop nasty squid oscillation.
+	{TASK_GET_PATH_TO_ENEMY, static_cast<float>(0)},
+	{TASK_RUN_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
 };
 
 Schedule_t slSquidChaseEnemy[] =
@@ -883,10 +884,10 @@ Schedule_t slSquidChaseEnemy[] =
 
 Task_t tlSquidHurtHop[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_SOUND_WAKE, (float)0},
-	{TASK_SQUID_HOPTURN, (float)0},
-	{TASK_FACE_ENEMY, (float)0}, // in case squid didn't turn all the way in the air.
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_SOUND_WAKE, static_cast<float>(0)},
+	{TASK_SQUID_HOPTURN, static_cast<float>(0)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)}, // in case squid didn't turn all the way in the air.
 };
 
 Schedule_t slSquidHurtHop[] =
@@ -902,10 +903,10 @@ Schedule_t slSquidHurtHop[] =
 
 Task_t tlSquidSeeCrab[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_SOUND_WAKE, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_EXCITED},
-	{TASK_FACE_ENEMY, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_SOUND_WAKE, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_EXCITED)},
+	{TASK_FACE_ENEMY, static_cast<float>(0)},
 };
 
 Schedule_t slSquidSeeCrab[] =
@@ -923,20 +924,20 @@ Schedule_t slSquidSeeCrab[] =
 // squid walks to something tasty and eats it.
 Task_t tlSquidEat[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_EAT, (float)10}, // this is in case the squid can't get to the food
-	{TASK_STORE_LASTPOSITION, (float)0},
-	{TASK_GET_PATH_TO_BESTSCENT, (float)0},
-	{TASK_WALK_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_EAT},
-	{TASK_PLAY_SEQUENCE, (float)ACT_EAT},
-	{TASK_PLAY_SEQUENCE, (float)ACT_EAT},
-	{TASK_EAT, (float)50},
-	{TASK_GET_PATH_TO_LASTPOSITION, (float)0},
-	{TASK_WALK_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_CLEAR_LASTPOSITION, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_EAT, static_cast<float>(10)}, // this is in case the squid can't get to the food
+	{TASK_STORE_LASTPOSITION, static_cast<float>(0)},
+	{TASK_GET_PATH_TO_BESTSCENT, static_cast<float>(0)},
+	{TASK_WALK_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_EAT)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_EAT)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_EAT)},
+	{TASK_EAT, static_cast<float>(50)},
+	{TASK_GET_PATH_TO_LASTPOSITION, static_cast<float>(0)},
+	{TASK_WALK_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_CLEAR_LASTPOSITION, static_cast<float>(0)},
 };
 
 Schedule_t slSquidEat[] =
@@ -960,21 +961,21 @@ Schedule_t slSquidEat[] =
 // the squid. This schedule plays a sniff animation before going to the source of food.
 Task_t tlSquidSniffAndEat[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_EAT, (float)10}, // this is in case the squid can't get to the food
-	{TASK_PLAY_SEQUENCE, (float)ACT_DETECT_SCENT},
-	{TASK_STORE_LASTPOSITION, (float)0},
-	{TASK_GET_PATH_TO_BESTSCENT, (float)0},
-	{TASK_WALK_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_EAT},
-	{TASK_PLAY_SEQUENCE, (float)ACT_EAT},
-	{TASK_PLAY_SEQUENCE, (float)ACT_EAT},
-	{TASK_EAT, (float)50},
-	{TASK_GET_PATH_TO_LASTPOSITION, (float)0},
-	{TASK_WALK_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_CLEAR_LASTPOSITION, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_EAT, static_cast<float>(10)}, // this is in case the squid can't get to the food
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_DETECT_SCENT)},
+	{TASK_STORE_LASTPOSITION, static_cast<float>(0)},
+	{TASK_GET_PATH_TO_BESTSCENT, static_cast<float>(0)},
+	{TASK_WALK_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_EAT)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_EAT)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_EAT)},
+	{TASK_EAT, static_cast<float>(50)},
+	{TASK_GET_PATH_TO_LASTPOSITION, static_cast<float>(0)},
+	{TASK_WALK_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_CLEAR_LASTPOSITION, static_cast<float>(0)},
 };
 
 Schedule_t slSquidSniffAndEat[] =
@@ -997,18 +998,18 @@ Schedule_t slSquidSniffAndEat[] =
 // squid does this to stinky things. 
 Task_t tlSquidWallow[] =
 {
-	{TASK_STOP_MOVING, (float)0},
-	{TASK_EAT, (float)10}, // this is in case the squid can't get to the stinkiness
-	{TASK_STORE_LASTPOSITION, (float)0},
-	{TASK_GET_PATH_TO_BESTSCENT, (float)0},
-	{TASK_WALK_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_PLAY_SEQUENCE, (float)ACT_INSPECT_FLOOR},
-	{TASK_EAT, (float)50}, // keeps squid from eating or sniffing anything else for a while.
-	{TASK_GET_PATH_TO_LASTPOSITION, (float)0},
-	{TASK_WALK_PATH, (float)0},
-	{TASK_WAIT_FOR_MOVEMENT, (float)0},
-	{TASK_CLEAR_LASTPOSITION, (float)0},
+	{TASK_STOP_MOVING, static_cast<float>(0)},
+	{TASK_EAT, static_cast<float>(10)}, // this is in case the squid can't get to the stinkiness
+	{TASK_STORE_LASTPOSITION, static_cast<float>(0)},
+	{TASK_GET_PATH_TO_BESTSCENT, static_cast<float>(0)},
+	{TASK_WALK_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_PLAY_SEQUENCE, static_cast<float>(ACT_INSPECT_FLOOR)},
+	{TASK_EAT, static_cast<float>(50)}, // keeps squid from eating or sniffing anything else for a while.
+	{TASK_GET_PATH_TO_LASTPOSITION, static_cast<float>(0)},
+	{TASK_WALK_PATH, static_cast<float>(0)},
+	{TASK_WAIT_FOR_MOVEMENT, static_cast<float>(0)},
+	{TASK_CLEAR_LASTPOSITION, static_cast<float>(0)},
 };
 
 Schedule_t slSquidWallow[] =
@@ -1100,10 +1101,7 @@ Schedule_t* CBullsquid::GetSchedule(void)
 					m_fCanThreatDisplay = FALSE; // only do the headcrab dance once per lifetime.
 					return GetScheduleOfType(SCHED_SQUID_SEECRAB);
 				}
-				else
-				{
-					return GetScheduleOfType(SCHED_WAKE_ANGRY);
-				}
+				return GetScheduleOfType(SCHED_WAKE_ANGRY);
 			}
 
 			if (HasConditions(bits_COND_SMELL_FOOD))
@@ -1287,7 +1285,7 @@ MONSTERSTATE CBullsquid::GetIdealState(void)
 				FClassnameIs(m_hEnemy->pev, "monster_headcrab"))
 			{
 				// if the squid has a headcrab enemy and something hurts it, it's going to forget about the crab for a while.
-				m_hEnemy = NULL;
+				m_hEnemy = nullptr;
 				m_IdealMonsterState = MONSTERSTATE_ALERT;
 			}
 			break;
