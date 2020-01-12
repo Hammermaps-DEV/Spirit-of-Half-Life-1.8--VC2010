@@ -25,6 +25,21 @@
 #include "enginecallback.h"
 #endif
 
+//g-cont. safe precaching models & sounds
+int PRECACHE_MODEL(char* s);		//classic precache 
+int PRECACHE_MODEL(string_t s);		//pev->model as argument
+int PRECACHE_MODEL(string_t s, char *e);	//custom model precache
+
+int PRECACHE_SOUND(char* s);		//classic precache
+int PRECACHE_SOUND(string_t s);		//pev->noise as argument
+int PRECACHE_SOUND(string_t s, char *e);	//custom model precache
+
+void SET_MODEL(edict_t *e, string_t model);	//pev->model as argument
+void SET_MODEL(edict_t *e, const char *model);	//classic set model
+void SET_MODEL(edict_t *e, string_t s, char *c);//custom model set
+
+unsigned short PRECACHE_EVENT(int type, const char *psz);
+
 inline void MESSAGE_BEGIN( int msg_dest, int msg_type, const float *pOrigin, entvars_t *ent );  // implementation later in this file
 
 extern globalvars_t				*gpGlobals;

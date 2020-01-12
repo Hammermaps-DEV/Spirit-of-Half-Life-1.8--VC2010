@@ -1201,20 +1201,11 @@ int CGraph :: LinkVisibleNodes ( CLink *pLinkPool, FILE *file, int *piBadNode )
 				continue;
 			}
 
-#if 0
-			
-			if ( (m_pNodes[ i ].m_afNodeInfo & bits_NODE_WATER) != (m_pNodes[ j ].m_afNodeInfo & bits_NODE_WATER) )
-			{
-				// don't connect water nodes to air nodes or land nodes. It just wouldn't be prudent at this juncture.
-				continue;
-			}
-#else
 			if ( (m_pNodes[ i ].m_afNodeInfo & bits_NODE_GROUP_REALM) != (m_pNodes[ j ].m_afNodeInfo & bits_NODE_GROUP_REALM) )
 			{
 				// don't connect air nodes to water nodes to land nodes. It just wouldn't be prudent at this juncture.
 				continue;
 			}
-#endif
 
 			tr.pHit = NULL;// clear every time so we don't get stuck with last trace's hit ent
 			pTraceEnt = 0;

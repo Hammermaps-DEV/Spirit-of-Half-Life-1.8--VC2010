@@ -51,11 +51,10 @@ typedef unsigned char byte;
 #include "enginecallback.h"
 #endif
 
-extern globalvars_t				*gpGlobals;
+extern globalvars_t	*gpGlobals;
+extern int PRECACHE_SOUND(char* s);
 
 #pragma warning( disable : 4244 )
-
-
 
 int ExtractBbox( void *pmodel, int sequence, float *mins, float *maxs )
 {

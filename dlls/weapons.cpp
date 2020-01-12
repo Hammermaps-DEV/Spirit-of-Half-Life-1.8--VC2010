@@ -39,13 +39,19 @@ extern int gEvilImpulse101;
 
 DLL_GLOBAL	short		g_sModelIndexLaser;// holds the index for the laser beam
 DLL_GLOBAL  const char 	*g_pModelNameLaser = "sprites/laserbeam.spr";
-DLL_GLOBAL	short    		g_sModelIndexLaserDot;// holds the index for the laser beam dot
-DLL_GLOBAL	short    		g_sModelIndexFireball;// holds the index for the fireball
-DLL_GLOBAL	short    		g_sModelIndexSmoke;// holds the index for the smoke cloud
-DLL_GLOBAL	short    		g_sModelIndexWExplosion;// holds the index for the underwater explosion
+DLL_GLOBAL	short    	g_sModelIndexLaserDot;// holds the index for the laser beam dot
+DLL_GLOBAL	short    	g_sModelIndexFireball;// holds the index for the fireball
+DLL_GLOBAL	short    	g_sModelIndexSmoke;// holds the index for the smoke cloud
+DLL_GLOBAL	short    	g_sModelIndexWExplosion;// holds the index for the underwater explosion
 DLL_GLOBAL	short		g_sModelIndexBubbles;// holds the index for the bubbles model
 DLL_GLOBAL	short		g_sModelIndexBloodDrop;// holds the sprite index for the initial blood
 DLL_GLOBAL	short		g_sModelIndexBloodSpray;// holds the sprite index for splattered blood
+
+DLL_GLOBAL	short		g_sModelIndexNullModel; //null model index
+DLL_GLOBAL	short		g_sModelIndexErrorModel;//error model index
+DLL_GLOBAL	short		g_sModelIndexNullSprite;//null sprite index
+DLL_GLOBAL	short		g_sModelIndexErrorSprite;//error sprite index
+DLL_GLOBAL	short		g_sSoundIndexNullSound;//null sound index
 
 ItemInfo CBasePlayerItem::ItemInfoArray[MAX_WEAPONS];
 AmmoInfo CBasePlayerItem::AmmoInfoArray[MAX_AMMO_SLOTS];
@@ -376,6 +382,14 @@ void W_Precache(void)
 
 	g_sModelIndexLaser = PRECACHE_MODEL( (char *)g_pModelNameLaser );
 	g_sModelIndexLaserDot = PRECACHE_MODEL("sprites/laserdot.spr");
+
+	//g-cont. init safe precaching system
+	//WARNING!!! this is critical stuff! do not edit this
+	g_sSoundIndexNullSound = PRECACHE_SOUND("common/null.wav");
+	g_sModelIndexNullModel = PRECACHE_MODEL("models/null.mdl");
+	g_sModelIndexErrorModel = PRECACHE_MODEL("models/error.mdl");
+	g_sModelIndexNullSprite = PRECACHE_MODEL("sprites/null.spr");
+	g_sModelIndexErrorSprite = PRECACHE_MODEL("sprites/error.spr");
 
 
 	// used by explosions

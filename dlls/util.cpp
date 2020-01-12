@@ -2992,3 +2992,175 @@ int HaveCamerasInPVS( edict_t* edict )
 	}
 	return 0;
 }
+
+//=================================
+//	string operations
+//=================================
+
+char *COM_FileExtension(char *in)
+{
+	static char exten[8];
+	int             i;
+
+	while (*in && *in != '.')
+		in++;
+	if (!*in)
+		return "";
+	in++;
+	for (i = 0; i < 7 && *in; i++, in++)
+		exten[i] = *in;
+	exten[i] = 0;
+	return exten;
+}
+
+//g-cont. new system for safely precaching and set models. Copyright© 2005 XashXT Group. All Rights Reserved.
+void SET_MODEL(edict_t *e, string_t s, char *c)//set default model if not found
+{
+	if (FStringNull(s))SET_MODEL(e, c);
+	else SET_MODEL(e, s);
+}
+void SET_MODEL(edict_t *e, string_t model) { SET_MODEL(e, STRING(model)); }
+void SET_MODEL(edict_t *e, const char *model)
+{
+	if (!model || !(*model))
+	{
+		g_engfuncs.pfnSetModel(e, "models/null.mdl");
+		return;
+	}
+	//is this brush model?
+	if (model[0] == '*')
+	{
+		g_engfuncs.pfnSetModel(e, model);
+		return;
+	}
+
+	//verify file exists
+	byte *data = LOAD_FILE_FOR_ME((char*)model, NULL);
+	if (data)
+	{
+		FREE_FILE(data);
+		g_engfuncs.pfnSetModel(e, model);
+		return;
+	}
+
+	char *ext = COM_FileExtension((char *)model);
+
+	if (FStrEq(ext, "mdl"))
+	{
+		//this is model
+		g_engfuncs.pfnSetModel(e, "models/error.mdl");
+	}
+	else if (FStrEq(ext, "spr"))
+	{
+		//this is sprite
+		g_engfuncs.pfnSetModel(e, "sprites/error.spr");
+	}
+	else
+	{
+		//set null model
+		g_engfuncs.pfnSetModel(e, "models/null.mdl");
+	}
+}
+
+int PRECACHE_MODEL(string_t s, char *e)//precache default model if not found
+{
+	if (FStringNull(s))
+		return PRECACHE_MODEL(e);
+	return PRECACHE_MODEL(s);
+}
+int PRECACHE_MODEL(string_t s) { return PRECACHE_MODEL((char*)STRING(s)); }
+int PRECACHE_MODEL(char* s)
+{
+	if (!s || !*s)
+	{
+		ALERT(at_console, "Warning: modelname not specified\n");
+		return g_sModelIndexNullModel; //set null model
+	}
+	//no need to precacahe brush
+	if (s[0] == '*') return 0;
+
+	//verify file exists
+	byte *data = LOAD_FILE_FOR_ME(s, NULL);
+	if (data)
+	{
+		FREE_FILE(data);
+		return g_engfuncs.pfnPrecacheModel(s);
+	}
+
+	char *ext = COM_FileExtension(s);
+	if (FStrEq(ext, "mdl"))
+	{
+		//this is model
+		ALERT(at_console, "Warning: model \"%s\" not found!\n", s);
+		return g_sModelIndexErrorModel;
+	}
+	else if (FStrEq(ext, "spr"))
+	{
+		//this is sprite
+		ALERT(at_console, "Warning: sprite \"%s\" not found!\n", s);
+		return g_sModelIndexErrorSprite;
+	}
+	else
+	{
+		//unknown format
+		ALERT(at_console, "Warning: invalid name \"%s\"!\n", s);
+		return g_sModelIndexNullModel; //set null model
+	}
+}
+
+int PRECACHE_SOUND(string_t s, char *e)//precache default model if not found
+{
+	if (FStringNull(s))
+		return PRECACHE_SOUND(e);
+	return PRECACHE_SOUND(s);
+}
+int PRECACHE_SOUND(string_t s) { return PRECACHE_SOUND((char*)STRING(s)); }
+int PRECACHE_SOUND(char* s)
+{
+	if (!s || !*s) return g_sSoundIndexNullSound; //set null sound
+
+	//NOTE: Engine function as predicted for sound folder
+	//But LOAD_FILE_FOR_ME don't known about this. Set it manualy
+
+	char path[256];		//g-cont.
+	char *sound = s;		//sounds from model events can contains a symbol '*'.
+				//remove this for sucessfully loading a sound	
+	if (sound[0] == '*')sound++;	//only for fake path, engine needs this prefix!
+	snprintf(path, 256, "sound/%s", sound);
+
+	//verify file exists
+	byte *data = LOAD_FILE_FOR_ME(path, NULL);
+	if (data)
+	{
+		FREE_FILE(data);
+		return g_engfuncs.pfnPrecacheSound(s);
+	}
+
+	char *ext = COM_FileExtension(s);
+
+	if (FStrEq(ext, "wav"))
+	{
+		//this is sound
+		ALERT(at_console, "Warning: sound \"%s\" not found!\n", s);
+		return g_sSoundIndexNullSound; //set null sound
+	}
+	else
+	{
+		//unknown format
+		ALERT(at_console, "Warning: invalid name \"%s\"!\n", s);
+		return g_sSoundIndexNullSound; //set null sound
+	}
+}
+
+unsigned short PRECACHE_EVENT(int type, const char* psz)
+{
+	byte *data = LOAD_FILE_FOR_ME((char*)psz, NULL);
+	if (data)
+	{
+		FREE_FILE(data);
+		return g_engfuncs.pfnPrecacheEvent(type, psz);
+	}
+
+	ALERT(at_console, "Warning: event \"%s\" not found!\n", psz);
+	return g_engfuncs.pfnPrecacheEvent(type, "events/null.sc");
+}

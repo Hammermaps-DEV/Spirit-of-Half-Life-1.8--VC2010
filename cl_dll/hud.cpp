@@ -520,7 +520,7 @@ int CHud :: GetSpriteIndex( const char *SpriteName )
 void CHud :: VidInit( void )
 {
 	#ifdef ENGINE_DEBUG
-		CONPRINT("## CHud::VidInit (hi from me)\n");
+		CONPRINT("## CHud::VidInit\n");
 	#endif
 
 	m_scrinfo.iSize = sizeof(m_scrinfo);

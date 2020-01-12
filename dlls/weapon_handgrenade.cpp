@@ -167,7 +167,7 @@ void CHandGrenade::WeaponIdle( void )
 		m_flReleaseThrow = 0;
 		m_flStartThrow = 0;
 		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.5;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.5;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1;
 
 		m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ]--;
 
@@ -180,7 +180,8 @@ void CHandGrenade::WeaponIdle( void )
 		}
 		return;
 	}
-	else if ( m_flReleaseThrow > 0 )
+
+	if ( m_flReleaseThrow > 0 )
 	{
 		// we've finished the throw, restart.
 		m_flStartThrow = 0;

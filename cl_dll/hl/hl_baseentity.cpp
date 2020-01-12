@@ -347,3 +347,7 @@ int CBasePlayerWeapon::ExtractClipAmmo( CBasePlayerWeapon *pWeapon ) { return 0;
 void CBasePlayerWeapon::RetireWeapon( void ) { }
 void CSoundEnt::InsertSound ( int iType, const Vector &vecOrigin, int iVolume, float flDuration ) {}
 void RadiusDamage( Vector vecSrc, entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, float flRadius, int iClassIgnore, int bitsDamageType ){}
+int PRECACHE_MODEL(char* s) { return 0; }		//classic precache
+unsigned short PRECACHE_EVENT(int type, const char *psz) { return g_engfuncs.pfnPrecacheEvent(type, psz); }
+void SET_MODEL(edict_t *e, const char *model) { }
+int PRECACHE_SOUND(char* s) { return 0; }
