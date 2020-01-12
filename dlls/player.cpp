@@ -4352,8 +4352,6 @@ void CBasePlayer::UpdateClientData(void)
 			MESSAGE_END();
 		}
 
-		FireTargets("game_playerspawn", this, this, USE_TOGGLE, 0);
-
 		InitStatusBar();
 	}
 

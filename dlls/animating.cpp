@@ -12,13 +12,6 @@
 *   without written permission from Valve LLC.
 *
 ****/
-/*
-
-===== monsters.cpp ========================================================
-
-  Monster-related utility code
-
-*/
 
 #include "extdll.h"
 #include "util.h"
@@ -37,7 +30,6 @@ TYPEDESCRIPTION CBaseAnimating::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CBaseAnimating, CBaseDelay);
 
-
 //=========================================================
 // StudioFrameAdvance - advance the animation frame up to the current time
 // if an flInterval is passed in, only advance animation that number of seconds
@@ -53,7 +45,8 @@ float CBaseAnimating::StudioFrameAdvance(float flInterval)
 			return 0.0;
 		}
 	}
-	if (! pev->animtime)
+	
+	if (!pev->animtime)
 		flInterval = 0.0;
 
 	pev->frame += flInterval * m_flFrameRate * pev->framerate;
@@ -118,7 +111,6 @@ void CBaseAnimating::ResetSequenceInfo()
 	m_fSequenceFinished = FALSE;
 	m_flLastEventCheck = gpGlobals->time;
 }
-
 
 //=========================================================
 //=========================================================
@@ -221,8 +213,8 @@ int CBaseAnimating::FindTransition(int iEndingSequence, int iGoalSequence, int* 
 		int sequence = ::FindTransition(pmodel, iEndingSequence, iGoalSequence, &iDir);
 		if (iDir != 1)
 			return -1;
-		else
-			return sequence;
+
+		return sequence;
 	}
 
 	return ::FindTransition(pmodel, iEndingSequence, iGoalSequence, piDir);

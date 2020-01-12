@@ -22,7 +22,6 @@
 #include	"schedule.h"
 #include	"defaultai.h"
 #include	"soundent.h"
-#include	"nodes.h"
 #include	"scripted.h"
 
 //=========================================================
@@ -1053,7 +1052,6 @@ Schedule_t* CBaseMonster::ScheduleFromName(const char* pName)
 	return ScheduleInList(pName, m_scheduleList, ARRAYSIZE(m_scheduleList));
 }
 
-
 Schedule_t* CBaseMonster::ScheduleInList(const char* pName, Schedule_t** pList, int listCount)
 {
 	int i;
@@ -1252,9 +1250,7 @@ Schedule_t* CBaseMonster::GetScheduleOfType(int Type)
 	default:
 		{
 			ALERT(at_debug, "GetScheduleOfType()\nNo CASE for Schedule Type %d!\n", Type);
-
 			return &slIdleStand[0];
-			break;
 		}
 	}
 

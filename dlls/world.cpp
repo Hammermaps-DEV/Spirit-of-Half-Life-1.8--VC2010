@@ -12,13 +12,6 @@
 *   without written permission from Valve LLC.
 *
 ****/
-/*
-
-===== world.cpp ========================================================
-
-  precaches and defs for entities and other data that must always be available.
-
-*/
 
 #include "extdll.h"
 #include "util.h"
@@ -27,13 +20,9 @@
 #include "soundent.h"
 #include "client.h"
 #include "decals.h"
-#include "skill.h"
 #include "effects.h"
 #include "player.h"
-#include "weapons.h"
 #include "gamerules.h"
-#include "teamplay_gamerules.h"
-#include "movewith.h" //LRC
 
 extern CGraph WorldGraph;
 extern CSoundEnt* pSoundEnt;
@@ -43,12 +32,10 @@ DLL_GLOBAL edict_t* g_pBodyQueueHead;
 CGlobalState gGlobalState;
 extern DLL_GLOBAL int gDisplayTitle;
 
-extern void W_Precache(void); //weapon precache - weapons.cpp
-extern void I_Precache(void); //item precache - items.cpp
+extern void W_Precache(); //weapon precache - weapons.cpp
+extern void I_Precache(); //item precache - items.cpp
 
-//
 // This must match the list in util.h
-//
 DLL_DECALLIST gDecals[] = {
 	{"{shot1", 0}, // DECAL_GUNSHOT1 
 	{"{shot2", 0}, // DECAL_GUNSHOT2
@@ -107,16 +94,16 @@ BODY QUE
 class CDecal : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void KeyValue(KeyValueData* pkvd);
-	void EXPORT StaticDecal(void);
+	void Spawn() override;
+	void KeyValue(KeyValueData* pkvd) override;
+	void EXPORT StaticDecal();
 	void EXPORT TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 };
 
 LINK_ENTITY_TO_CLASS(infodecal, CDecal);
 
 // UNDONE:  These won't get sent to joining players in multi-player
-void CDecal::Spawn(void)
+void CDecal::Spawn()
 {
 	if (pev->skin < 0 || (gpGlobals->deathmatch && FBitSet(pev->spawnflags, SF_DECAL_NOTINDEATHMATCH)))
 	{
@@ -163,15 +150,14 @@ void CDecal::TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 	SetNextThink(0.1);
 }
 
-
-void CDecal::StaticDecal(void)
+void CDecal::StaticDecal()
 {
 	TraceResult trace;
-	int entityIndex, modelIndex;
+	int modelIndex;
 
 	UTIL_TraceLine(pev->origin - Vector(5, 5, 5), pev->origin + Vector(5, 5, 5), ignore_monsters, ENT(pev), &trace);
 
-	entityIndex = (short)ENTINDEX(trace.pHit);
+	int entityIndex = (short)ENTINDEX(trace.pHit);
 	if (entityIndex)
 		modelIndex = (int)VARS(trace.pHit)->modelindex;
 	else
@@ -181,7 +167,6 @@ void CDecal::StaticDecal(void)
 
 	SUB_Remove();
 }
-
 
 void CDecal::KeyValue(KeyValueData* pkvd)
 {
@@ -198,11 +183,10 @@ void CDecal::KeyValue(KeyValueData* pkvd)
 		CBaseEntity::KeyValue(pkvd);
 }
 
-
 // Body queue class here.... It's really just CBaseEntity
 class CCorpse : public CBaseEntity
 {
-	virtual int ObjectCaps(void) { return FCAP_DONT_SAVE; }
+	virtual int ObjectCaps() { return FCAP_DONT_SAVE; }
 };
 
 LINK_ENTITY_TO_CLASS(bodyque, CCorpse);
@@ -223,7 +207,6 @@ static void InitBodyQue(void)
 
 	pev->owner = g_pBodyQueueHead;
 }
-
 
 //
 // make a body que entry for the given ent so the ent can be respawned elsewhere
@@ -250,9 +233,6 @@ void CopyToBodyQue(entvars_t* pev)
 	pevHead->renderamt = ENTINDEX(ENT(pev));
 
 	pevHead->effects = pev->effects | EF_NOINTERP;
-	//pevHead->goalstarttime = pev->goalstarttime;
-	//pevHead->goalframe	= pev->goalframe;
-	//pevHead->goalendtime = pev->goalendtime ;
 
 	pevHead->sequence = pev->sequence;
 	pevHead->animtime = pev->animtime;
@@ -263,12 +243,12 @@ void CopyToBodyQue(entvars_t* pev)
 }
 
 
-CGlobalState::CGlobalState(void)
+CGlobalState::CGlobalState()
 {
 	Reset();
 }
 
-void CGlobalState::Reset(void)
+void CGlobalState::Reset()
 {
 	m_pList = NULL;
 	m_listCount = 0;
@@ -279,11 +259,9 @@ globalentity_t* CGlobalState::Find(string_t globalname)
 	if (!globalname)
 		return NULL;
 
-	globalentity_t* pTest;
 	const char* pEntityName = STRING(globalname);
 
-
-	pTest = m_pList;
+	globalentity_t* pTest = m_pList;
 	while (pTest)
 	{
 		if (FStrEq(pEntityName, pTest->name))
@@ -301,10 +279,9 @@ globalentity_t* CGlobalState::Find(string_t globalname)
 void CGlobalState::DumpGlobals(void)
 {
 	static char* estates[] = {"Off", "On", "Dead"};
-	globalentity_t* pTest;
 
 	ALERT(at_debug, "-- Globals --\n");
-	pTest = m_pList;
+	globalentity_t* pTest = m_pList;
 	while (pTest)
 	{
 		ALERT(at_debug, "%s: %s (%s)\n", pTest->name, pTest->levelName, estates[pTest->state]);
@@ -313,7 +290,6 @@ void CGlobalState::DumpGlobals(void)
 }
 
 //#endif
-
 
 void CGlobalState::EntityAdd(string_t globalname, string_t mapName, GLOBALESTATE state)
 {
@@ -329,7 +305,6 @@ void CGlobalState::EntityAdd(string_t globalname, string_t mapName, GLOBALESTATE
 	m_listCount++;
 }
 
-
 void CGlobalState::EntitySetState(string_t globalname, GLOBALESTATE state)
 {
 	globalentity_t* pEnt = Find(globalname);
@@ -338,14 +313,12 @@ void CGlobalState::EntitySetState(string_t globalname, GLOBALESTATE state)
 		pEnt->state = state;
 }
 
-
 const globalentity_t* CGlobalState::EntityFromTable(string_t globalname)
 {
 	globalentity_t* pEnt = Find(globalname);
 
 	return pEnt;
 }
-
 
 GLOBALESTATE CGlobalState::EntityGetState(string_t globalname)
 {
@@ -355,7 +328,6 @@ GLOBALESTATE CGlobalState::EntityGetState(string_t globalname)
 
 	return GLOBAL_OFF;
 }
-
 
 // Global Savedata for Delay
 TYPEDESCRIPTION CGlobalState::m_SaveData[] =
@@ -371,17 +343,13 @@ TYPEDESCRIPTION gGlobalEntitySaveData[] =
 	DEFINE_FIELD(globalentity_t, state, FIELD_INTEGER),
 };
 
-
 int CGlobalState::Save(CSave& save)
 {
-	int i;
-	globalentity_t* pEntity;
-
 	if (!save.WriteFields("cGLOBAL", "GLOBAL", this, m_SaveData, ARRAYSIZE(m_SaveData)))
 		return 0;
 
-	pEntity = m_pList;
-	for (i = 0; i < m_listCount && pEntity; i++)
+	globalentity_t* pEntity = m_pList;
+	for (int i = 0; i < m_listCount && pEntity; i++)
 	{
 		if (!save.WriteFields("cGENT", "GENT", pEntity, gGlobalEntitySaveData, ARRAYSIZE(gGlobalEntitySaveData)))
 			return 0;
@@ -394,17 +362,16 @@ int CGlobalState::Save(CSave& save)
 
 int CGlobalState::Restore(CRestore& restore)
 {
-	int i, listCount;
 	globalentity_t tmpEntity;
 
 	ClearStates();
 	if (!restore.ReadFields("GLOBAL", this, m_SaveData, ARRAYSIZE(m_SaveData)))
 		return 0;
 
-	listCount = m_listCount; // Get new list count
+	int listCount = m_listCount; // Get new list count
 	m_listCount = 0; // Clear loaded data
 
-	for (i = 0; i < listCount; i++)
+	for (int i = 0; i < listCount; i++)
 	{
 		if (!restore.ReadFields("GENT", &tmpEntity, gGlobalEntitySaveData, ARRAYSIZE(gGlobalEntitySaveData)))
 			return 0;
@@ -421,7 +388,6 @@ void CGlobalState::EntityUpdate(string_t globalname, string_t mapname)
 		strcpy(pEnt->levelName, STRING(mapname));
 }
 
-
 void CGlobalState::ClearStates(void)
 {
 	globalentity_t* pFree = m_pList;
@@ -434,13 +400,11 @@ void CGlobalState::ClearStates(void)
 	Reset();
 }
 
-
 void SaveGlobalState(SAVERESTOREDATA* pSaveData)
 {
 	CSave saveHelper(pSaveData);
 	gGlobalState.Save(saveHelper);
 }
-
 
 void RestoreGlobalState(SAVERESTOREDATA* pSaveData)
 {
@@ -448,13 +412,11 @@ void RestoreGlobalState(SAVERESTOREDATA* pSaveData)
 	gGlobalState.Restore(restoreHelper);
 }
 
-
 void ResetGlobalState(void)
 {
 	gGlobalState.ClearStates();
 	gInitHUD = TRUE; // Init the HUD on a new game / load game
 }
-
 
 // moved CWorld class definition to cbase.h
 //=======================
@@ -476,14 +438,14 @@ float g_flWeaponCheat;
 BOOL g_startSuit; //LRC
 BOOL g_allowGJump;
 
-void CWorld::Spawn(void)
+void CWorld::Spawn()
 {
 	g_fGameOver = FALSE;
 	Precache();
 	g_flWeaponCheat = CVAR_GET_FLOAT("sv_cheats"); // Is the impulse 101 command allowed?
 }
 
-void CWorld::Precache(void)
+void CWorld::Precache()
 {
 	//LRC - set up the world lists
 	g_pWorld = this;
@@ -507,23 +469,24 @@ void CWorld::Precache(void)
 	if (g_pGameRules)
 	{
 		delete g_pGameRules;
+		g_pGameRules = nullptr;
 	}
 
 	g_pGameRules = InstallGameRules();
 
 	//!!!UNDONE why is there so much Spawn code in the Precache function? I'll just keep it here 
 
-	/*	if ( WorldGraph.m_fGraphPresent && !WorldGraph.m_fGraphPointersSet )
+	if (WorldGraph.m_fGraphPresent && !WorldGraph.m_fGraphPointersSet)
+	{
+		if (!WorldGraph.FSetGraphPointers())
 		{
-			if ( !WorldGraph.FSetGraphPointers() )
-			{
-				ALERT ( at_debug, "**Graph pointers were not set!\n");
-			}
-			else
-			{
-				ALERT ( at_debug, "**Graph Pointers Set!\n" );
-			} 
-		}*/
+			ALERT(at_debug, "**Graph pointers were not set!\n");
+		}
+		else
+		{
+			ALERT(at_debug, "**Graph Pointers Set!\n");
+		}
+	}
 
 	///!!!LATER - do we want a sound ent in deathmatch? (sjb)
 	//pSoundEnt = CBaseEntity::Create( "soundent", g_vecZero, g_vecZero, edict() );
@@ -631,7 +594,7 @@ void CWorld::Precache(void)
 	if (pev->netname)
 	{
 		ALERT(at_aiconsole, "Chapter title: %s\n", STRING(pev->netname));
-		CBaseEntity* pEntity = CBaseEntity::Create("env_message", g_vecZero, g_vecZero, NULL);
+		CBaseEntity* pEntity = Create("env_message", g_vecZero, g_vecZero, NULL);
 		if (pEntity)
 		{
 			pEntity->SetThink(&CWorld::SUB_CallUseToggle);
@@ -662,10 +625,7 @@ void CWorld::Precache(void)
 	}
 }
 
-
-//
 // Just to ignore the "wad" field.
-//
 void CWorld::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "skyname"))

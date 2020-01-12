@@ -1744,20 +1744,19 @@ We're about to run this usercmd for the specified player.  We can set up groupin
 This is the time to examine the usercmd for anything extra.  This call happens even if think does not.
 =================
 */
-void CmdStart( const edict_t *player, const struct usercmd_s *cmd, unsigned int random_seed )
+void CmdStart(const edict_t* player, const usercmd_t* cmd, unsigned int random_seed)
 {
-	entvars_t *pev = (entvars_t *)&player->v;
-	CBasePlayer *pl = ( CBasePlayer *) CBasePlayer::Instance( pev );
+	auto pPlayer = static_cast<CBasePlayer*>(CBasePlayer::Instance(const_cast<edict_t*>(player)));
 
-	if( !pl )
+	if (!pPlayer)
 		return;
 
-	if ( pl->pev->groupinfo != 0 )
+	if (pPlayer->pev->groupinfo != 0)
 	{
-		UTIL_SetGroupTrace( pl->pev->groupinfo, GROUP_OP_AND );
+		UTIL_SetGroupTrace(pPlayer->pev->groupinfo, GROUP_OP_AND);
 	}
 
-	pl->random_seed = random_seed;
+	pPlayer->random_seed = random_seed;
 }
 
 /*
@@ -1767,14 +1766,14 @@ CmdEnd
 Each cmdstart is exactly matched with a cmd end, clean up any group trace flags, etc. here
 =================
 */
-void CmdEnd ( const edict_t *player )
+void CmdEnd(const edict_t* player)
 {
-	entvars_t *pev = (entvars_t *)&player->v;
-	CBasePlayer *pl = ( CBasePlayer *) CBasePlayer::Instance( pev );
+	auto pPlayer = static_cast<CBasePlayer*>(CBasePlayer::Instance(const_cast<edict_t*>(player)));
 
-	if( !pl )
+	if (!pPlayer)
 		return;
-	if ( pl->pev->groupinfo != 0 )
+
+	if (pPlayer->pev->groupinfo != 0)
 	{
 		UTIL_UnsetGroupTrace();
 	}
@@ -1788,10 +1787,10 @@ ConnectionlessPacket
   size of the response_buffer, so you must zero it out if you choose not to respond.
 ================================
 */
-int	ConnectionlessPacket( const struct netadr_s *net_from, const char *args, char *response_buffer, int *response_buffer_size )
+int	ConnectionlessPacket(const netadr_t *net_from, const char *args, char *response_buffer, int *response_buffer_size)
 {
 	// Parse stuff from args
-	int max_buffer_size = *response_buffer_size;
+	/*int max_buffer_size = *response_buffer_size;*/
 
 	// Zero it out since we aren't going to respond.
 	// If we wanted to response, we'd write data into response_buffer
@@ -1845,7 +1844,6 @@ to be created during play ( e.g., grenades, ammo packs, projectiles, corpses, et
 */
 void CreateInstancedBaselines ( void )
 {
-	int iret = 0;
 	entity_state_t state;
 
 	memset( &state, 0, sizeof( state ) );

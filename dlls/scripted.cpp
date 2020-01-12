@@ -929,7 +929,13 @@ public:
 	BOOL AcceptableSpeaker(CBaseMonster* pMonster);
 	BOOL StartSentence(CBaseMonster* pTarget);
 
-
+	enum class SoundRadius
+	{
+		SMALL = 0,
+		MEDIUM,
+		LARGE,
+		PLAY_EVERYWHERE
+	};
 private:
 	int m_iszSentence; // string index for idle animation
 	int m_iszEntity; // entity that is wanted for this sentence
@@ -1038,25 +1044,26 @@ void CScriptedSentence::Spawn(void)
 		SetNextThink(1.0);
 	}
 
-	switch (pev->impulse)
+	switch (static_cast<SoundRadius>(pev->impulse))
 	{
-	case 1: // Medium radius
+	case SoundRadius::MEDIUM:			// Medium radius
 		m_flAttenuation = ATTN_STATIC;
 		break;
 
-	case 2: // Large radius
+	case SoundRadius::LARGE:			// Large radius
 		m_flAttenuation = ATTN_NORM;
 		break;
 
-	case 3: //EVERYWHERE
+	case SoundRadius::PLAY_EVERYWHERE:	//EVERYWHERE
 		m_flAttenuation = ATTN_NONE;
 		break;
 
 	default:
-	case 0: // Small radius
+	case SoundRadius::SMALL:			// Small radius
 		m_flAttenuation = ATTN_IDLE;
 		break;
 	}
+	
 	pev->impulse = 0;
 
 	// No volume, use normal
@@ -1077,8 +1084,10 @@ void CScriptedSentence::FindThink(void)
 				pPlayer->SetSuitUpdate((char*)STRING(m_iszSentence),FALSE, 0);
 			else
 				pPlayer->SetSuitUpdate((char*)STRING(m_iszSentence),TRUE, 0);
+
 			if (pev->spawnflags & SF_SENTENCE_ONCE)
 				UTIL_Remove(this);
+			
 			SetThink(&CScriptedSentence :: DurationThink);
 			SetNextThink(m_flDuration);
 			m_active = FALSE;
@@ -1093,8 +1102,10 @@ void CScriptedSentence::FindThink(void)
 	{
 		m_playing = TRUE;
 		StartSentence(pMonster);
+		
 		if (pev->spawnflags & SF_SENTENCE_ONCE)
 			UTIL_Remove(this);
+		
 		SetThink(&CScriptedSentence :: DurationThink);
 		SetNextThink(m_flDuration);
 		m_active = FALSE;

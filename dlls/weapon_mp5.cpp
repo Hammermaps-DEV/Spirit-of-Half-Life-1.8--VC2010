@@ -107,10 +107,12 @@ int CMP5::AddToPlayer(CBasePlayer* pPlayer)
 	if (CBasePlayerWeapon::AddToPlayer(pPlayer))
 	{
 		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
-		WRITE_BYTE(m_iId);
+			WRITE_BYTE(m_iId);
 		MESSAGE_END();
+		
 		return TRUE;
 	}
+	
 	return FALSE;
 }
 
@@ -119,7 +121,7 @@ BOOL CMP5::Deploy()
 	return DefaultDeploy("models/v_9mmAR.mdl", "models/p_9mmAR.mdl", MP5_DEPLOY, "mp5");
 }
 
-void CMP5::Holster(int skiplocal /* = 0 */)
+void CMP5::Holster(int skiplocal)
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + (12.0 / 30);
 	m_flTimeWeaponIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
@@ -148,24 +150,23 @@ void CMP5::PrimaryAttack()
 
 	m_iClip--;
 
-
-	m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
+	m_pPlayer->pev->effects = static_cast<int>(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 
 	// player "shoot" animation
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
 #ifndef CLIENT_DLL
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-	WRITE_BYTE(TE_DLIGHT);
-	WRITE_COORD(pev->origin.x); // origin
-	WRITE_COORD(pev->origin.y);
-	WRITE_COORD(pev->origin.z);
-	WRITE_BYTE(16); // radius
-	WRITE_BYTE(255); // R
-	WRITE_BYTE(255); // G
-	WRITE_BYTE(160); // B
-	WRITE_BYTE(0); // life * 10
-	WRITE_BYTE(0); // decay
+		WRITE_BYTE(TE_DLIGHT);
+		WRITE_COORD(pev->origin.x); // origin
+		WRITE_COORD(pev->origin.y);
+		WRITE_COORD(pev->origin.z);
+		WRITE_BYTE(16); // radius
+		WRITE_BYTE(255); // R
+		WRITE_BYTE(255); // G
+		WRITE_BYTE(160); // B
+		WRITE_BYTE(0); // life * 10
+		WRITE_BYTE(0); // decay
 	MESSAGE_END();
 #endif
 
@@ -299,24 +300,26 @@ void CMP5::WeaponIdle()
 	}
 
 	SendWeaponAnim(iAnim);
+
+	m_flTimeWeaponIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15); // how long till we do this again.
 }
 
 class CMP5AmmoClip : public CBasePlayerAmmo
 {
-	void Spawn()
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_9mmARclip.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
-	void Precache()
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/w_9mmARclip.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther)
+	BOOL AddAmmo(CBaseEntity* pOther) override
 	{
 		int bResult = (pOther->GiveAmmo(MAX_CLIP_MP5, "9mm", MAX_CARRY_9MM) != -1);
 		if (bResult)
@@ -332,20 +335,20 @@ LINK_ENTITY_TO_CLASS(ammo_9mmAR, CMP5AmmoClip);
 
 class CMP5Chainammo : public CBasePlayerAmmo
 {
-	void Spawn()
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_chainammo.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
-	void Precache()
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/w_chainammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther)
+	BOOL AddAmmo(CBaseEntity* pOther) override
 	{
 		int bResult = (pOther->GiveAmmo(AMMO_CHAINBOX_GIVE, "9mm", MAX_CARRY_9MM) != -1);
 		if (bResult)
@@ -360,20 +363,20 @@ LINK_ENTITY_TO_CLASS(ammo_9mmbox, CMP5Chainammo);
 
 class CMP5AmmoGrenade : public CBasePlayerAmmo
 {
-	void Spawn()
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_ARgrenade.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
-	void Precache()
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/w_ARgrenade.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 
-	BOOL AddAmmo(CBaseEntity* pOther)
+	BOOL AddAmmo(CBaseEntity* pOther) override
 	{
 		int bResult = (pOther->GiveAmmo(AMMO_M203BOX_GIVE, "ARgrenades", MAX_CARRY_M203) != -1);
 

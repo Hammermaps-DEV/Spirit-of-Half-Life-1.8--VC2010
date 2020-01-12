@@ -581,6 +581,8 @@ void CHalfLifeMultiplay::PlayerSpawn(CBasePlayer* pPlayer)
 		pPlayer->GiveNamedItem("weapon_9mmhandgun");
 		pPlayer->GiveAmmo(68, "9mm", MAX_CARRY_9MM); // 4 full reloads
 	}
+
+	FireTargets("game_playerspawn", pPlayer, pPlayer, USE_TOGGLE, 0);
 }
 
 //=========================================================
