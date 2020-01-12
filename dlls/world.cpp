@@ -488,8 +488,6 @@ void CWorld::Precache()
 		}
 	}
 
-	///!!!LATER - do we want a sound ent in deathmatch? (sjb)
-	//pSoundEnt = CBaseEntity::Create( "soundent", g_vecZero, g_vecZero, edict() );
 	pSoundEnt = GetClassPtr(static_cast<CSoundEnt*>(nullptr));
 	pSoundEnt->Spawn();
 
@@ -703,9 +701,8 @@ void CWorld::KeyValue(KeyValueData* pkvd)
 		CVAR_SET_FLOAT("mp_allowmonsters", atof(pkvd->szValue));
 		pkvd->fHandled = TRUE;
 	}
-		//LRC- ends
-
-		//AJH- Gauss Jump in single play
+	//LRC- ends
+	//AJH- Gauss Jump in single play
 	else if (FStrEq(pkvd->szKeyName, "allow_sp_gjump"))
 	{
 		g_allowGJump = atoi(pkvd->szValue);

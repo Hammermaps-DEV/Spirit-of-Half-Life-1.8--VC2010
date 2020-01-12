@@ -13,6 +13,18 @@
       <UniqueIdentifier>{ce38f00d-6af9-43ce-b031-ce29e0ae5552}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
+    <Filter Include="Source Files\game">
+      <UniqueIdentifier>{be30ad81-a9a0-4387-a446-ef510d6f932c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\server">
+      <UniqueIdentifier>{965687d9-b05b-4200-a472-bfc7ae235eb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\server\entities">
+      <UniqueIdentifier>{e7e68e06-8e6f-40cb-981d-e31055a7b4ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\server\entities\xen">
+      <UniqueIdentifier>{5f63c9ff-cdd3-4b71-bef3-cdbe259f1a5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AI_BaseNPC_Schedule.cpp">
@@ -327,11 +339,41 @@
     <ClCompile Include="weapon_handgrenade.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="npc_otis.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\xen\xen.cpp">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\CActAnimating.cpp">
+      <Filter>Source Files\game\server\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\xen\CXenPLight.cpp">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\xen\CXenHair.cpp">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\xen\CXenTreeTrigger.cpp">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\xen\CXenTree.cpp">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\xen\CXenHull.cpp">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\xen\CXenSporeSmall.cpp">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\xen\CXenSporeMed.cpp">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\xen\CXenSporeLarge.cpp">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\xen\CXenSpore.cpp">
+      <Filter>Source Files\game\server\entities\xen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -475,6 +517,36 @@
     </ClInclude>
     <ClInclude Include="weapons.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\CActAnimating.h">
+      <Filter>Source Files\game\server\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\xen\CXenPLight.h">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\xen\CXenHair.h">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\xen\CXenTreeTrigger.h">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\xen\CXenTree.h">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\xen\CXenSpore.h">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\xen\CXenHull.h">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\xen\CXenSporeSmall.h">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\xen\CXenSporeMed.h">
+      <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\xen\CXenSporeLarge.h">
+      <Filter>Source Files\game\server\entities\xen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

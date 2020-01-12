@@ -231,6 +231,17 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\game\server\entities\CActAnimating.cpp" />
+    <ClCompile Include="..\game\server\entities\xen\CXenHair.cpp" />
+    <ClCompile Include="..\game\server\entities\xen\CXenHull.cpp" />
+    <ClCompile Include="..\game\server\entities\xen\CXenPLight.cpp" />
+    <ClCompile Include="..\game\server\entities\xen\CXenSpore.cpp" />
+    <ClCompile Include="..\game\server\entities\xen\CXenSporeLarge.cpp" />
+    <ClCompile Include="..\game\server\entities\xen\CXenSporeMed.cpp" />
+    <ClCompile Include="..\game\server\entities\xen\CXenSporeSmall.cpp" />
+    <ClCompile Include="..\game\server\entities\xen\CXenTree.cpp" />
+    <ClCompile Include="..\game\server\entities\xen\CXenTreeTrigger.cpp" />
+    <ClCompile Include="..\game\server\entities\xen\xen.cpp" />
     <ClCompile Include="npc_aflock.cpp" />
     <ClCompile Include="npc_agrunt.cpp" />
     <ClCompile Include="AI_BaseNPC_Schedule.cpp" />
@@ -335,10 +346,19 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
     <ClCompile Include="..\game_shared\voice_gamemgr.cpp" />
     <ClCompile Include="weapons.cpp" />
     <ClCompile Include="world.cpp" />
-    <ClCompile Include="xen.cpp" />
     <ClCompile Include="npc_zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\game\server\entities\CActAnimating.h" />
+    <ClInclude Include="..\game\server\entities\xen\CXenHair.h" />
+    <ClInclude Include="..\game\server\entities\xen\CXenHull.h" />
+    <ClInclude Include="..\game\server\entities\xen\CXenPLight.h" />
+    <ClInclude Include="..\game\server\entities\xen\CXenSpore.h" />
+    <ClInclude Include="..\game\server\entities\xen\CXenSporeLarge.h" />
+    <ClInclude Include="..\game\server\entities\xen\CXenSporeMed.h" />
+    <ClInclude Include="..\game\server\entities\xen\CXenSporeSmall.h" />
+    <ClInclude Include="..\game\server\entities\xen\CXenTree.h" />
+    <ClInclude Include="..\game\server\entities\xen\CXenTreeTrigger.h" />
     <ClInclude Include="activity.h" />
     <ClInclude Include="activitymap.h" />
     <ClInclude Include="animation.h" />
