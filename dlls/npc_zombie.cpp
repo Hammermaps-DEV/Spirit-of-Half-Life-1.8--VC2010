@@ -39,7 +39,7 @@ class CZombie : public CBaseMonster
 public:
 	void Spawn( void );
 	void Precache( void );
-	void SetYawSpeed( void );
+	void SetYawSpeed( void ) { pev->yaw_speed = 120; }
 	int  Classify ( void );
 	void HandleAnimEvent( MonsterEvent_t *pEvent );
 	int IgnoreConditions ( void );
@@ -115,25 +115,6 @@ int	CZombie :: Classify ( void )
 	return m_iClass?m_iClass:CLASS_ALIEN_MONSTER;
 }
 
-//=========================================================
-// SetYawSpeed - allows each sequence to have a different
-// turn rate associated with it.
-//=========================================================
-void CZombie :: SetYawSpeed ( void )
-{
-	int ys;
-
-	ys = 120;
-
-#if 0
-	switch ( m_Activity )
-	{
-	}
-#endif
-
-	pev->yaw_speed = ys;
-}
-
 int CZombie :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
 {
 	// Take 30% damage from bullets
@@ -149,6 +130,7 @@ int CZombie :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 	// HACK HACK -- until we fix this.
 	if ( IsAlive() )
 		PainSound();
+	
 	return CBaseMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
 }
 
@@ -195,22 +177,17 @@ void CZombie :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			// do stuff for this event.
 	//		ALERT( at_console, "Slash right!\n" );
 			CBaseEntity *pHurt = CheckTraceHullAttack( 70, gSkillData.zombieDmgOneSlash, DMG_SLASH );
-			if ( pHurt )
-			{
-				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) )
-				{
-					pHurt->pev->punchangle.z = -18;
+			if (pHurt) {
+				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
+					pHurt->pev->punchangle.z = 18;
 					pHurt->pev->punchangle.x = 5;
 					pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_right * 100;
 				}
-				// Play a random attack hit sound
-				EMIT_SOUND_DYN ( ENT(pev), CHAN_WEAPON, pAttackHitSounds[ RANDOM_LONG(0,ARRAYSIZE(pAttackHitSounds)-1) ], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5,5) );
-			}
-			else // Play a random attack miss sound
-				EMIT_SOUND_DYN ( ENT(pev), CHAN_WEAPON, pAttackMissSounds[ RANDOM_LONG(0,ARRAYSIZE(pAttackMissSounds)-1) ], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5,5) );
 
-			if (RANDOM_LONG(0,1))
-				AttackSound();
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+			}
+			else
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
 		}
 		break;
 
@@ -219,42 +196,38 @@ void CZombie :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			// do stuff for this event.
 	//		ALERT( at_console, "Slash left!\n" );
 			CBaseEntity *pHurt = CheckTraceHullAttack( 70, gSkillData.zombieDmgOneSlash, DMG_SLASH );
-			if ( pHurt )
-			{
-				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) )
-				{
-					pHurt->pev->punchangle.z = 18;
+			if (pHurt) {
+				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
+					pHurt->pev->punchangle.z = -18;
 					pHurt->pev->punchangle.x = 5;
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 100;
 				}
-				EMIT_SOUND_DYN ( ENT(pev), CHAN_WEAPON, pAttackHitSounds[ RANDOM_LONG(0,ARRAYSIZE(pAttackHitSounds)-1) ], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5,5) );
+
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
 			}
 			else
-				EMIT_SOUND_DYN ( ENT(pev), CHAN_WEAPON, pAttackMissSounds[ RANDOM_LONG(0,ARRAYSIZE(pAttackMissSounds)-1) ], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5,5) );
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
 
-			if (RANDOM_LONG(0,1))
-				AttackSound();
+			if (RANDOM_LONG(0, 1)) { AttackSound(); }
 		}
 		break;
 
 		case ZOMBIE_AE_ATTACK_BOTH:
 		{
 			// do stuff for this event.
-			CBaseEntity *pHurt = CheckTraceHullAttack( 70, gSkillData.zombieDmgBothSlash, DMG_SLASH );
-			if ( pHurt )
-			{
-				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) )
-				{
-					pHurt->pev->punchangle.x = 5;
+			CBaseEntity *pHurt = CheckTraceHullAttack( 70, gSkillData.zombieDmgBothSlash, DMG_CLUB);
+			if (pHurt) {
+				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
+					pHurt->pev->punchangle.x = 20;
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * -100;
 				}
-				EMIT_SOUND_DYN ( ENT(pev), CHAN_WEAPON, pAttackHitSounds[ RANDOM_LONG(0,ARRAYSIZE(pAttackHitSounds)-1) ], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5,5) );
+
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
 			}
 			else
-				EMIT_SOUND_DYN ( ENT(pev), CHAN_WEAPON, pAttackMissSounds[ RANDOM_LONG(0,ARRAYSIZE(pAttackMissSounds)-1) ], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5,5) );
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
 
-			if (RANDOM_LONG(0,1))
-				AttackSound();
+			if (RANDOM_LONG(0, 1)) { AttackSound(); }
 		}
 		break;
 
@@ -275,6 +248,7 @@ void CZombie :: Spawn()
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
 	else
 		SET_MODEL(ENT(pev), "models/zombie.mdl");
+	
 	UTIL_SetSize( pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX );
 
 	pev->solid			= SOLID_SLIDEBOX;
@@ -295,38 +269,22 @@ void CZombie :: Spawn()
 //=========================================================
 void CZombie :: Precache()
 {
-	int i;
-
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
 		PRECACHE_MODEL("models/zombie.mdl");
 
-	for ( i = 0; i < ARRAYSIZE( pAttackHitSounds ); i++ )
-		PRECACHE_SOUND((char *)pAttackHitSounds[i]);
-
-	for ( i = 0; i < ARRAYSIZE( pAttackMissSounds ); i++ )
-		PRECACHE_SOUND((char *)pAttackMissSounds[i]);
-
-	for ( i = 0; i < ARRAYSIZE( pAttackSounds ); i++ )
-		PRECACHE_SOUND((char *)pAttackSounds[i]);
-
-	for ( i = 0; i < ARRAYSIZE( pIdleSounds ); i++ )
-		PRECACHE_SOUND((char *)pIdleSounds[i]);
-
-	for ( i = 0; i < ARRAYSIZE( pAlertSounds ); i++ )
-		PRECACHE_SOUND((char *)pAlertSounds[i]);
-
-	for ( i = 0; i < ARRAYSIZE( pPainSounds ); i++ )
-		PRECACHE_SOUND((char *)pPainSounds[i]);
+	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
+	PRECACHE_SOUND_ARRAY(pAttackMissSounds);
+	PRECACHE_SOUND_ARRAY(pAttackSounds);
+	PRECACHE_SOUND_ARRAY(pIdleSounds);
+	PRECACHE_SOUND_ARRAY(pAlertSounds);
+	PRECACHE_SOUND_ARRAY(pPainSounds);
 }	
 
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-
-
-
 int CZombie::IgnoreConditions ( void )
 {
 	int iIgnore = CBaseMonster::IgnoreConditions();
