@@ -43,8 +43,8 @@ enum tripmine_e
 
 class CTripmineGrenade : public CGrenade
 {
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -53,14 +53,14 @@ class CTripmineGrenade : public CGrenade
 
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-	void EXPORT WarningThink(void);
-	void EXPORT PowerupThink(void);
-	void EXPORT BeamBreakThink(void);
-	void EXPORT DelayDeathThink(void);
+	void EXPORT WarningThink();
+	void EXPORT PowerupThink();
+	void EXPORT BeamBreakThink();
+	void EXPORT DelayDeathThink();
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
-	void MakeBeam(void);
-	void KillBeam(void);
+	void MakeBeam();
+	void KillBeam();
 
 	float m_flPowerUp;
 	Vector m_vecDir;
@@ -93,7 +93,7 @@ TYPEDESCRIPTION CTripmineGrenade::m_SaveData[] =
 IMPLEMENT_SAVERESTORE(CTripmineGrenade, CGrenade);
 
 
-void CTripmineGrenade::Spawn(void)
+void CTripmineGrenade::Spawn()
 {
 	Precache();
 	// motor
@@ -144,7 +144,7 @@ void CTripmineGrenade::Spawn(void)
 }
 
 
-void CTripmineGrenade::Precache(void)
+void CTripmineGrenade::Precache()
 {
 	PRECACHE_MODEL("models/v_tripmine.mdl");
 	PRECACHE_SOUND("weapons/mine_deploy.wav");
@@ -154,7 +154,7 @@ void CTripmineGrenade::Precache(void)
 }
 
 
-void CTripmineGrenade::WarningThink(void)
+void CTripmineGrenade::WarningThink()
 {
 	// play warning sound
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/Blip2.wav", 1.0, ATTN_NORM);
@@ -165,7 +165,7 @@ void CTripmineGrenade::WarningThink(void)
 }
 
 
-void CTripmineGrenade::PowerupThink(void)
+void CTripmineGrenade::PowerupThink()
 {
 	TraceResult tr;
 
@@ -231,7 +231,7 @@ void CTripmineGrenade::PowerupThink(void)
 }
 
 
-void CTripmineGrenade::KillBeam(void)
+void CTripmineGrenade::KillBeam()
 {
 	if (m_pBeam)
 	{
@@ -241,7 +241,7 @@ void CTripmineGrenade::KillBeam(void)
 }
 
 
-void CTripmineGrenade::MakeBeam(void)
+void CTripmineGrenade::MakeBeam()
 {
 	TraceResult tr;
 
@@ -265,7 +265,7 @@ void CTripmineGrenade::MakeBeam(void)
 }
 
 
-void CTripmineGrenade::BeamBreakThink(void)
+void CTripmineGrenade::BeamBreakThink()
 {
 	BOOL bBlowup = 0;
 
@@ -345,7 +345,7 @@ void CTripmineGrenade::Killed(entvars_t* pevAttacker, int iGib)
 }
 
 
-void CTripmineGrenade::DelayDeathThink(void)
+void CTripmineGrenade::DelayDeathThink()
 {
 	KillBeam();
 	TraceResult tr;
@@ -382,7 +382,7 @@ void CTripmine::Spawn()
 	}
 }
 
-void CTripmine::Precache(void)
+void CTripmine::Precache()
 {
 	PRECACHE_MODEL("models/v_tripmine.mdl");
 	PRECACHE_MODEL("models/p_tripmine.mdl");
@@ -430,7 +430,7 @@ void CTripmine::Holster(int skiplocal /* = 0 */)
 	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
 }
 
-void CTripmine::PrimaryAttack(void)
+void CTripmine::PrimaryAttack()
 {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return;
@@ -488,7 +488,7 @@ void CTripmine::PrimaryAttack(void)
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 }
 
-void CTripmine::WeaponIdle(void)
+void CTripmine::WeaponIdle()
 {
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
 		return;

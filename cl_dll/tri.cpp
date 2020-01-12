@@ -207,7 +207,7 @@ void Draw_Triangles( void )
 
 extern engine_studio_api_t IEngineStudio;
 
-void BlackFog(void)
+void BlackFog()
 {
 	static float fColorBlack[3] = { 0,0,0 };
 	bool bFog = g_fStartDist > 0 && g_fEndDist > 0;
@@ -220,7 +220,7 @@ void BlackFog(void)
 	}
 }
 
-void RenderFog(void)
+void RenderFog()
 {
 	float g_fFogColor[4] = { FogColor.x, FogColor.y, FogColor.z, 1.0 };
 	bool bFog = g_iWaterLevel < 2 && g_fStartDist > 0 && g_fEndDist > 0;

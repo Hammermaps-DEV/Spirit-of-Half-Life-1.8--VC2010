@@ -76,28 +76,28 @@ enum
 class CHoundeye : public CSquadMonster
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
-	int Classify(void) override;
+	void Spawn() override;
+	void Precache() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	void SetYawSpeed(void) override;
-	void WarmUpSound(void);
-	void AlertSound(void) override;
-	void DeathSound(void) override;
-	void WarnSound(void);
-	void PainSound(void) override;
-	void IdleSound(void) override;
+	void SetYawSpeed() override;
+	void WarmUpSound();
+	void AlertSound() override;
+	void DeathSound() override;
+	void WarnSound();
+	void PainSound() override;
+	void IdleSound() override;
 	void StartTask(Task_t* pTask) override;
 	void RunTask(Task_t* pTask) override;
-	void SonicAttack(void);
-	void PrescheduleThink(void) override;
+	void SonicAttack();
+	void PrescheduleThink() override;
 	void SetActivity(Activity NewActivity) override;
-	void WriteBeamColor(void);
+	void WriteBeamColor();
 	BOOL CheckRangeAttack1(float flDot, float flDist) override;
 	BOOL FValidateHintType(short sHint) override;
-	BOOL FCanActiveIdle(void) override;
+	BOOL FCanActiveIdle() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
-	Schedule_t* CHoundeye::GetSchedule(void) override;
+	Schedule_t* CHoundeye::GetSchedule() override;
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -128,7 +128,7 @@ IMPLEMENT_SAVERESTORE(CHoundeye, CSquadMonster);
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int CHoundeye::Classify(void)
+int CHoundeye::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
@@ -164,7 +164,7 @@ BOOL CHoundeye::FValidateHintType(short sHint)
 //=========================================================
 // FCanActiveIdle
 //=========================================================
-BOOL CHoundeye::FCanActiveIdle(void)
+BOOL CHoundeye::FCanActiveIdle()
 {
 	if (InSquad())
 	{
@@ -206,7 +206,7 @@ BOOL CHoundeye::CheckRangeAttack1(float flDot, float flDist)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CHoundeye::SetYawSpeed(void)
+void CHoundeye::SetYawSpeed()
 {
 	int ys;
 
@@ -399,7 +399,7 @@ void CHoundeye::Precache()
 //=========================================================
 // IdleSound
 //=========================================================
-void CHoundeye::IdleSound(void)
+void CHoundeye::IdleSound()
 {
 	switch (RANDOM_LONG(0, 2))
 	{
@@ -418,7 +418,7 @@ void CHoundeye::IdleSound(void)
 //=========================================================
 // IdleSound
 //=========================================================
-void CHoundeye::WarmUpSound(void)
+void CHoundeye::WarmUpSound()
 {
 	switch (RANDOM_LONG(0, 1))
 	{
@@ -434,7 +434,7 @@ void CHoundeye::WarmUpSound(void)
 //=========================================================
 // WarnSound 
 //=========================================================
-void CHoundeye::WarnSound(void)
+void CHoundeye::WarnSound()
 {
 	switch (RANDOM_LONG(0, 2))
 	{
@@ -453,7 +453,7 @@ void CHoundeye::WarnSound(void)
 //=========================================================
 // AlertSound 
 //=========================================================
-void CHoundeye::AlertSound(void)
+void CHoundeye::AlertSound()
 {
 	if (InSquad() && !IsLeader())
 	{
@@ -477,7 +477,7 @@ void CHoundeye::AlertSound(void)
 //=========================================================
 // DeathSound 
 //=========================================================
-void CHoundeye::DeathSound(void)
+void CHoundeye::DeathSound()
 {
 	switch (RANDOM_LONG(0, 2))
 	{
@@ -496,7 +496,7 @@ void CHoundeye::DeathSound(void)
 //=========================================================
 // PainSound 
 //=========================================================
-void CHoundeye::PainSound(void)
+void CHoundeye::PainSound()
 {
 	switch (RANDOM_LONG(0, 2))
 	{
@@ -516,7 +516,7 @@ void CHoundeye::PainSound(void)
 // WriteBeamColor - writes a color vector to the network 
 // based on the size of the group. 
 //=========================================================
-void CHoundeye::WriteBeamColor(void)
+void CHoundeye::WriteBeamColor()
 {
 	BYTE bRed, bGreen, bBlue;
 
@@ -565,7 +565,7 @@ void CHoundeye::WriteBeamColor(void)
 //=========================================================
 // SonicAttack
 //=========================================================
-void CHoundeye::SonicAttack(void)
+void CHoundeye::SonicAttack()
 {
 	float flAdjustedDamage;
 	float flDist;
@@ -859,7 +859,7 @@ void CHoundeye::RunTask(Task_t* pTask)
 //=========================================================
 // PrescheduleThink
 //=========================================================
-void CHoundeye::PrescheduleThink(void)
+void CHoundeye::PrescheduleThink()
 {
 	// if the hound is mad and is running, make hunt noises.
 	if (m_MonsterState == MONSTERSTATE_COMBAT && m_Activity == ACT_RUN && RANDOM_FLOAT(0, 1) < 0.2)
@@ -1260,7 +1260,7 @@ Schedule_t* CHoundeye::GetScheduleOfType(int Type)
 //=========================================================
 // GetSchedule 
 //=========================================================
-Schedule_t* CHoundeye::GetSchedule(void)
+Schedule_t* CHoundeye::GetSchedule()
 {
 	switch (m_MonsterState)
 	{

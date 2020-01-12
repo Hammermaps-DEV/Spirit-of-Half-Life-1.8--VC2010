@@ -85,7 +85,7 @@ extern client_sprite_t *GetSpriteList(client_sprite_t *pList, const char *psz, i
 extern cvar_t *sensitivity;
 cvar_t *cl_lw = NULL;
 
-void ShutdownInput (void);
+void ShutdownInput ();
 
 //DECLARE_MESSAGE(m_Logo, Logo)
 int __MsgFunc_Logo(const char *pszName, int iSize, void *pbuf)
@@ -201,7 +201,7 @@ int __MsgFunc_Inventory(const char *pszName, int iSize, void *pbuf)
 }
 	
 // TFFree Command Menu
-void __CmdFunc_OpenCommandMenu(void)
+void __CmdFunc_OpenCommandMenu()
 {
 	if ( gViewPort )
 	{
@@ -210,7 +210,7 @@ void __CmdFunc_OpenCommandMenu(void)
 }
 
 // TFC "special" command
-void __CmdFunc_InputPlayerSpecial(void)
+void __CmdFunc_InputPlayerSpecial()
 {
 	if ( gViewPort )
 	{
@@ -218,7 +218,7 @@ void __CmdFunc_InputPlayerSpecial(void)
 	}
 }
 
-void __CmdFunc_CloseCommandMenu(void)
+void __CmdFunc_CloseCommandMenu()
 {
 	if ( gViewPort )
 	{

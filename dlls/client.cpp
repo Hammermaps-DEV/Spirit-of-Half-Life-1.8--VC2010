@@ -56,7 +56,7 @@ extern int gmsgCamData; // for trigger_viewset
 extern int g_teamplay;
 DLL_GLOBAL int g_serveractive = 0;
 
-void LinkUserMessages(void);
+void LinkUserMessages();
 
 /*
  * used by kill command and disconnect command
@@ -663,7 +663,7 @@ void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
 	g_pGameRules->ClientUserInfoChanged(GetClassPtr((CBasePlayer*)&pEntity->v), infobuffer);
 }
 
-void ServerDeactivate(void)
+void ServerDeactivate()
 {
 	// make sure they reinitialise the World in the next server
 	g_pWorld = nullptr;
@@ -761,12 +761,12 @@ void PlayerPostThink(edict_t* pEntity)
 }
 
 
-void ParmsNewLevel(void)
+void ParmsNewLevel()
 {
 }
 
 
-void ParmsChangeLevel(void)
+void ParmsChangeLevel()
 {
 	// retrieve the pointer to the save data
 	SAVERESTOREDATA* pSaveData = static_cast<SAVERESTOREDATA*>(gpGlobals->pSaveData);
@@ -779,7 +779,7 @@ void ParmsChangeLevel(void)
 //
 // GLOBALS ASSUMED SET:  g_ulFrameCount
 //
-void StartFrame(void)
+void StartFrame()
 {
 	if (g_pGameRules)
 		g_pGameRules->Think();
@@ -795,7 +795,7 @@ void StartFrame(void)
 }
 
 
-void ClientPrecache(void)
+void ClientPrecache()
 {
 	// setup precaches always needed
 	PRECACHE_SOUND("player/sprayer.wav"); // spray paint sound for PreAlpha
@@ -1593,7 +1593,7 @@ RegisterEncoders
 Allows game .dll to override network encoding of certain types of entities and tweak values, etc.
 =================
 */
-void RegisterEncoders(void)
+void RegisterEncoders()
 {
 	DELTA_ADDENCODER("Entity_Encode", Entity_Encode);
 	DELTA_ADDENCODER("Custom_Encode", Custom_Encode);
@@ -1861,7 +1861,7 @@ Create pseudo-baselines for items that aren't placed in the map at spawn time, b
 to be created during play ( e.g., grenades, ammo packs, projectiles, corpses, etc. )
 ================================
 */
-void CreateInstancedBaselines(void)
+void CreateInstancedBaselines()
 {
 	entity_state_t state;
 
@@ -1906,7 +1906,7 @@ AllowLagCompensation
   if you want.
 ================================
 */
-int AllowLagCompensation(void)
+int AllowLagCompensation()
 {
 	return 1;
 }

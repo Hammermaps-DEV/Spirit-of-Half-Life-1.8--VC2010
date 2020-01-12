@@ -54,46 +54,46 @@ typedef enum
 class CBaseTurret : public CBaseMonster
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 	void KeyValue(KeyValueData* pkvd) override;
 	void EXPORT TurretUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
 	                 int bitsDamageType) override;
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	int Classify(void) override;
+	int Classify() override;
 
-	int BloodColor(void) override { return DONT_BLEED; }
+	int BloodColor() override { return DONT_BLEED; }
 
-	void GibMonster(void) override
+	void GibMonster() override
 	{
 	} // UNDONE: Throw turret gibs?
 
 	// Think functions
 
-	void EXPORT ActiveThink(void);
-	void EXPORT SearchThink(void);
-	void EXPORT AutoSearchThink(void);
-	void EXPORT TurretDeath(void);
+	void EXPORT ActiveThink();
+	void EXPORT SearchThink();
+	void EXPORT AutoSearchThink();
+	void EXPORT TurretDeath();
 
-	virtual void EXPORT SpinDownCall(void) { m_iSpin = 0; }
-	virtual void EXPORT SpinUpCall(void) { m_iSpin = 1; }
+	virtual void EXPORT SpinDownCall() { m_iSpin = 0; }
+	virtual void EXPORT SpinUpCall() { m_iSpin = 1; }
 
-	// void SpinDown(void);
+	// void SpinDown();
 	// float EXPORT SpinDownCall( void ) { return SpinDown(); }
 
-	// virtual float SpinDown(void) { return 0;}
-	// virtual float Retire(void) { return 0;}
+	// virtual float SpinDown() { return 0;}
+	// virtual float Retire() { return 0;}
 
-	void EXPORT Deploy(void);
-	void EXPORT Retire(void);
+	void EXPORT Deploy();
+	void EXPORT Retire();
 
-	void EXPORT Initialize(void);
+	void EXPORT Initialize();
 
-	virtual void Ping(void);
-	virtual void EyeOn(void);
-	virtual void EyeOff(void);
+	virtual void Ping();
+	virtual void EyeOn();
+	virtual void EyeOff();
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -102,7 +102,7 @@ public:
 
 	// other functions
 	void SetTurretAnim(TURRET_ANIM anim);
-	int MoveTurret(void);
+	int MoveTurret();
 
 	virtual void Shoot(Vector& vecSrc, Vector& vecDirToEnemy)
 	{
@@ -186,11 +186,11 @@ IMPLEMENT_SAVERESTORE(CBaseTurret, CBaseMonster);
 class CTurret : public CBaseTurret
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 	// Think functions
-	void SpinUpCall(void) override;
-	void SpinDownCall(void) override;
+	void SpinUpCall() override;
+	void SpinDownCall() override;
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -216,7 +216,7 @@ class CMiniTurret : public CBaseTurret
 {
 public:
 	void Spawn() override;
-	void Precache(void) override;
+	void Precache() override;
 	// other functions
 	void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) override;
 };
@@ -385,7 +385,7 @@ void CMiniTurret::Precache()
 	PRECACHE_SOUND("weapons/hks3.wav");
 }
 
-void CBaseTurret::Initialize(void)
+void CBaseTurret::Initialize()
 {
 	m_iOn = 0;
 	m_fBeserk = 0;
@@ -448,7 +448,7 @@ void CBaseTurret::TurretUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 }
 
 
-void CBaseTurret::Ping(void)
+void CBaseTurret::Ping()
 {
 	// make the pinging noise every second while searching
 	if (m_flPingTime == 0)
@@ -492,7 +492,7 @@ void CBaseTurret::EyeOff()
 }
 
 
-void CBaseTurret::ActiveThink(void)
+void CBaseTurret::ActiveThink()
 {
 	int fAttack = 0;
 	Vector vecDirToEnemy;
@@ -672,7 +672,7 @@ void CMiniTurret::Shoot(Vector& vecSrc, Vector& vecDirToEnemy)
 }
 
 
-void CBaseTurret::Deploy(void)
+void CBaseTurret::Deploy()
 {
 	SetNextThink(0.1);
 	StudioFrameAdvance();
@@ -710,7 +710,7 @@ void CBaseTurret::Deploy(void)
 	m_flLastSight = gpGlobals->time + m_flMaxWait;
 }
 
-void CBaseTurret::Retire(void)
+void CBaseTurret::Retire()
 {
 	// make the turret level
 	m_vecGoalAngles.x = 0;
@@ -758,7 +758,7 @@ void CBaseTurret::Retire(void)
 }
 
 
-void CTurret::SpinUpCall(void)
+void CTurret::SpinUpCall()
 {
 	StudioFrameAdvance();
 	SetNextThink(0.1);
@@ -797,7 +797,7 @@ void CTurret::SpinUpCall(void)
 }
 
 
-void CTurret::SpinDownCall(void)
+void CTurret::SpinDownCall()
 {
 	if (m_iSpin)
 	{
@@ -858,7 +858,7 @@ void CBaseTurret::SetTurretAnim(TURRET_ANIM anim)
 // After a set amount of time, the barrel will spin down. After m_flMaxWait, the turret will
 // retact.
 //
-void CBaseTurret::SearchThink(void)
+void CBaseTurret::SearchThink()
 {
 	// ensure rethink
 	SetTurretAnim(TURRET_ANIM_SPIN);
@@ -921,7 +921,7 @@ void CBaseTurret::SearchThink(void)
 // This think function will deploy the turret when something comes into range. This is for
 // automatically activated turrets.
 //
-void CBaseTurret::AutoSearchThink(void)
+void CBaseTurret::AutoSearchThink()
 {
 	// ensure rethink
 	StudioFrameAdvance();
@@ -951,7 +951,7 @@ void CBaseTurret::AutoSearchThink(void)
 }
 
 
-void CBaseTurret::TurretDeath(void)
+void CBaseTurret::TurretDeath()
 {
 	BOOL iActive = FALSE;
 
@@ -1079,7 +1079,7 @@ int CBaseTurret::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 	return 1;
 }
 
-int CBaseTurret::MoveTurret(void)
+int CBaseTurret::MoveTurret()
 {
 	int state = 0;
 	// any x movement?
@@ -1164,7 +1164,7 @@ int CBaseTurret::MoveTurret(void)
 //
 // ID as a machine
 //
-int CBaseTurret::Classify(void)
+int CBaseTurret::Classify()
 {
 	if (m_iClass) return m_iClass;
 	if (m_iOn || m_iAutoStart)
@@ -1180,12 +1180,12 @@ class CSentry : public CBaseTurret
 {
 public:
 	void Spawn() override;
-	void Precache(void) override;
+	void Precache() override;
 	// other functions
 	void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) override;
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void EXPORT SentryTouch(CBaseEntity* pOther);
-	void EXPORT SentryDeath(void);
+	void EXPORT SentryDeath();
 };
 
 LINK_ENTITY_TO_CLASS(monster_sentry, CSentry);
@@ -1283,7 +1283,7 @@ void CSentry::SentryTouch(CBaseEntity* pOther)
 }
 
 
-void CSentry::SentryDeath(void)
+void CSentry::SentryDeath()
 {
 	BOOL iActive = FALSE;
 

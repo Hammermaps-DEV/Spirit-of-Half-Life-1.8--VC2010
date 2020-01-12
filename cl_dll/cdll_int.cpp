@@ -43,7 +43,7 @@ CMP3 gMP3; //AJH - Killars MP3player
 
 TeamFortressViewport *gViewPort = NULL;
 
-void InitInput (void);
+void InitInput ();
 void EV_HookEvents( void );
 void IN_Commands( void );
 

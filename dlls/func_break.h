@@ -39,18 +39,18 @@ class CBreakable : public CBaseDelay
 {
 public:
 	// basic functions
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 	void KeyValue(KeyValueData* pkvd) override;
 	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult) override;
 	void EXPORT BreakTouch(CBaseEntity* pOther);
 	void EXPORT BreakUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT RespawnUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT RespawnThink(void);
-	void EXPORT RespawnFadeThink(void);
-	void DamageSound(void);
-	virtual void DoRespawn(void); //AJH Fix for respawnable breakable pushables
-	int Classify(void) override { return m_iClass; }
+	void EXPORT RespawnThink();
+	void EXPORT RespawnFadeThink();
+	void DamageSound();
+	virtual void DoRespawn(); //AJH Fix for respawnable breakable pushables
+	int Classify() override { return m_iClass; }
 
 	// breakables use an overridden takedamage
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
@@ -58,20 +58,20 @@ public:
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
 	                 int bitsDamageType) override;
 
-	BOOL IsBreakable(void);
-	BOOL SparkWhenHit(void);
+	BOOL IsBreakable();
+	BOOL SparkWhenHit();
 
-	STATE GetState(void) override;
+	STATE GetState() override;
 
 	int DamageDecal(int bitsDamageType) override;
 
-	void EXPORT Die(void);
-	int ObjectCaps(void) override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	void EXPORT Die();
+	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
 
-	BOOL Explodable(void) { return ExplosionMagnitude() > 0; }
-	int ExplosionMagnitude(void) { return pev->impulse; }
+	BOOL Explodable() { return ExplosionMagnitude() > 0; }
+	int ExplosionMagnitude() { return pev->impulse; }
 	void ExplosionSetMagnitude(int magnitude) { pev->impulse = magnitude; }
 
 	static void MaterialSoundPrecache(Materials precacheMaterial);

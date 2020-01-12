@@ -36,15 +36,15 @@ extern void SetMovedir(entvars_t* ev);
 class CBaseDoor : public CBaseToggle
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
-	void PostSpawn(void) override;
+	void Spawn() override;
+	void Precache() override;
+	void PostSpawn() override;
 	void KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	void Blocked(CBaseEntity* pOther) override;
 
 
-	int ObjectCaps(void) override
+	int ObjectCaps() override
 	{
 		if (pev->spawnflags & SF_ITEM_USE_ONLY)
 		{
@@ -65,10 +65,10 @@ public:
 
 	// local functions
 	int DoorActivate();
-	void EXPORT DoorGoUp(void);
-	void EXPORT DoorGoDown(void);
-	void EXPORT DoorHitTop(void);
-	void EXPORT DoorHitBottom(void);
+	void EXPORT DoorGoUp();
+	void EXPORT DoorGoDown();
+	void EXPORT DoorHitTop();
+	void EXPORT DoorHitBottom();
 
 	BYTE m_bHealthValue; // some doors are medi-kit doors, they give players health
 
@@ -425,7 +425,7 @@ void CBaseDoor::Spawn()
 //END
 
 //LRC
-void CBaseDoor::PostSpawn(void)
+void CBaseDoor::PostSpawn()
 {
 	if (m_pMoveWith)
 		m_vecPosition1 = pev->origin - m_pMoveWith->pev->origin;
@@ -484,7 +484,7 @@ void CBaseDoor::SetToggleState(int state)
 }
 
 
-void CBaseDoor::Precache(void)
+void CBaseDoor::Precache()
 {
 	char* pszSound;
 
@@ -773,7 +773,7 @@ extern Vector VecBModelOrigin(entvars_t* pevBModel);
 //
 // Starts the door going to its "up" position (simply ToggleData->vecPosition2).
 //
-void CBaseDoor::DoorGoUp(void)
+void CBaseDoor::DoorGoUp()
 {
 	entvars_t* pevActivator;
 
@@ -839,7 +839,7 @@ void CBaseDoor::DoorGoUp(void)
 //
 // The door has reached the "up" position.  Either go back down, or wait for another activation.
 //
-void CBaseDoor::DoorHitTop(void)
+void CBaseDoor::DoorHitTop()
 {
 	if (!FBitSet(pev->spawnflags, SF_DOOR_SILENT))
 	{
@@ -897,7 +897,7 @@ void CBaseDoor::DoorHitTop(void)
 //
 // Starts the door going to its "down" position (simply ToggleData->vecPosition1).
 //
-void CBaseDoor::DoorGoDown(void)
+void CBaseDoor::DoorGoDown()
 {
 	if (!FBitSet(pev->spawnflags, SF_DOOR_SILENT))
 		EMIT_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseMoving), 1, ATTN_NORM);
@@ -946,7 +946,7 @@ void CBaseDoor::DoorGoDown(void)
 //
 // The door has reached the "down" position.  Back to quiescence.
 //
-void CBaseDoor::DoorHitBottom(void)
+void CBaseDoor::DoorHitBottom()
 {
 	if (!FBitSet(pev->spawnflags, SF_DOOR_SILENT))
 	{
@@ -1120,10 +1120,10 @@ button or trigger field activates the door.
 class CRotDoor : public CBaseDoor
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 	void KeyValue(KeyValueData* pkvd) override;
 
-	void PostSpawn(void) override
+	void PostSpawn() override
 	{
 	} // don't use the moveWith fix from CBaseDoor
 	void SetToggleState(int state) override;
@@ -1132,7 +1132,7 @@ public:
 LINK_ENTITY_TO_CLASS(func_door_rotating, CRotDoor);
 
 
-void CRotDoor::Spawn(void)
+void CRotDoor::Spawn()
 {
 	Precache();
 	// set the axis of rotation
@@ -1207,13 +1207,13 @@ void CRotDoor::SetToggleState(int state)
 class CMomentaryDoor : public CBaseToggle
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
-	void EXPORT MomentaryMoveDone(void);
+	void Spawn() override;
+	void Precache() override;
+	void EXPORT MomentaryMoveDone();
 
 	void KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	int ObjectCaps(void) override { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps() override { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -1225,7 +1225,7 @@ public:
 	STATE m_iState;
 	float m_fLastPos;
 
-	STATE GetState(void) override { return m_iState; }
+	STATE GetState() override { return m_iState; }
 
 	bool CalcNumber(CBaseEntity* pLocus, float* OUTresult) override
 	{
@@ -1246,7 +1246,7 @@ TYPEDESCRIPTION CMomentaryDoor::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CMomentaryDoor, CBaseToggle);
 
-void CMomentaryDoor::Spawn(void)
+void CMomentaryDoor::Spawn()
 {
 	SetMovedir(pev);
 
@@ -1289,7 +1289,7 @@ void CMomentaryDoor::Spawn(void)
 	SetTouch(NULL);
 }
 
-void CMomentaryDoor::Precache(void)
+void CMomentaryDoor::Precache()
 {
 	// set the door's "in-motion" sound
 	switch (m_bMoveSnd)
@@ -1453,7 +1453,7 @@ void CMomentaryDoor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 	}
 }
 
-void CMomentaryDoor::MomentaryMoveDone(void)
+void CMomentaryDoor::MomentaryMoveDone()
 {
 	m_iState = STATE_OFF;
 	STOP_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseMoving));

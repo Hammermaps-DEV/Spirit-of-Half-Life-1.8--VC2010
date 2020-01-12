@@ -32,7 +32,7 @@ public:
 		return true;
 	}
 
-	void Think(void) override { SUB_Remove(); }
+	void Think() override { SUB_Remove(); }
 };
 
 
@@ -455,10 +455,10 @@ bool TryCalcLocus_NumberNonRandom(CBaseEntity* pLocus, const char* szText, float
 class CLocusAlias : public CBaseMutableAlias
 {
 public:
-	void PostSpawn(void) override;
+	void PostSpawn() override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	CBaseEntity* FollowAlias(CBaseEntity* pFrom) override;
-	void FlushChanges(void) override;
+	void FlushChanges() override;
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -477,7 +477,7 @@ TYPEDESCRIPTION CLocusAlias::m_SaveData[] =
 LINK_ENTITY_TO_CLASS(locus_alias, CLocusAlias);
 IMPLEMENT_SAVERESTORE(CLocusAlias, CBaseMutableAlias);
 
-void CLocusAlias::PostSpawn(void)
+void CLocusAlias::PostSpawn()
 {
 	m_hValue = UTIL_FindEntityByTargetname(nullptr, STRING(pev->netname));
 }
@@ -488,7 +488,7 @@ void CLocusAlias::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 	UTIL_AddToAliasList(this);
 }
 
-void CLocusAlias::FlushChanges(void)
+void CLocusAlias::FlushChanges()
 {
 	m_hValue = m_hChangeTo;
 	m_hChangeTo = nullptr;
@@ -521,8 +521,8 @@ CBaseEntity* CLocusAlias::FollowAlias(CBaseEntity* pFrom)
 class CLocusBeam : public CPointEntity
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	void KeyValue(KeyValueData* pkvd) override;
@@ -625,7 +625,7 @@ void CLocusBeam::KeyValue(KeyValueData* pkvd)
 		CBaseEntity::KeyValue(pkvd);
 }
 
-void CLocusBeam::Precache(void)
+void CLocusBeam::Precache()
 {
 	PRECACHE_MODEL((char*)STRING(m_iszSprite));
 }
@@ -697,7 +697,7 @@ void CLocusBeam::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 	}
 }
 
-void CLocusBeam::Spawn(void)
+void CLocusBeam::Spawn()
 {
 	Precache();
 	m_iFlags = 0;
@@ -1272,7 +1272,7 @@ public:
 		return true;
 	}
 
-	void Think(void) override
+	void Think() override
 	{
 		FireTargets(STRING(pev->message), m_hActivator, this, USE_TOGGLE, 0);
 	}
@@ -1716,7 +1716,7 @@ bool CCalcVelocityPolar::CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult)
 class CLocusVariable : public CPointEntity
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	bool CalcVelocity(CBaseEntity* pLocus, Vector* OUTresult) override
@@ -1795,7 +1795,7 @@ void CLocusVariable::KeyValue(KeyValueData* pkvd)
 		CPointEntity::KeyValue(pkvd);
 }
 
-void CLocusVariable::Spawn(void)
+void CLocusVariable::Spawn()
 {
 	SetMovedir(pev);
 }

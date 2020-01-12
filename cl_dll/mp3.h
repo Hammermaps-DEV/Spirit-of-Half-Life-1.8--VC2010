@@ -10,7 +10,7 @@
 class CMP3
 {
 private:
-	float			(_stdcall * VER)	(void);//AJH get fmod dll version
+	float			(_stdcall * VER)	();//AJH get fmod dll version
 	signed char		(_stdcall * SCL)	(FSOUND_STREAM *stream);
 	signed char		(_stdcall * SOP)	(int outputtype);
 	signed char		(_stdcall * SBS)	(int len_ms);

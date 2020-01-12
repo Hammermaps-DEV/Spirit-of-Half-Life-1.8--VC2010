@@ -67,23 +67,23 @@ enum
 class CHAssassin : public CBaseMonster
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
-	void SetYawSpeed(void) override;
-	int Classify(void) override;
-	int ISoundMask(void) override;
-	void Shoot(void);
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int Classify() override;
+	int ISoundMask() override;
+	void Shoot();
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	Schedule_t* GetSchedule(void) override;
+	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	BOOL CheckMeleeAttack1(float flDot, float flDist) override; // jump
 	BOOL CheckRangeAttack1(float flDot, float flDist) override; // shoot
 	BOOL CheckRangeAttack2(float flDot, float flDist) override; // throw grenade
 	void StartTask(Task_t* pTask) override;
-	void RunAI(void) override;
+	void RunAI() override;
 	void RunTask(Task_t* pTask) override;
-	void DeathSound(void) override;
-	void IdleSound(void) override;
+	void DeathSound() override;
+	void IdleSound() override;
 	CUSTOM_SCHEDULES;
 
 	int Save(CSave& save) override;
@@ -132,14 +132,14 @@ IMPLEMENT_SAVERESTORE(CHAssassin, CBaseMonster);
 //=========================================================
 // DieSound
 //=========================================================
-void CHAssassin::DeathSound(void)
+void CHAssassin::DeathSound()
 {
 }
 
 //=========================================================
 // IdleSound
 //=========================================================
-void CHAssassin::IdleSound(void)
+void CHAssassin::IdleSound()
 {
 }
 
@@ -147,7 +147,7 @@ void CHAssassin::IdleSound(void)
 // ISoundMask - returns a bit mask indicating which types
 // of sounds this monster regards. 
 //=========================================================
-int CHAssassin::ISoundMask(void)
+int CHAssassin::ISoundMask()
 {
 	return bits_SOUND_WORLD |
 		bits_SOUND_COMBAT |
@@ -160,7 +160,7 @@ int CHAssassin::ISoundMask(void)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int CHAssassin::Classify(void)
+int CHAssassin::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_HUMAN_MILITARY;
 }
@@ -169,7 +169,7 @@ int CHAssassin::Classify(void)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CHAssassin::SetYawSpeed(void)
+void CHAssassin::SetYawSpeed()
 {
 	int ys;
 
@@ -191,7 +191,7 @@ void CHAssassin::SetYawSpeed(void)
 //=========================================================
 // Shoot
 //=========================================================
-void CHAssassin::Shoot(void)
+void CHAssassin::Shoot()
 {
 	if (m_hEnemy == NULL && !m_pCine) //LRC
 		return;
@@ -743,7 +743,7 @@ BOOL CHAssassin::CheckRangeAttack2(float flDot, float flDist)
 //=========================================================
 // RunAI
 //=========================================================
-void CHAssassin::RunAI(void)
+void CHAssassin::RunAI()
 {
 	CBaseMonster::RunAI();
 
@@ -861,7 +861,7 @@ void CHAssassin::RunTask(Task_t* pTask)
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t* CHAssassin::GetSchedule(void)
+Schedule_t* CHAssassin::GetSchedule()
 {
 	switch (m_MonsterState)
 	{

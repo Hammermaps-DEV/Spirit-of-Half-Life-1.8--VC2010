@@ -38,17 +38,17 @@
 class CMonsterMaker : public CBaseMonster
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 	void KeyValue(KeyValueData* pkvd) override;
 	void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT CyclicUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT MakerThink(void);
-	void EXPORT MakeMonsterThink(void);
+	void EXPORT MakerThink();
+	void EXPORT MakeMonsterThink();
 	void DeathNotice(entvars_t* pevChild) override;
 	// monster maker children use this to tell the monster maker that they have died.
-	void TryMakeMonster(void); //LRC - to allow for a spawndelay
-	CBaseMonster* MakeMonster(void); //LRC - actually make a monster (and return the new creation)
+	void TryMakeMonster(); //LRC - to allow for a spawndelay
+	CBaseMonster* MakeMonster(); //LRC - actually make a monster (and return the new creation)
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -166,7 +166,7 @@ void CMonsterMaker::Spawn()
 	m_flGround = 0;
 }
 
-void CMonsterMaker::Precache(void)
+void CMonsterMaker::Precache()
 {
 	CBaseMonster::Precache();
 
@@ -176,7 +176,7 @@ void CMonsterMaker::Precache(void)
 //=========================================================
 // TryMakeMonster-  check that it's ok to drop a monster.
 //=========================================================
-void CMonsterMaker::TryMakeMonster(void)
+void CMonsterMaker::TryMakeMonster()
 {
 	if (m_iMaxLiveChildren > 0 && m_cLiveChildren >= m_iMaxLiveChildren)
 	{
@@ -284,7 +284,7 @@ void CMonsterMaker::TryMakeMonster(void)
 //=========================================================
 // MakeMonsterThink- a really trivial think function
 //=========================================================
-void CMonsterMaker::MakeMonsterThink(void)
+void CMonsterMaker::MakeMonsterThink()
 {
 	MakeMonster();
 }
@@ -292,7 +292,7 @@ void CMonsterMaker::MakeMonsterThink(void)
 //=========================================================
 // MakeMonster-  this is the code that drops the monster
 //=========================================================
-CBaseMonster* CMonsterMaker::MakeMonster(void)
+CBaseMonster* CMonsterMaker::MakeMonster()
 {
 	edict_t* pent;
 	entvars_t* pevCreate;
@@ -408,7 +408,7 @@ void CMonsterMaker::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE
 //=========================================================
 // MakerThink - creates a new monster every so often
 //=========================================================
-void CMonsterMaker::MakerThink(void)
+void CMonsterMaker::MakerThink()
 {
 	SetNextThink(m_flDelay);
 	TryMakeMonster();

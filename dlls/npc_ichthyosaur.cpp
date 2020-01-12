@@ -51,10 +51,10 @@ extern CGraph WorldGraph;
 class CIchthyosaur : public CFlyingMonster
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
-	void SetYawSpeed(void) override;
-	int Classify(void) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	CUSTOM_SCHEDULES;
 
@@ -62,11 +62,11 @@ public:
 	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	Schedule_t* GetSchedule(void) override;
+	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 
 	void Killed(entvars_t* pevAttacker, int iGib) override;
-	void BecomeDead(void) override;
+	void BecomeDead() override;
 
 	void EXPORT CombatUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT BiteTouch(CBaseEntity* pOther);
@@ -78,17 +78,17 @@ public:
 	BOOL CheckRangeAttack1(float flDot, float flDist) override;
 
 	float ChangeYaw(int speed) override;
-	Activity GetStoppedActivity(void) override;
+	Activity GetStoppedActivity() override;
 
 	void Move(float flInterval) override;
 	void MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, float flInterval) override;
-	void MonsterThink(void) override;
-	void Stop(void) override;
-	void Swim(void);
+	void MonsterThink() override;
+	void Stop() override;
+	void Swim();
 	Vector DoProbe(const Vector& Probe);
 
 	float VectorToPitch(const Vector& vec);
-	float FlPitchDiff(void);
+	float FlPitchDiff();
 	float ChangePitch(int speed);
 
 	Vector m_SaveVelocity;
@@ -114,12 +114,12 @@ public:
 	static const char* pDieSounds[];
 	static const char* pPainSounds[];
 
-	void IdleSound(void) override;
-	void AlertSound(void) override;
-	void AttackSound(void);
-	void BiteSound(void);
-	void DeathSound(void) override;
-	void PainSound(void) override;
+	void IdleSound() override;
+	void AlertSound() override;
+	void AttackSound();
+	void BiteSound();
+	void DeathSound() override;
+	void PainSound() override;
 };
 
 LINK_ENTITY_TO_CLASS(monster_ichthyosaur, CIchthyosaur);
@@ -183,32 +183,32 @@ const char* CIchthyosaur::pDieSounds[] =
 	EMIT_SOUND_DYN ( ENT(pev), chan , array [ RANDOM_LONG(0,ARRAYSIZE( array )-1) ], 1.0, 0.6, 0, RANDOM_LONG(95,105) );
 
 
-void CIchthyosaur::IdleSound(void)
+void CIchthyosaur::IdleSound()
 {
 	EMIT_ICKY_SOUND(CHAN_VOICE, pIdleSounds);
 }
 
-void CIchthyosaur::AlertSound(void)
+void CIchthyosaur::AlertSound()
 {
 	EMIT_ICKY_SOUND(CHAN_VOICE, pAlertSounds);
 }
 
-void CIchthyosaur::AttackSound(void)
+void CIchthyosaur::AttackSound()
 {
 	EMIT_ICKY_SOUND(CHAN_VOICE, pAttackSounds);
 }
 
-void CIchthyosaur::BiteSound(void)
+void CIchthyosaur::BiteSound()
 {
 	EMIT_ICKY_SOUND(CHAN_WEAPON, pBiteSounds);
 }
 
-void CIchthyosaur::DeathSound(void)
+void CIchthyosaur::DeathSound()
 {
 	EMIT_ICKY_SOUND(CHAN_VOICE, pDieSounds);
 }
 
-void CIchthyosaur::PainSound(void)
+void CIchthyosaur::PainSound()
 {
 	EMIT_ICKY_SOUND(CHAN_VOICE, pPainSounds);
 }
@@ -323,7 +323,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CIchthyosaur, CFlyingMonster);
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int CIchthyosaur::Classify(void)
+int CIchthyosaur::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
@@ -384,7 +384,7 @@ BOOL CIchthyosaur::CheckRangeAttack1(float flDot, float flDist)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CIchthyosaur::SetYawSpeed(void)
+void CIchthyosaur::SetYawSpeed()
 {
 	pev->yaw_speed = 100;
 }
@@ -399,7 +399,7 @@ void CIchthyosaur::Killed(entvars_t* pevAttacker, int iGib)
 	pev->velocity = Vector(0, 0, 0);
 }
 
-void CIchthyosaur::BecomeDead(void)
+void CIchthyosaur::BecomeDead()
 {
 	pev->takedamage = DAMAGE_YES; // don't let autoaim aim at corpses.
 
@@ -772,7 +772,7 @@ void CIchthyosaur::Move(float flInterval)
 	CFlyingMonster::Move(flInterval);
 }
 
-float CIchthyosaur::FlPitchDiff(void)
+float CIchthyosaur::FlPitchDiff()
 {
 	float flPitchDiff;
 	float flCurrentPitch;
@@ -837,7 +837,7 @@ float CIchthyosaur::ChangeYaw(int speed)
 }
 
 
-Activity CIchthyosaur::GetStoppedActivity(void)
+Activity CIchthyosaur::GetStoppedActivity()
 {
 	if (pev->movetype != MOVETYPE_FLY) // UNDONE: Ground idle here, IDLE may be something else
 		return ACT_IDLE;
@@ -850,7 +850,7 @@ void CIchthyosaur::MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, fl
 }
 
 
-void CIchthyosaur::MonsterThink(void)
+void CIchthyosaur::MonsterThink()
 {
 	CFlyingMonster::MonsterThink();
 
@@ -877,7 +877,7 @@ void CIchthyosaur::MonsterThink(void)
 	}
 }
 
-void CIchthyosaur::Stop(void)
+void CIchthyosaur::Stop()
 {
 	if (!m_bOnAttack)
 		m_flightSpeed = 80.0;

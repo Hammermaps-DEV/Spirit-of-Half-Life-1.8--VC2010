@@ -33,30 +33,30 @@ class CApache : public CBaseMonster
 	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn(void) override;
-	void Precache(void) override;
-	int Classify(void) override { return CLASS_HUMAN_MILITARY; };
-	int BloodColor(void) override { return DONT_BLEED; }
+	void Spawn() override;
+	void Precache() override;
+	int Classify() override { return CLASS_HUMAN_MILITARY; };
+	int BloodColor() override { return DONT_BLEED; }
 	void Killed(entvars_t* pevAttacker, int iGib) override;
-	void GibMonster(void) override;
+	void GibMonster() override;
 
-	void SetObjectCollisionBox(void) override
+	void SetObjectCollisionBox() override
 	{
 		pev->absmin = pev->origin + Vector(-300, -300, -172);
 		pev->absmax = pev->origin + Vector(300, 300, 8);
 	}
 
-	void EXPORT HuntThink(void);
+	void EXPORT HuntThink();
 	void EXPORT FlyTouch(CBaseEntity* pOther);
 	void EXPORT CrashTouch(CBaseEntity* pOther);
-	void EXPORT DyingThink(void);
+	void EXPORT DyingThink();
 	void EXPORT StartupUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT NullThink(void);
+	void EXPORT NullThink();
 
-	void ShowDamage(void);
-	void Flight(void);
-	void FireRocket(void);
-	BOOL FireGun(void);
+	void ShowDamage();
+	void Flight();
+	void FireRocket();
+	BOOL FireGun();
 
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
@@ -116,7 +116,7 @@ TYPEDESCRIPTION CApache::m_SaveData[] =
 IMPLEMENT_SAVERESTORE(CApache, CBaseMonster);
 
 
-void CApache::Spawn(void)
+void CApache::Spawn()
 {
 	Precache();
 	// motor
@@ -158,7 +158,7 @@ void CApache::Spawn(void)
 }
 
 
-void CApache::Precache(void)
+void CApache::Precache()
 {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
@@ -185,7 +185,7 @@ void CApache::Precache(void)
 }
 
 
-void CApache::NullThink(void)
+void CApache::NullThink()
 {
 	StudioFrameAdvance();
 	SetNextThink(0.5);
@@ -224,7 +224,7 @@ void CApache::Killed(entvars_t* pevAttacker, int iGib)
 	}
 }
 
-void CApache::DyingThink(void)
+void CApache::DyingThink()
 {
 	StudioFrameAdvance();
 	SetNextThink(0.1);
@@ -438,13 +438,13 @@ void CApache::CrashTouch(CBaseEntity* pOther)
 }
 
 
-void CApache::GibMonster(void)
+void CApache::GibMonster()
 {
 	// EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "common/bodysplat.wav", 0.75, ATTN_NORM, 0, 200);		
 }
 
 
-void CApache::HuntThink(void)
+void CApache::HuntThink()
 {
 	StudioFrameAdvance();
 	SetNextThink(0.1);
@@ -594,7 +594,7 @@ void CApache::HuntThink(void)
 }
 
 
-void CApache::Flight(void)
+void CApache::Flight()
 {
 	// tilt model 5 degrees
 	Vector vecAdj = Vector(5.0, 0, 0);
@@ -750,7 +750,7 @@ void CApache::Flight(void)
 }
 
 
-void CApache::FireRocket(void)
+void CApache::FireRocket()
 {
 	static float side = 1.0;
 	static int count;
@@ -874,7 +874,7 @@ BOOL CApache::FireGun()
 }
 
 
-void CApache::ShowDamage(void)
+void CApache::ShowDamage()
 {
 	if (m_iDoSmokePuff > 0 || RANDOM_LONG(0, 99) > pev->health)
 	{
@@ -942,10 +942,10 @@ void CApache::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 
 class CApacheHVR : public CGrenade
 {
-	void Spawn(void) override;
-	void Precache(void) override;
-	void EXPORT IgniteThink(void);
-	void EXPORT AccelerateThink(void);
+	void Spawn() override;
+	void Precache() override;
+	void EXPORT IgniteThink();
+	void EXPORT AccelerateThink();
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -965,7 +965,7 @@ TYPEDESCRIPTION CApacheHVR::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CApacheHVR, CGrenade);
 
-void CApacheHVR::Spawn(void)
+void CApacheHVR::Spawn()
 {
 	Precache();
 	// motor
@@ -989,7 +989,7 @@ void CApacheHVR::Spawn(void)
 }
 
 
-void CApacheHVR::Precache(void)
+void CApacheHVR::Precache()
 {
 	PRECACHE_MODEL("models/HVR.mdl");
 	m_iTrail = PRECACHE_MODEL("sprites/smoke.spr");
@@ -997,7 +997,7 @@ void CApacheHVR::Precache(void)
 }
 
 
-void CApacheHVR::IgniteThink(void)
+void CApacheHVR::IgniteThink()
 {
 	// pev->movetype = MOVETYPE_TOSS;
 
@@ -1028,7 +1028,7 @@ void CApacheHVR::IgniteThink(void)
 }
 
 
-void CApacheHVR::AccelerateThink(void)
+void CApacheHVR::AccelerateThink()
 {
 	// check world boundaries
 	if (pev->origin.x < -4096 || pev->origin.x > 4096 || pev->origin.y < -4096 || pev->origin.y > 4096 || pev->origin.z

@@ -26,8 +26,8 @@ extern int gmsgItemPickup;
 
 class CHealthKit : public CItem
 {
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 	BOOL MyTouch(CBasePlayer* pPlayer) override;
 
 	/*
@@ -51,7 +51,7 @@ TYPEDESCRIPTION	CHealthKit::m_SaveData[] =
 IMPLEMENT_SAVERESTORE( CHealthKit, CItem);
 */
 
-void CHealthKit::Spawn(void)
+void CHealthKit::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_medkit.mdl");
@@ -59,7 +59,7 @@ void CHealthKit::Spawn(void)
 	CItem::Spawn();
 }
 
-void CHealthKit::Precache(void)
+void CHealthKit::Precache()
 {
 	PRECACHE_MODEL("models/w_medkit.mdl");
 	PRECACHE_SOUND("items/smallmedkit1.wav");
@@ -103,20 +103,20 @@ class CWallHealth : public CBaseToggle
 {
 public:
 	void Spawn() override;
-	void Precache(void) override;
-	void EXPORT Off(void);
-	void EXPORT Recharge(void);
+	void Precache() override;
+	void EXPORT Off();
+	void EXPORT Recharge();
 	void KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	int ObjectCaps(void) override
+	int ObjectCaps() override
 	{
 		return (CBaseToggle::ObjectCaps() | FCAP_CONTINUOUS_USE) & ~FCAP_ACROSS_TRANSITION;
 	}
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
-	STATE GetState(void) override;
+	STATE GetState() override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -251,7 +251,7 @@ void CWallHealth::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 	m_flNextCharge = gpGlobals->time + 0.1;
 }
 
-void CWallHealth::Recharge(void)
+void CWallHealth::Recharge()
 {
 	EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/medshot4.wav", 1.0, ATTN_NORM);
 	m_iJuice = gSkillData.healthchargerCapacity;
@@ -264,7 +264,7 @@ void CWallHealth::Recharge(void)
 	SetThink(&CWallHealth:: SUB_DoNothing);
 }
 
-void CWallHealth::Off(void)
+void CWallHealth::Off()
 {
 	// Stop looping sound.
 	if (m_iOn > 1)
@@ -281,7 +281,7 @@ void CWallHealth::Off(void)
 		SetThink(&CWallHealth:: SUB_DoNothing);
 }
 
-STATE CWallHealth::GetState(void)
+STATE CWallHealth::GetState()
 {
 	if (m_iOn == 2)
 		return STATE_IN_USE;

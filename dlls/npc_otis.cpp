@@ -62,36 +62,36 @@ enum { SCHED_OTIS_COVER_AND_RELOAD };
 class COtis : public CTalkMonster
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
-	void SetYawSpeed(void) override;
-	int ISoundMask(void) override;
-	void Eagle(void);
-	void AlertSound(void) override;
-	int Classify(void) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int ISoundMask() override;
+	void Eagle();
+	void AlertSound() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	void CheckAmmo(void) override;
+	void CheckAmmo() override;
 
 	void RunTask(Task_t* pTask) override;
 	void StartTask(Task_t* pTask) override;
 
-	int ObjectCaps(void) override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	int ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
 	BOOL CheckRangeAttack1(float flDot, float flDist) override;
 	void KeyValue(KeyValueData* pkvd) override;
 
-	void DeclineFollowing(void) override;
+	void DeclineFollowing() override;
 
 	// Override these to set behavior
 	Schedule_t* GetScheduleOfType(int Type) override;
-	Schedule_t* GetSchedule(void) override;
-	MONSTERSTATE GetIdealState(void) override;
+	Schedule_t* GetSchedule() override;
+	MONSTERSTATE GetIdealState() override;
 
-	void DeathSound(void) override;
-	void PainSound(void) override;
+	void DeathSound() override;
+	void PainSound() override;
 
-	void TalkInit(void);
+	void TalkInit();
 
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
 	                 int bitsDamageType) override;
@@ -333,7 +333,7 @@ void COtis::RunTask(Task_t* pTask)
 // ISoundMask - returns a bit mask indicating which types
 // of sounds this monster regards. 
 //=========================================================
-int COtis::ISoundMask(void)
+int COtis::ISoundMask()
 {
 	return bits_SOUND_WORLD |
 		bits_SOUND_COMBAT |
@@ -348,7 +348,7 @@ int COtis::ISoundMask(void)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int COtis::Classify(void)
+int COtis::Classify()
 {
 	if (m_fHostile)
 		return CLASS_HUMAN_MILITARY;
@@ -358,7 +358,7 @@ int COtis::Classify(void)
 //=========================================================
 // ALertSound - barney says "Freeze!"
 //=========================================================
-void COtis::AlertSound(void)
+void COtis::AlertSound()
 {
 	if (m_hEnemy != NULL)
 	{
@@ -381,7 +381,7 @@ void COtis::AlertSound(void)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void COtis::SetYawSpeed(void)
+void COtis::SetYawSpeed()
 {
 	int ys = 0;
 	switch (m_Activity)
@@ -437,7 +437,7 @@ BOOL COtis::CheckRangeAttack1(float flDot, float flDist)
 // BarneyFirePistol - shoots one round from the pistol at
 // the enemy barney is facing.
 //=========================================================
-void COtis::Eagle(void)
+void COtis::Eagle()
 {
 	Vector vecShootOrigin;
 
@@ -718,7 +718,7 @@ int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flD
 //=========================================================
 // PainSound
 //=========================================================
-void COtis::PainSound(void)
+void COtis::PainSound()
 {
 	if (gpGlobals->time < m_painTime)
 		return;
@@ -739,7 +739,7 @@ void COtis::PainSound(void)
 //=========================================================
 // DeathSound 
 //=========================================================
-void COtis::DeathSound(void)
+void COtis::DeathSound()
 {
 	switch (RANDOM_LONG(0, 2))
 	{
@@ -840,7 +840,7 @@ Schedule_t* COtis::GetScheduleOfType(int Type)
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t* COtis::GetSchedule(void)
+Schedule_t* COtis::GetSchedule()
 {
 	if (HasConditions(bits_COND_HEAR_SOUND))
 	{
@@ -919,12 +919,12 @@ Schedule_t* COtis::GetSchedule(void)
 	return CTalkMonster::GetSchedule();
 }
 
-MONSTERSTATE COtis::GetIdealState(void)
+MONSTERSTATE COtis::GetIdealState()
 {
 	return CTalkMonster::GetIdealState();
 }
 
-void COtis::DeclineFollowing(void)
+void COtis::DeclineFollowing()
 {
 	if (IsAlive())
 		PlaySentence(m_szGrp[TLK_DECLINE], 2, VOL_NORM, ATTN_NORM); //LRC
@@ -934,7 +934,7 @@ void COtis::DeclineFollowing(void)
 // CheckAmmo - overridden for the grunt because he actually
 // uses ammo! (base class doesn't)
 //=========================================================
-void COtis::CheckAmmo(void)
+void COtis::CheckAmmo()
 {
 	if (m_cAmmoLoaded <= 0)
 		SetConditions(bits_COND_NO_AMMO_LOADED);
@@ -953,8 +953,8 @@ void COtis::CheckAmmo(void)
 class CDeadOtis : public CBaseMonster
 {
 public:
-	void Spawn(void) override;
-	int Classify(void) override { return CLASS_PLAYER_ALLY; }
+	void Spawn() override;
+	int Classify() override { return CLASS_PLAYER_ALLY; }
 
 	void KeyValue(KeyValueData* pkvd) override;
 

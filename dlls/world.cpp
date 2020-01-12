@@ -191,7 +191,7 @@ class CCorpse : public CBaseEntity
 
 LINK_ENTITY_TO_CLASS(bodyque, CCorpse);
 
-static void InitBodyQue(void)
+static void InitBodyQue()
 {
 	string_t istrClassname = MAKE_STRING("bodyque");
 
@@ -276,7 +276,7 @@ globalentity_t* CGlobalState::Find(string_t globalname)
 
 // This is available all the time now on impulse 104, remove later
 //#ifdef _DEBUG
-void CGlobalState::DumpGlobals(void)
+void CGlobalState::DumpGlobals()
 {
 	static char* estates[] = {"Off", "On", "Dead"};
 
@@ -388,7 +388,7 @@ void CGlobalState::EntityUpdate(string_t globalname, string_t mapname)
 		strcpy(pEnt->levelName, STRING(mapname));
 }
 
-void CGlobalState::ClearStates(void)
+void CGlobalState::ClearStates()
 {
 	globalentity_t* pFree = m_pList;
 	while (pFree)
@@ -412,7 +412,7 @@ void RestoreGlobalState(SAVERESTOREDATA* pSaveData)
 	gGlobalState.Restore(restoreHelper);
 }
 
-void ResetGlobalState(void)
+void ResetGlobalState()
 {
 	gGlobalState.ClearStates();
 	gInitHUD = TRUE; // Init the HUD on a new game / load game

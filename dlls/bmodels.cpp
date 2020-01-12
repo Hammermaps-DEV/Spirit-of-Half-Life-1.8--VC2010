@@ -12,13 +12,6 @@
 *   without written permission from Valve LLC.
 *
 ****/
-/*
-
-===== bmodels.cpp ========================================================
-
-  spawn, think, and use functions for entities that use brush models
-
-*/
 
 #include "extdll.h"
 #include "util.h"
@@ -56,30 +49,24 @@ This is just a solid wall if not inhibited
 class CFuncWall : public CBaseEntity
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	STATE GetState(void) override { return pev->frame ? STATE_ON : STATE_OFF; };
+	STATE GetState() override { return pev->frame ? STATE_ON : STATE_OFF; };
 
 	// Bmodels don't go across transitions
-	int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	int m_iStyle;
 };
 
 LINK_ENTITY_TO_CLASS(func_wall, CFuncWall);
 
-void CFuncWall::Spawn(void)
+void CFuncWall::Spawn()
 {
 	// If it can't move/go away, it's really part of the world
 	if (!m_pMoveWith) //LRC
 		pev->flags |= FL_WORLDBRUSH;
-
-
-	//AJH This allows rotating of func_walls on spawn.
-	//It would be easier to just use pev->angles directly but some old maps might have 'angles' specified already
-	//and we don't want to stuff them up. Therefore we'll make people use the key 'message' in VHE to specify the angle.
-	//pev->angles		= g_vecZero;
 
 	UTIL_StringToVector(static_cast<float*>(pev->angles), STRING(pev->message));
 
@@ -89,8 +76,8 @@ void CFuncWall::Spawn(void)
 
 	pev->movetype = MOVETYPE_PUSH; // so it doesn't get pushed by anything
 	pev->solid = SOLID_BSP;
+	
 	SET_MODEL(ENT(pev), STRING(pev->model));
-
 
 	//LRC
 	if (m_iStyle >= 32)
@@ -127,17 +114,17 @@ void CFuncWall::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 class CFuncWallToggle : public CFuncWall
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	void TurnOff(void);
-	void TurnOn(void);
-	BOOL IsOn(void);
-	STATE GetState(void) override { return (pev->solid == SOLID_NOT) ? STATE_OFF : STATE_ON; };
+	void TurnOff();
+	void TurnOn();
+	BOOL IsOn();
+	STATE GetState() override { return (pev->solid == SOLID_NOT) ? STATE_OFF : STATE_ON; };
 };
 
 LINK_ENTITY_TO_CLASS(func_wall_toggle, CFuncWallToggle);
 
-void CFuncWallToggle::Spawn(void)
+void CFuncWallToggle::Spawn()
 {
 	CFuncWall::Spawn();
 	if (pev->spawnflags & SF_WALL_START_OFF)
@@ -145,7 +132,7 @@ void CFuncWallToggle::Spawn(void)
 }
 
 
-void CFuncWallToggle::TurnOff(void)
+void CFuncWallToggle::TurnOff()
 {
 	pev->solid = SOLID_NOT;
 	pev->effects |= EF_NODRAW;
@@ -153,7 +140,7 @@ void CFuncWallToggle::TurnOff(void)
 }
 
 
-void CFuncWallToggle::TurnOn(void)
+void CFuncWallToggle::TurnOn()
 {
 	pev->solid = SOLID_BSP;
 	pev->effects &= ~EF_NODRAW;
@@ -161,7 +148,7 @@ void CFuncWallToggle::TurnOn(void)
 }
 
 
-BOOL CFuncWallToggle::IsOn(void)
+BOOL CFuncWallToggle::IsOn()
 {
 	if (pev->solid == SOLID_NOT)
 		return FALSE;
@@ -190,14 +177,14 @@ void CFuncWallToggle::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 class CFuncConveyor : public CFuncWall
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	void UpdateSpeed(float speed);
 };
 
 LINK_ENTITY_TO_CLASS(func_conveyor, CFuncConveyor);
 
-void CFuncConveyor::Spawn(void)
+void CFuncConveyor::Spawn()
 {
 	SetMovedir(pev);
 	CFuncWall::Spawn();
@@ -251,10 +238,10 @@ A simple entity that looks solid but lets you walk through it.
 class CFuncIllusionary : public CBaseToggle
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 	void EXPORT SloshTouch(CBaseEntity* pOther);
 	void KeyValue(KeyValueData* pkvd) override;
-	int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 };
 
 LINK_ENTITY_TO_CLASS(func_illusionary, CFuncIllusionary);
@@ -271,7 +258,7 @@ void CFuncIllusionary::KeyValue(KeyValueData* pkvd)
 		CBaseToggle::KeyValue(pkvd);
 }
 
-void CFuncIllusionary::Spawn(void)
+void CFuncIllusionary::Spawn()
 {
 	pev->angles = g_vecZero;
 	pev->movetype = MOVETYPE_NONE;
@@ -290,19 +277,19 @@ void CFuncIllusionary::Spawn(void)
 class CFuncShine : public CBaseEntity
 {
 public:
-	void Spawn(void) override;
-	void Activate(void) override;
-	int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	void Spawn() override;
+	void Activate() override;
+	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	void DesiredAction(void) override;
-	void EXPORT Think(void) override;
+	void DesiredAction() override;
+	void EXPORT Think() override;
 };
 
 LINK_ENTITY_TO_CLASS(func_shine, CFuncShine);
 
 extern int gmsgAddShine;
 
-void CFuncShine::Spawn(void)
+void CFuncShine::Spawn()
 {
 	pev->solid = SOLID_NOT; // always solid_not 
 	SET_MODEL(ENT(pev), STRING(pev->model));
@@ -312,7 +299,7 @@ void CFuncShine::Spawn(void)
 	PRECACHE_MODEL((char*)STRING(pev->message));
 }
 
-void CFuncShine::Activate(void)
+void CFuncShine::Activate()
 {
 	//	ALERT(at_console, "Activate shine\n");
 
@@ -320,7 +307,7 @@ void CFuncShine::Activate(void)
 	UTIL_DesiredAction(this);
 }
 
-void CFuncShine::DesiredAction(void)
+void CFuncShine::DesiredAction()
 {
 	if (pev->message && pev->renderamt)
 	{
@@ -329,7 +316,7 @@ void CFuncShine::DesiredAction(void)
 	}
 }
 
-void CFuncShine::Think(void)
+void CFuncShine::Think()
 {
 	//	ALERT(at_console, "Think shine\n");
 	MESSAGE_BEGIN(MSG_BROADCAST, gmsgAddShine, nullptr);
@@ -359,7 +346,7 @@ void CFuncShine::Think(void)
 class CFuncMonsterClip : public CFuncWall
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override
 	{
@@ -368,7 +355,7 @@ public:
 
 LINK_ENTITY_TO_CLASS(func_monsterclip, CFuncMonsterClip);
 
-void CFuncMonsterClip::Spawn(void)
+void CFuncMonsterClip::Spawn()
 {
 	CFuncWall::Spawn();
 	if (CVAR_GET_FLOAT("showtriggers") == 0)
@@ -382,18 +369,18 @@ class CFuncRotating : public CBaseEntity
 {
 public:
 	// basic functions
-	void Spawn(void) override;
-	void Precache(void) override;
-	void EXPORT SpinUp(void);
-	void EXPORT SpinDown(void);
+	void Spawn() override;
+	void Precache() override;
+	void EXPORT SpinUp();
+	void EXPORT SpinDown();
 	void KeyValue(KeyValueData* pkvd) override;
 	void EXPORT HurtTouch(CBaseEntity* pOther);
 	void EXPORT RotatingUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void EXPORT WaitForStart(); //LRC - get round 1.1.0.8's bizarre behaviour on startup
-	void EXPORT Rotate(void);
+	void EXPORT Rotate();
 	void RampPitchVol(int fUp);
 	void Blocked(CBaseEntity* pOther) override;
-	int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
 
@@ -413,7 +400,7 @@ public:
 	// from pev->avelocity.
 
 	STATE m_iState; //LRC
-	STATE GetState(void) override { return m_iState; }; //LRC
+	STATE GetState() override { return m_iState; }; //LRC
 };
 
 TYPEDESCRIPTION CFuncRotating::m_SaveData[] =
@@ -582,7 +569,7 @@ void CFuncRotating::Spawn()
 }
 
 
-void CFuncRotating::Precache(void)
+void CFuncRotating::Precache()
 {
 	char* szSoundFile = (char*)STRING(pev->message);
 
@@ -715,7 +702,7 @@ void CFuncRotating::RampPitchVol(int fUp)
 //
 // SpinUp - accelerates a non-moving func_rotating up to it's speed
 //
-void CFuncRotating::SpinUp(void)
+void CFuncRotating::SpinUp()
 {
 	//Vector	vecAVel;//rotational velocity
 
@@ -748,7 +735,7 @@ void CFuncRotating::SpinUp(void)
 //
 // SpinDown - decelerates a moving func_rotating to a standstill.
 //
-void CFuncRotating::SpinDown(void)
+void CFuncRotating::SpinDown()
 {
 	SetNextThink(0.1);
 
@@ -777,7 +764,7 @@ void CFuncRotating::SpinDown(void)
 	}
 }
 
-void CFuncRotating::Rotate(void)
+void CFuncRotating::Rotate()
 {
 	SetNextThink(10);
 }
@@ -867,18 +854,18 @@ void CFuncRotating::Blocked(CBaseEntity* pOther)
 class CPendulum : public CBaseEntity
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 	void KeyValue(KeyValueData* pkvd) override;
-	void EXPORT SwingThink(void);
+	void EXPORT SwingThink();
 	void EXPORT PendulumUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void EXPORT StopThink(void);
+	void EXPORT StopThink();
 	void Touch(CBaseEntity* pOther) override;
 	void EXPORT RopeTouch(CBaseEntity* pOther); // this touch func makes the pendulum a rope
-	int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
 	void Blocked(CBaseEntity* pOther) override;
-	STATE GetState(void) override { return (pev->speed) ? STATE_ON : STATE_OFF; }
+	STATE GetState() override { return (pev->speed) ? STATE_ON : STATE_OFF; }
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -933,7 +920,7 @@ void CPendulum::KeyValue(KeyValueData* pkvd)
 }
 
 
-void CPendulum::Spawn(void)
+void CPendulum::Spawn()
 {
 	// set the axis of rotation
 	CBaseToggle::AxisDir(pev);
@@ -1009,7 +996,7 @@ void CPendulum::PendulumUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 	}
 }
 
-void CPendulum::StopThink(void)
+void CPendulum::StopThink()
 {
 	UTIL_AssignAngles(this, m_start); //LRC
 	pev->speed = 0;
@@ -1024,7 +1011,7 @@ void CPendulum::Blocked(CBaseEntity* pOther)
 	m_time = gpGlobals->time;
 }
 
-void CPendulum::SwingThink(void)
+void CPendulum::SwingThink()
 {
 	float delta, dt;
 

@@ -31,7 +31,7 @@
 
 extern int gmsgItemPickup;
 
-void I_Precache(void)
+void I_Precache()
 {
 	// common world objects (moved from W_Precache - weapons.cpp)
 	UTIL_PrecacheOther("item_suit");
@@ -50,7 +50,7 @@ class CWorldItem : public CBaseEntity
 {
 public:
 	void KeyValue(KeyValueData* pkvd) override;
-	void Spawn(void) override;
+	void Spawn() override;
 	int m_iType;
 };
 
@@ -67,7 +67,7 @@ void CWorldItem::KeyValue(KeyValueData* pkvd)
 		CBaseEntity::KeyValue(pkvd);
 }
 
-void CWorldItem::Spawn(void)
+void CWorldItem::Spawn()
 {
 	CBaseEntity* pEntity = nullptr;
 
@@ -102,7 +102,7 @@ void CWorldItem::Spawn(void)
 }
 
 
-void CItem::Spawn(void)
+void CItem::Spawn()
 {
 	pev->movetype = MOVETYPE_TOSS;
 	pev->solid = SOLID_TRIGGER;
@@ -159,7 +159,7 @@ void CItem::ItemTouch(CBaseEntity* pOther)
 	}
 }
 
-CBaseEntity* CItem::Respawn(void)
+CBaseEntity* CItem::Respawn()
 {
 	SetTouch(NULL);
 	pev->effects |= EF_NODRAW;
@@ -171,7 +171,7 @@ CBaseEntity* CItem::Respawn(void)
 	return this;
 }
 
-void CItem::Materialize(void)
+void CItem::Materialize()
 {
 	if (pev->effects & EF_NODRAW)
 	{
@@ -188,14 +188,14 @@ void CItem::Materialize(void)
 
 class CItemSuit : public CItem
 {
-	void Spawn(void) override
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_suit.mdl");
 		CItem::Spawn();
 	}
 
-	void Precache(void) override
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/w_suit.mdl");
 	}
@@ -226,7 +226,7 @@ LINK_ENTITY_TO_CLASS(item_suit, CItemSuit);
 
 class CItemBattery : public CItem
 {
-	void Spawn(void) override
+	void Spawn() override
 	{
 		Precache();
 		if (pev->model)
@@ -236,7 +236,7 @@ class CItemBattery : public CItem
 		CItem::Spawn();
 	}
 
-	void Precache(void) override
+	void Precache() override
 	{
 		if (pev->model)
 			PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
@@ -300,14 +300,14 @@ class CItemBattery : public CItem
 LINK_ENTITY_TO_CLASS(item_battery, CItemBattery);
 
 
-void CItemAntidote::Spawn(void)
+void CItemAntidote::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_antidote.mdl");
 	CItem::Spawn();
 }
 
-void CItemAntidote::Precache(void)
+void CItemAntidote::Precache()
 {
 	PRECACHE_MODEL("models/w_antidote.mdl");
 }
@@ -349,14 +349,14 @@ LINK_ENTITY_TO_CLASS(item_antidote, CItemAntidote);
 
 class CItemSecurity : public CItem
 {
-	void Spawn(void) override
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_security.mdl");
 		CItem::Spawn();
 	}
 
-	void Precache(void) override
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/w_security.mdl");
 	}
@@ -384,14 +384,14 @@ LINK_ENTITY_TO_CLASS(item_security, CItemSecurity);
 
 class CItemLongJump : public CItem
 {
-	void Spawn(void) override
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_longjump.mdl");
 		CItem::Spawn();
 	}
 
-	void Precache(void) override
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/w_longjump.mdl");
 	}
@@ -438,7 +438,7 @@ LINK_ENTITY_TO_CLASS(item_medicalkit, CItemMedicalKit);
 #define ITEM_PICKEDUP 1
 #define ITEM_DRAINED 2	//The item has had some 'charge' removed but remains in existence
 
-void CItemMedicalKit::Spawn(void)
+void CItemMedicalKit::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_portablemed.mdl"); // create a new model and spawn it here
@@ -458,7 +458,7 @@ void CItemMedicalKit::Spawn(void)
 	}
 }
 
-void CItemMedicalKit::Precache(void)
+void CItemMedicalKit::Precache()
 {
 	PRECACHE_MODEL("models/w_portablemed.mdl"); // create a new model and precache it here
 	PRECACHE_SOUND("items/smallmedkit1.wav");
@@ -557,14 +557,14 @@ void CItemMedicalKit::ItemTouch(CBaseEntity* pOther)
 	}
 }
 
-void CItemAntiRad::Spawn(void)
+void CItemAntiRad::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_rad.mdl");
 	CItem::Spawn();
 }
 
-void CItemAntiRad::Precache(void)
+void CItemAntiRad::Precache()
 {
 	PRECACHE_MODEL("models/w_rad.mdl");
 }
@@ -601,14 +601,14 @@ void CItemAntiRad::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 LINK_ENTITY_TO_CLASS(item_antirad, CItemAntiRad);
 
 
-void CItemFlare::Spawn(void)
+void CItemFlare::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_flare.mdl");
 	CItem::Spawn();
 }
 
-void CItemFlare::Precache(void)
+void CItemFlare::Precache()
 {
 	PRECACHE_MODEL("models/w_flare.mdl");
 }
@@ -711,7 +711,7 @@ TYPEDESCRIPTION CItemCamera::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CItemCamera, CItem);
 
-void CItemCamera::Spawn(void)
+void CItemCamera::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_camera.mdl");
@@ -738,7 +738,7 @@ void CItemCamera::Spawn(void)
 	pev->oldorigin = pev->origin; //Remeber where we respawn (must be after DROP_TO_FLOOR)
 }
 
-void CItemCamera::Precache(void)
+void CItemCamera::Precache()
 {
 	PRECACHE_MODEL("models/w_camera.mdl");
 }

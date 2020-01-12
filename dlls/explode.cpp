@@ -12,13 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
-/*
 
-===== explode.cpp ========================================================
-
-  Explosion-related code
-
-*/
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -29,15 +23,15 @@
 // Spark Shower
 class CShower : public CBaseEntity
 {
-	void Spawn(void) override;
-	void Think(void) override;
+	void Spawn() override;
+	void Think() override;
 	void Touch(CBaseEntity* pOther) override;
-	int ObjectCaps(void) override { return FCAP_DONT_SAVE; }
+	int ObjectCaps() override { return FCAP_DONT_SAVE; }
 };
 
 LINK_ENTITY_TO_CLASS(spark_shower, CShower);
 
-void CShower::Spawn(void)
+void CShower::Spawn()
 {
 	pev->velocity = RANDOM_FLOAT(200, 300) * pev->angles;
 	pev->velocity.x += RANDOM_FLOAT(-100.f, 100.f);
@@ -59,7 +53,7 @@ void CShower::Spawn(void)
 }
 
 
-void CShower::Think(void)
+void CShower::Think()
 {
 	UTIL_Sparks(pev->origin);
 
@@ -86,7 +80,7 @@ class CEnvExplosion : public CBaseMonster
 {
 public:
 	void Spawn() override;
-	void EXPORT Smoke(void);
+	void EXPORT Smoke();
 	void KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
@@ -118,28 +112,15 @@ void CEnvExplosion::KeyValue(KeyValueData* pkvd)
 		CBaseEntity::KeyValue(pkvd);
 }
 
-void CEnvExplosion::Spawn(void)
+void CEnvExplosion::Spawn()
 {
 	pev->solid = SOLID_NOT;
 	pev->effects = EF_NODRAW;
 
 	pev->movetype = MOVETYPE_NONE;
-	/*
-	if ( m_iMagnitude > 250 )
-	{
-		m_iMagnitude = 250;
-	}
-	*/
 
-	float flSpriteScale;
-	flSpriteScale = (m_iMagnitude - 50) * 0.6;
+	float flSpriteScale = (m_iMagnitude - 50) * 0.6;
 
-	/*
-	if ( flSpriteScale > 50 )
-	{
-		flSpriteScale = 50;
-	}
-	*/
 	if (flSpriteScale < 10)
 	{
 		flSpriteScale = 10;
@@ -241,7 +222,7 @@ void CEnvExplosion::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 	}
 }
 
-void CEnvExplosion::Smoke(void)
+void CEnvExplosion::Smoke()
 {
 	if (!(pev->spawnflags & SF_ENVEXPLOSION_NOSMOKE))
 	{
@@ -261,7 +242,6 @@ void CEnvExplosion::Smoke(void)
 		UTIL_Remove(this);
 	}
 }
-
 
 // HACKHACK -- create one of these and fake a keyvalue to get the right explosion setup
 void ExplosionCreate(const Vector& center, const Vector& angles, edict_t* pOwner, int magnitude, BOOL doDamage)

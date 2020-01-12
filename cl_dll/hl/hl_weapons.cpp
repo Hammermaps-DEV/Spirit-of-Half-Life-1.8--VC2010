@@ -430,7 +430,7 @@ CBasePlayer::SelectLastItem
 
 =====================
 */
-void CBasePlayer::SelectLastItem(void)
+void CBasePlayer::SelectLastItem()
 {
 	if (!m_pLastItem)
 		return;

@@ -65,7 +65,7 @@ BOOL CFlyingMonster::FTriangulate(const Vector& vecStart, const Vector& vecEnd, 
 }
 
 
-Activity CFlyingMonster::GetStoppedActivity(void)
+Activity CFlyingMonster::GetStoppedActivity()
 {
 	if (pev->movetype != MOVETYPE_FLY) // UNDONE: Ground idle here, IDLE may be something else
 		return ACT_IDLE;
@@ -73,7 +73,7 @@ Activity CFlyingMonster::GetStoppedActivity(void)
 	return ACT_HOVER;
 }
 
-void CFlyingMonster::Stop(void)
+void CFlyingMonster::Stop()
 {
 	Activity stopped = GetStoppedActivity();
 	if (m_IdealActivity != stopped)

@@ -48,23 +48,23 @@
 class CGenericMonster : public CTalkMonster
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
-	void SetYawSpeed(void) override;
-	int Classify(void) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	int ISoundMask(void) override;
+	int ISoundMask() override;
 	void KeyValue(KeyValueData* pkvd) override;
-	void Torch(void);
-	void MakeGas(void);
-	void UpdateGas(void);
-	void KillGas(void);
+	void Torch();
+	void MakeGas();
+	void UpdateGas();
+	void KillGas();
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int HasCustomGibs(void) override { return m_iszGibModel; }
+	int HasCustomGibs() override { return m_iszGibModel; }
 
 	CBeam* m_pBeam;
 	int m_iszGibModel;
@@ -99,7 +99,7 @@ void CGenericMonster::KeyValue(KeyValueData* pkvd)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int CGenericMonster::Classify(void)
+int CGenericMonster::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_PLAYER_ALLY;
 }
@@ -108,7 +108,7 @@ int CGenericMonster::Classify(void)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CGenericMonster::SetYawSpeed(void)
+void CGenericMonster::SetYawSpeed()
 {
 	int ys;
 
@@ -170,7 +170,7 @@ void CGenericMonster::HandleAnimEvent(MonsterEvent_t* pEvent)
 //=========================================================
 // ISoundMask - generic monster can't hear.
 //=========================================================
-int CGenericMonster::ISoundMask(void)
+int CGenericMonster::ISoundMask()
 {
 	return NULL;
 }
@@ -271,7 +271,7 @@ enum
 // =========================================================
 // TORCH SUPPORT
 // =========================================================
-void CGenericMonster::Torch(void)
+void CGenericMonster::Torch()
 {
 	Vector vecGunPos;
 	Vector vecGunAngles;
@@ -284,11 +284,11 @@ void CGenericMonster::Torch(void)
 	SetBlending(0, angDir.x);
 }
 
-void CGenericMonster::UpdateGas(void)
+void CGenericMonster::UpdateGas()
 {
 }
 
-void CGenericMonster::MakeGas(void)
+void CGenericMonster::MakeGas()
 {
 	Vector posGun, angleGun;
 	TraceResult tr;
@@ -328,7 +328,7 @@ void CGenericMonster::MakeGas(void)
 	}
 }
 
-void CGenericMonster::KillGas(void)
+void CGenericMonster::KillGas()
 {
 	if (m_pBeam)
 	{
@@ -343,16 +343,16 @@ void CGenericMonster::KillGas(void)
 class CDeadGenericMonster : public CBaseMonster
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
-	int Classify(void) override { return CLASS_PLAYER_ALLY; }
+	void Spawn() override;
+	void Precache() override;
+	int Classify() override { return CLASS_PLAYER_ALLY; }
 	void KeyValue(KeyValueData* pkvd) override;
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int HasCustomGibs(void) override { return m_iszGibModel; }
+	int HasCustomGibs() override { return m_iszGibModel; }
 
 	int m_iszGibModel;
 };
@@ -385,7 +385,7 @@ void CDeadGenericMonster::KeyValue(KeyValueData* pkvd)
 //=========================================================
 // ********** DeadGenericMonster SPAWN **********
 //=========================================================
-void CDeadGenericMonster::Spawn(void)
+void CDeadGenericMonster::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), STRING(pev->model));

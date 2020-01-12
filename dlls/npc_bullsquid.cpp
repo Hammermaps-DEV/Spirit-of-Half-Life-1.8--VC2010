@@ -60,11 +60,11 @@ enum
 class CSquidSpit : public CBaseEntity
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 
 	static void Shoot(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity);
 	void Touch(CBaseEntity* pOther) override;
-	void EXPORT Animate(void);
+	void EXPORT Animate();
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -82,7 +82,7 @@ TYPEDESCRIPTION CSquidSpit::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CSquidSpit, CBaseEntity);
 
-void CSquidSpit::Spawn(void)
+void CSquidSpit::Spawn()
 {
 	pev->movetype = MOVETYPE_FLY;
 	pev->classname = MAKE_STRING("squidspit");
@@ -100,7 +100,7 @@ void CSquidSpit::Spawn(void)
 	m_maxFrame = static_cast<float>(MODEL_FRAMES(pev->modelindex)) - 1;
 }
 
-void CSquidSpit::Animate(void)
+void CSquidSpit::Animate()
 {
 	SetNextThink(0.1);
 
@@ -189,30 +189,30 @@ void CSquidSpit::Touch(CBaseEntity* pOther)
 class CBullsquid : public CBaseMonster
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
-	void SetYawSpeed(void) override;
-	int ISoundMask(void) override;
-	int Classify(void) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int ISoundMask() override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	void IdleSound(void) override;
-	void PainSound(void) override;
-	void DeathSound(void) override;
-	void AlertSound(void) override;
-	void AttackSound(void);
+	void IdleSound() override;
+	void PainSound() override;
+	void DeathSound() override;
+	void AlertSound() override;
+	void AttackSound();
 	void StartTask(Task_t* pTask) override;
 	void RunTask(Task_t* pTask) override;
 	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
 	BOOL CheckMeleeAttack2(float flDot, float flDist) override;
 	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	void RunAI(void) override;
+	void RunAI() override;
 	BOOL FValidateHintType(short sHint) override;
-	Schedule_t* GetSchedule(void) override;
+	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	int IRelationship(CBaseEntity* pTarget) override;
-	int IgnoreConditions(void) override;
-	MONSTERSTATE GetIdealState(void) override;
+	int IgnoreConditions() override;
+	MONSTERSTATE GetIdealState() override;
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -242,7 +242,7 @@ IMPLEMENT_SAVERESTORE(CBullsquid, CBaseMonster);
 //=========================================================
 // IgnoreConditions 
 //=========================================================
-int CBullsquid::IgnoreConditions(void)
+int CBullsquid::IgnoreConditions()
 {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 
@@ -416,7 +416,7 @@ BOOL CBullsquid::FValidateHintType(short sHint)
 // of sounds this monster regards. In the base class implementation,
 // monsters care about all sounds, but no scents.
 //=========================================================
-int CBullsquid::ISoundMask(void)
+int CBullsquid::ISoundMask()
 {
 	return bits_SOUND_WORLD |
 		bits_SOUND_COMBAT |
@@ -430,7 +430,7 @@ int CBullsquid::ISoundMask(void)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int CBullsquid::Classify(void)
+int CBullsquid::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_ALIEN_PREDATOR;
 }
@@ -440,7 +440,7 @@ int CBullsquid::Classify(void)
 //=========================================================
 #define SQUID_ATTN_IDLE	(float)1.5
 
-void CBullsquid::IdleSound(void)
+void CBullsquid::IdleSound()
 {
 	switch (RANDOM_LONG(0, 4))
 	{
@@ -465,7 +465,7 @@ void CBullsquid::IdleSound(void)
 //=========================================================
 // PainSound 
 //=========================================================
-void CBullsquid::PainSound(void)
+void CBullsquid::PainSound()
 {
 	int iPitch = RANDOM_LONG(85, 120);
 
@@ -489,7 +489,7 @@ void CBullsquid::PainSound(void)
 //=========================================================
 // AlertSound
 //=========================================================
-void CBullsquid::AlertSound(void)
+void CBullsquid::AlertSound()
 {
 	int iPitch = RANDOM_LONG(140, 160);
 
@@ -508,7 +508,7 @@ void CBullsquid::AlertSound(void)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CBullsquid::SetYawSpeed(void)
+void CBullsquid::SetYawSpeed()
 {
 	int ys;
 
@@ -761,7 +761,7 @@ void CBullsquid::Precache()
 //=========================================================
 // DeathSound
 //=========================================================
-void CBullsquid::DeathSound(void)
+void CBullsquid::DeathSound()
 {
 	switch (RANDOM_LONG(0, 2))
 	{
@@ -780,7 +780,7 @@ void CBullsquid::DeathSound(void)
 //=========================================================
 // AttackSound
 //=========================================================
-void CBullsquid::AttackSound(void)
+void CBullsquid::AttackSound()
 {
 	switch (RANDOM_LONG(0, 1))
 	{
@@ -798,7 +798,7 @@ void CBullsquid::AttackSound(void)
 // RunAI - overridden for bullsquid because there are things
 // that need to be checked every think.
 //========================================================
-void CBullsquid::RunAI(void)
+void CBullsquid::RunAI()
 {
 	// first, do base class stuff
 	CBaseMonster::RunAI();
@@ -1045,7 +1045,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CBullsquid, CBaseMonster);
 //=========================================================
 // GetSchedule 
 //=========================================================
-Schedule_t* CBullsquid::GetSchedule(void)
+Schedule_t* CBullsquid::GetSchedule()
 {
 	switch (m_MonsterState)
 	{
@@ -1267,7 +1267,7 @@ void CBullsquid::RunTask(Task_t* pTask)
 // the feature that makes it lose interest in headcrabs for 
 // a while if something injures it. 
 //=========================================================
-MONSTERSTATE CBullsquid::GetIdealState(void)
+MONSTERSTATE CBullsquid::GetIdealState()
 {
 	int iConditions;
 

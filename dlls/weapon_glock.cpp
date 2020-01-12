@@ -245,14 +245,14 @@ void CGlock::WeaponIdle()
 
 class CGlockAmmo : public CBasePlayerAmmo
 {
-	void Spawn(void) override
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_9mmclip.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
-	void Precache(void) override
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/w_9mmclip.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");

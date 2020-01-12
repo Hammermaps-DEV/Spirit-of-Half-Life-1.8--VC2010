@@ -75,35 +75,35 @@ int iAgruntMuzzleFlash;
 class CAGrunt : public CSquadMonster
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
-	void SetYawSpeed(void) override;
-	int Classify(void) override;
-	int ISoundMask(void) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int Classify() override;
+	int ISoundMask() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
-	void SetObjectCollisionBox(void) override
+	void SetObjectCollisionBox() override
 	{
 		pev->absmin = pev->origin + Vector(-32, -32, 0);
 		pev->absmax = pev->origin + Vector(32, 32, 85);
 	}
 
-	Schedule_t* GetSchedule(void) override;
+	Schedule_t* GetSchedule() override;
 	Schedule_t* GetScheduleOfType(int Type) override;
-	BOOL FCanCheckAttacks(void) override;
+	BOOL FCanCheckAttacks() override;
 	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
 	BOOL CheckRangeAttack1(float flDot, float flDist) override;
 	void StartTask(Task_t* pTask) override;
-	void AlertSound(void) override;
-	void DeathSound(void) override;
-	void PainSound(void) override;
-	void AttackSound(void);
-	void PrescheduleThink(void) override;
+	void AlertSound() override;
+	void DeathSound() override;
+	void PainSound() override;
+	void AttackSound();
+	void PrescheduleThink() override;
 	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
 	                 int bitsDamageType) override;
 	int IRelationship(CBaseEntity* pTarget) override;
-	void StopTalking(void);
-	BOOL ShouldSpeak(void);
+	void StopTalking();
+	BOOL ShouldSpeak();
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 
 
@@ -215,7 +215,7 @@ int CAGrunt::IRelationship(CBaseEntity* pTarget)
 //=========================================================
 // ISoundMask 
 //=========================================================
-int CAGrunt::ISoundMask(void)
+int CAGrunt::ISoundMask()
 {
 	return bits_SOUND_WORLD |
 		bits_SOUND_COMBAT |
@@ -275,7 +275,7 @@ void CAGrunt::TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir,
 //=========================================================
 // StopTalking - won't speak again for 10-20 seconds.
 //=========================================================
-void CAGrunt::StopTalking(void)
+void CAGrunt::StopTalking()
 {
 	m_flNextWordTime = m_flNextSpeakTime = gpGlobals->time + 10 + RANDOM_LONG(0, 10);
 }
@@ -283,7 +283,7 @@ void CAGrunt::StopTalking(void)
 //=========================================================
 // ShouldSpeak - Should this agrunt be talking?
 //=========================================================
-BOOL CAGrunt::ShouldSpeak(void)
+BOOL CAGrunt::ShouldSpeak()
 {
 	if (m_flNextSpeakTime > gpGlobals->time)
 	{
@@ -310,7 +310,7 @@ BOOL CAGrunt::ShouldSpeak(void)
 //=========================================================
 // PrescheduleThink 
 //=========================================================
-void CAGrunt::PrescheduleThink(void)
+void CAGrunt::PrescheduleThink()
 {
 	if (ShouldSpeak())
 	{
@@ -346,7 +346,7 @@ void CAGrunt::PrescheduleThink(void)
 //=========================================================
 // DieSound
 //=========================================================
-void CAGrunt::DeathSound(void)
+void CAGrunt::DeathSound()
 {
 	StopTalking();
 
@@ -356,7 +356,7 @@ void CAGrunt::DeathSound(void)
 //=========================================================
 // AlertSound
 //=========================================================
-void CAGrunt::AlertSound(void)
+void CAGrunt::AlertSound()
 {
 	StopTalking();
 
@@ -366,7 +366,7 @@ void CAGrunt::AlertSound(void)
 //=========================================================
 // AttackSound
 //=========================================================
-void CAGrunt::AttackSound(void)
+void CAGrunt::AttackSound()
 {
 	StopTalking();
 
@@ -376,7 +376,7 @@ void CAGrunt::AttackSound(void)
 //=========================================================
 // PainSound
 //=========================================================
-void CAGrunt::PainSound(void)
+void CAGrunt::PainSound()
 {
 	if (m_flNextPainTime > gpGlobals->time)
 	{
@@ -394,7 +394,7 @@ void CAGrunt::PainSound(void)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int CAGrunt::Classify(void)
+int CAGrunt::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MILITARY;
 }
@@ -403,7 +403,7 @@ int CAGrunt::Classify(void)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CAGrunt::SetYawSpeed(void)
+void CAGrunt::SetYawSpeed()
 {
 	int ys;
 
@@ -919,7 +919,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CAGrunt, CSquadMonster);
 // because they can use their smart weapons against unseen
 // enemies. Base class doesn't attack anyone it can't see.
 //=========================================================
-BOOL CAGrunt::FCanCheckAttacks(void)
+BOOL CAGrunt::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
 	{
@@ -1088,7 +1088,7 @@ void CAGrunt::StartTask(Task_t* pTask)
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t* CAGrunt::GetSchedule(void)
+Schedule_t* CAGrunt::GetSchedule()
 {
 	if (HasConditions(bits_COND_HEAR_SOUND))
 	{

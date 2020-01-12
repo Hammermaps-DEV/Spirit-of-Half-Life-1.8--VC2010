@@ -58,12 +58,12 @@
 class CPathTrack : public CPointEntity
 {
 public:
-	void Spawn(void) override;
-	void Activate(void) override;
+	void Spawn() override;
+	void Activate() override;
 	void KeyValue(KeyValueData* pkvd) override;
 
 	void SetPrevious(CPathTrack* pprevious);
-	void Link(void);
+	void Link();
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
 	CPathTrack* ValidPath(CPathTrack* ppath, int testFlag); // Returns ppath if enabled, NULL otherwise
@@ -74,15 +74,15 @@ public:
 	CPathTrack* LookAhead(Vector* origin, float dist, int move);
 	CPathTrack* Nearest(Vector origin);
 
-	CPathTrack* GetNext(void);
-	CPathTrack* GetPrevious(void);
+	CPathTrack* GetNext();
+	CPathTrack* GetPrevious();
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 #if PATH_SPARKLE_DEBUG
-	void EXPORT Sparkle(void);
+	void EXPORT Sparkle();
 #endif
 
 	float m_length;
@@ -97,8 +97,8 @@ class CTrainSequence;
 class CFuncTrackTrain : public CBaseEntity
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 
 	void Blocked(CBaseEntity* pOther) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
@@ -109,13 +109,13 @@ public:
 	void StopSequence();
 	CTrainSequence* m_pSequence;
 
-	void DesiredAction(void) override; //LRC - used to be called Next!
+	void DesiredAction() override; //LRC - used to be called Next!
 
 	//	void EXPORT Next( void );
-	void EXPORT PostponeNext(void);
-	void EXPORT Find(void);
-	void EXPORT NearestPath(void);
-	void EXPORT DeadEnd(void);
+	void EXPORT PostponeNext();
+	void EXPORT Find();
+	void EXPORT NearestPath();
+	void EXPORT DeadEnd();
 
 	void NextThink(float thinkTime, BOOL alwaysThink);
 
@@ -123,8 +123,8 @@ public:
 	void SetControls(entvars_t* pevControls);
 	BOOL OnControls(entvars_t* pev) override;
 
-	void StopSound(void);
-	void UpdateSound(void);
+	void StopSound();
+	void UpdateSound();
 
 	static CFuncTrackTrain* Instance(edict_t* pent);
 
@@ -133,12 +133,12 @@ public:
 
 	static TYPEDESCRIPTION m_SaveData[];
 
-	int ObjectCaps(void) override
+	int ObjectCaps() override
 	{
 		return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DIRECTIONAL_USE;
 	}
 
-	void OverrideReset(void) override;
+	void OverrideReset() override;
 
 	CPathTrack* m_ppath;
 	float m_length;

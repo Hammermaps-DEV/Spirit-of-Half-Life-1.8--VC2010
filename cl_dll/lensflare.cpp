@@ -11,7 +11,7 @@
 
 DECLARE_MESSAGE( m_Lensflare, Lensflare )
 
-int CHudLensflare::Init(void)
+int CHudLensflare::Init()
 {
 	HOOK_MESSAGE( Lensflare );
 
@@ -23,7 +23,7 @@ int CHudLensflare::Init(void)
     return 1;
 }
 
-int CHudLensflare::VidInit(void)
+int CHudLensflare::VidInit()
 {
     return 1;
 }

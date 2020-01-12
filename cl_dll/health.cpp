@@ -52,7 +52,7 @@ int giDmgFlags[NUM_DMG_TYPES] =
 	DMG_HALLUC
 };
 
-int CHudHealth::Init(void)
+int CHudHealth::Init()
 {
 	HOOK_MESSAGE(Health);
 	HOOK_MESSAGE(Damage);
@@ -85,7 +85,7 @@ void CHudHealth::Reset( void )
 	}
 }
 
-int CHudHealth::VidInit(void)
+int CHudHealth::VidInit()
 {
 	m_hSprite = 0;
 

@@ -22,7 +22,7 @@
 class Vector2D
 {
 public:
-	Vector2D(void)
+	Vector2D()
 	{
 	}
 
@@ -37,9 +37,9 @@ public:
 	Vector2D operator*(float fl) const { return Vector2D(x * fl, y * fl); }
 	Vector2D operator/(float fl) const { return Vector2D(x / fl, y / fl); }
 
-	float Length(void) const { return sqrt(x * x + y * y); }
+	float Length() const { return sqrt(x * x + y * y); }
 
-	Vector2D Normalize(void) const
+	Vector2D Normalize() const
 	{
 		Vector2D vec2;
 
@@ -66,7 +66,7 @@ class Vector // same data-layout as engine's vec3_t,
 	//		which is a vec_t[3]
 public:
 	// Construction/destruction
-	Vector(void)
+	Vector()
 	{
 	}
 
@@ -94,7 +94,7 @@ public:
 	}
 
 	// Operators
-	Vector operator-(void) const { return Vector(-x, -y, -z); }
+	Vector operator-() const { return Vector(-x, -y, -z); }
 	int operator==(const Vector& v) const { return x == v.x && y == v.y && z == v.z; }
 	int operator!=(const Vector& v) const { return !(*this == v); }
 	Vector operator+(const Vector& v) const { return Vector(x + v.x, y + v.y, z + v.z); }
@@ -104,10 +104,10 @@ public:
 
 	// Methods
 	void CopyToArray(float* rgfl) const { rgfl[0] = x, rgfl[1] = y, rgfl[2] = z; }
-	float Length(void) const { return sqrt(x * x + y * y + z * z); }
+	float Length() const { return sqrt(x * x + y * y + z * z); }
 	operator float*() { return &x; } // Vectors will now automatically convert to float * when needed
 	operator const float*() const { return &x; } // Vectors will now automatically convert to float * when needed
-	Vector Normalize(void) const
+	Vector Normalize() const
 	{
 		float flLen = Length();
 		if (flLen == 0) return Vector(0, 0, 1); // ????
@@ -115,7 +115,7 @@ public:
 		return Vector(x * flLen, y * flLen, z * flLen);
 	}
 
-	Vector2D Make2D(void) const
+	Vector2D Make2D() const
 	{
 		Vector2D Vec2;
 
@@ -125,7 +125,7 @@ public:
 		return Vec2;
 	}
 
-	float Length2D(void) const { return sqrt(x * x + y * y); }
+	float Length2D() const { return sqrt(x * x + y * y); }
 
 	// Members
 	vec_t x, y, z;

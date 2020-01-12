@@ -180,7 +180,7 @@ LINK_ENTITY_TO_CLASS(scripted_action, CCineMonster); //LRC
 LINK_ENTITY_TO_CLASS(aiscripted_sequence, CCineMonster); //LRC - aiscripted sequences don't need to be seperate
 
 
-void CCineMonster::Spawn(void)
+void CCineMonster::Spawn()
 {
 	// pev->solid = SOLID_TRIGGER;
 	// UTIL_SetSize(pev, Vector(-8, -8, -8), Vector(8, 8, 8));
@@ -289,7 +289,7 @@ void CCineMonster::Touch(CBaseEntity* pOther)
 //
 // ********** Cinematic DIE **********
 //
-void CCineMonster::Die(void)
+void CCineMonster::Die()
 {
 	SetThink(&CCineMonster :: SUB_Remove);
 }
@@ -297,7 +297,7 @@ void CCineMonster::Die(void)
 //
 // ********** Cinematic PAIN **********
 //
-void CCineMonster::Pain(void)
+void CCineMonster::Pain()
 {
 }
 
@@ -352,7 +352,7 @@ CBaseMonster* CCineMonster::FindEntity(const char* sName, CBaseEntity* pActivato
 }
 
 // make the entity enter a scripted sequence
-void CCineMonster::PossessEntity(void)
+void CCineMonster::PossessEntity()
 {
 	CBaseEntity* pEntity = m_hTargetEnt;
 	CBaseMonster* pTarget = nullptr;
@@ -468,7 +468,7 @@ void CCineMonster::PossessEntity(void)
 
 
 // at the beginning of the level, set up the idle animation. --LRC
-void CCineMonster::InitIdleThink(void)
+void CCineMonster::InitIdleThink()
 {
 	if ((m_hTargetEnt = FindEntity(STRING(m_iszEntity), nullptr)) != nullptr)
 	{
@@ -484,7 +484,7 @@ void CCineMonster::InitIdleThink(void)
 	}
 }
 
-void CCineMonster::CineThink(void)
+void CCineMonster::CineThink()
 {
 	//	ALERT(at_console, "Sequence think, activator %s\n", STRING(m_hActivator->pev->targetname));
 	if ((m_hTargetEnt = FindEntity(STRING(m_iszEntity), m_hActivator)) != nullptr)
@@ -624,7 +624,7 @@ void CCineMonster::AllowInterrupt(BOOL fAllow)
 }
 
 
-BOOL CCineMonster::CanInterrupt(void)
+BOOL CCineMonster::CanInterrupt()
 {
 	if (!m_interruptable)
 		return FALSE;
@@ -638,7 +638,7 @@ BOOL CCineMonster::CanInterrupt(void)
 }
 
 
-int CCineMonster::IgnoreConditions(void)
+int CCineMonster::IgnoreConditions()
 {
 	if (CanInterrupt())
 		return 0;
@@ -680,7 +680,7 @@ void ScriptEntityCancel(edict_t* pentCine)
 
 
 // find all the cinematic entities with my targetname and stop them from playing
-void CCineMonster::CancelScript(void)
+void CCineMonster::CancelScript()
 {
 	ALERT(at_aiconsole, "Cancelling script: %s\n", STRING(m_iszPlay));
 
@@ -733,7 +733,7 @@ void CCineMonster::DelayStart(int state)
 
 
 // Find an entity that I'm interested in and precache the sounds he'll need in the sequence.
-void CCineMonster::Activate(void)
+void CCineMonster::Activate()
 {
 	CBaseEntity* pEntity;
 	CBaseMonster* pTarget;
@@ -910,13 +910,13 @@ BOOL CBaseMonster::CineCleanup()
 class CScriptedSentence : public CBaseToggle
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 	void KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	void EXPORT FindThink(void);
-	void EXPORT DelayThink(void);
-	void EXPORT DurationThink(void);
-	int ObjectCaps(void) override { return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	void EXPORT FindThink();
+	void EXPORT DelayThink();
+	void EXPORT DurationThink();
+	int ObjectCaps() override { return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
 	STATE GetState() override { return m_playing ? STATE_ON : STATE_OFF; }
 
@@ -1032,7 +1032,7 @@ void CScriptedSentence::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_T
 }
 
 
-void CScriptedSentence::Spawn(void)
+void CScriptedSentence::Spawn()
 {
 	pev->solid = SOLID_NOT;
 
@@ -1073,7 +1073,7 @@ void CScriptedSentence::Spawn(void)
 }
 
 
-void CScriptedSentence::FindThink(void)
+void CScriptedSentence::FindThink()
 {
 	if (!m_iszEntity) //LRC- no target monster given: speak through HEV
 	{
@@ -1120,14 +1120,14 @@ void CScriptedSentence::FindThink(void)
 }
 
 //LRC
-void CScriptedSentence::DurationThink(void)
+void CScriptedSentence::DurationThink()
 {
 	m_playing = FALSE;
 	SetNextThink(m_flRepeat);
 	SetThink(&CScriptedSentence :: DelayThink);
 }
 
-void CScriptedSentence::DelayThink(void)
+void CScriptedSentence::DelayThink()
 {
 	m_active = TRUE;
 	if (!pev->targetname)
@@ -1238,10 +1238,10 @@ BOOL CScriptedSentence::StartSentence(CBaseMonster* pTarget)
 class CFurniture : public CBaseMonster
 {
 public:
-	void Spawn(void) override;
-	void Die(void);
-	int Classify(void) override;
-	int ObjectCaps(void) override { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	void Spawn() override;
+	void Die();
+	int Classify() override;
+	int ObjectCaps() override { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 };
 
 
@@ -1251,7 +1251,7 @@ LINK_ENTITY_TO_CLASS(monster_furniture, CFurniture);
 //=========================================================
 // Furniture is killed
 //=========================================================
-void CFurniture::Die(void)
+void CFurniture::Die()
 {
 	SetThink(&CFurniture :: SUB_Remove);
 	SetNextThink(0);
@@ -1286,7 +1286,7 @@ void CFurniture::Spawn()
 //=========================================================
 // ID's Furniture as neutral (noone will attack it)
 //=========================================================
-int CFurniture::Classify(void)
+int CFurniture::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_NONE;
 }

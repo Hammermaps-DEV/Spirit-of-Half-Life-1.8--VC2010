@@ -83,7 +83,7 @@ typedef int BOOL;
 
 // Keeps clutter down a bit, when declaring external entity/global method prototypes
 #define DECLARE_GLOBAL_METHOD(MethodName)  extern void DLLEXPORT MethodName( void )
-#define GLOBAL_METHOD(funcname)					void DLLEXPORT funcname(void)
+#define GLOBAL_METHOD(funcname)					void DLLEXPORT funcname()
 
 // This is the glue that hooks .MAP entity class names to our CPP classes
 // The _declspec forces them to be exported by name so we can do a lookup with GetProcAddress()
@@ -243,7 +243,7 @@ extern Vector UTIL_AxisRotationToVec(const Vector& vec, float angle); //LRC
 //LRC 1.8 - renamed CBaseAlias
 class CBaseMutableAlias;
 extern void UTIL_AddToAliasList(CBaseMutableAlias* pAlias);
-extern void UTIL_FlushAliases(void);
+extern void UTIL_FlushAliases();
 
 extern CBaseEntity* UTIL_FindEntityInSphere(CBaseEntity* pStartEntity, const Vector& vecCenter, float flRadius);
 extern CBaseEntity* UTIL_FindEntityByString(CBaseEntity* pStartEntity, const char* szKeyword, const char* szValue);
@@ -301,7 +301,7 @@ enum { point_hull=0, human_hull=1, large_hull=2, head_hull=3 };
 
 extern void UTIL_TraceHull(const Vector& vecStart, const Vector& vecEnd, IGNORE_MONSTERS igmon, int hullNumber,
                            edict_t* pentIgnore, TraceResult* ptr);
-extern TraceResult UTIL_GetGlobalTrace(void);
+extern TraceResult UTIL_GetGlobalTrace();
 extern void UTIL_TraceModel(const Vector& vecStart, const Vector& vecEnd, int hullNumber, edict_t* pentModel,
                             TraceResult* ptr);
 extern Vector UTIL_GetAimVector(edict_t* pent, float flSpeed);
@@ -310,7 +310,7 @@ extern int UTIL_PointContents(const Vector& vec);
 extern int UTIL_IsMasterTriggered(string_t sMaster, CBaseEntity* pActivator);
 extern void UTIL_BloodStream(const Vector& origin, const Vector& direction, int color, int amount);
 extern void UTIL_BloodDrips(const Vector& origin, const Vector& direction, int color, int amount);
-extern Vector UTIL_RandomBloodVector(void);
+extern Vector UTIL_RandomBloodVector();
 extern BOOL UTIL_ShouldShowBlood(int bloodColor);
 extern void UTIL_BloodDecalTrace(TraceResult* pTrace, int bloodColor);
 extern void UTIL_DecalTrace(TraceResult* pTrace, int decalNumber);
@@ -595,19 +595,19 @@ class UTIL_GroupTrace
 {
 public:
 	UTIL_GroupTrace(int groupmask, int op);
-	~UTIL_GroupTrace(void);
+	~UTIL_GroupTrace();
 
 private:
 	int m_oldgroupmask, m_oldgroupop;
 };
 
 void UTIL_SetGroupTrace(int groupmask, int op);
-void UTIL_UnsetGroupTrace(void);
+void UTIL_UnsetGroupTrace();
 
 int UTIL_SharedRandomLong(unsigned int seed, int low, int high);
 float UTIL_SharedRandomFloat(unsigned int seed, float low, float high);
 
-float UTIL_WeaponTimeBase(void);
+float UTIL_WeaponTimeBase();
 int GetStdLightStyle(int iStyle); //LRC- declared here so it can be used by everything that
 // needs to deal with the standard lightstyles.
 // LRC- for aliases and groups

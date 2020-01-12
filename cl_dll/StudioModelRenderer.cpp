@@ -2022,7 +2022,7 @@ StudioRenderFinal
 
 ====================
 */
-void CStudioModelRenderer::StudioRenderFinal(void)
+void CStudioModelRenderer::StudioRenderFinal()
 {
 	if ( IEngineStudio.IsHardware() )
 	{

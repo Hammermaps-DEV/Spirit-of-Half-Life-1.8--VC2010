@@ -34,13 +34,13 @@
 class CBarnacle : public CBaseMonster
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 	CBaseEntity* TongueTouchEnt(float* pflLength);
-	int Classify(void) override;
+	int Classify() override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-	void EXPORT BarnacleThink(void);
-	void EXPORT WaitTillDead(void);
+	void EXPORT BarnacleThink();
+	void EXPORT WaitTillDead();
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 	int Save(CSave& save) override;
@@ -74,7 +74,7 @@ IMPLEMENT_SAVERESTORE(CBarnacle, CBaseMonster);
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int CBarnacle::Classify(void)
+int CBarnacle::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
@@ -146,7 +146,7 @@ int CBarnacle::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float
 
 //=========================================================
 //=========================================================
-void CBarnacle::BarnacleThink(void)
+void CBarnacle::BarnacleThink()
 {
 	CBaseEntity* pTouchEnt;
 	CBaseMonster* pVictim;
@@ -366,7 +366,7 @@ void CBarnacle::Killed(entvars_t* pevAttacker, int iGib)
 
 //=========================================================
 //=========================================================
-void CBarnacle::WaitTillDead(void)
+void CBarnacle::WaitTillDead()
 {
 	SetNextThink(0.1);
 

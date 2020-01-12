@@ -257,7 +257,7 @@ void CBasePlayer::RemoveAllItems( BOOL removeSuit ) { }
 void CBasePlayer::SetAnimation( PLAYER_ANIM playerAnim ) { }
 void CBasePlayer::WaterMove() { }
 BOOL CBasePlayer::IsOnLadder( void ) { return FALSE; }
-void CBasePlayer::PlayerDeathThink(void) { }
+void CBasePlayer::PlayerDeathThink() { }
 void CBasePlayer::StartDeathCam( void ) { }
 void CBasePlayer::StartObserver( Vector vecPosition, Vector vecViewAngle ) { }
 void CBasePlayer::PlayerUse ( void ) { }
@@ -265,7 +265,7 @@ int CBasePlayer::TakeArmor(float flArmor) { return 1; }
 void CBasePlayer::Jump() { }
 void CBasePlayer::Duck( ) { }
 int  CBasePlayer::Classify ( void ) { return 0; }
-void CBasePlayer::PreThink(void) { }
+void CBasePlayer::PreThink() { }
 void CBasePlayer::CheckTimeBasedDamage()  { }
 void CBasePlayer :: UpdateGeigerCounter( void ) { }
 void CBasePlayer::CheckSuitUpdate() { }
@@ -274,7 +274,7 @@ void CBasePlayer :: UpdatePlayerSound ( void ) { }
 void CBasePlayer::PostThink() { }
 void CBasePlayer :: Precache( void ) { }
 int CBasePlayer::Save( CSave &save ) { return 0; }
-void CBasePlayer::RenewItems(void) { }
+void CBasePlayer::RenewItems() { }
 int CBasePlayer::Restore( CRestore &restore ) { return 0; }
 BOOL CBasePlayer::HasWeapons( void ) { return FALSE; }
 void CBasePlayer::SelectPrevItem( int iItem ) { }
@@ -290,7 +290,7 @@ int CBasePlayer::RemovePlayerItem( CBasePlayerItem *pItem ) { return FALSE; }
 void CBasePlayer::ItemPostFrame() { }
 int CBasePlayer::AmmoInventory( int iAmmoIndex ) { return -1; }
 int CBasePlayer::GetAmmoIndex(const char *psz) { return -1; }
-void CBasePlayer::SendAmmoUpdate(void) { }
+void CBasePlayer::SendAmmoUpdate() { }
 void CBasePlayer :: UpdateClientData( void ) { }
 BOOL CBasePlayer :: FBecomeProne ( void ) { return TRUE; }
 void CBasePlayer :: BarnacleVictimBitten ( entvars_t *pevBarnacle ) { }
@@ -309,7 +309,7 @@ const char *CBasePlayer::TeamID( void ) { return ""; }
 int CBasePlayer :: GiveAmmo( int iCount, char *szName, int iMax ) { return 0; }
 void CBasePlayer::AddPoints( int score, BOOL bAllowNegativeScore ) { } 
 void CBasePlayer::AddPointsToTeam( int score, BOOL bAllowNegativeScore ) { } 
-void ClearMultiDamage(void) { }
+void ClearMultiDamage() { }
 void ApplyMultiDamage(entvars_t *pevInflictor, entvars_t *pevAttacker ) { }
 void AddMultiDamage( entvars_t *pevInflictor, CBaseEntity *pEntity, float flDamage, int bitsDamageType) { }
 void SpawnBlood(Vector vecSpot, int bloodColor, float flDamage) { }

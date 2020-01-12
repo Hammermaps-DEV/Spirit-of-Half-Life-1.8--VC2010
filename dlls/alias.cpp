@@ -47,12 +47,12 @@ public:
 	int m_iCurrentTarget; //AJH the current target that is being aliased
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-	void Spawn(void) override;
+	void Spawn() override;
 	STATE GetState() override { return (pev->spawnflags & SF_ALIAS_OFF) ? STATE_OFF : STATE_ON; }
 
 	CBaseEntity* FollowAlias(CBaseEntity* pFrom) override;
 	void ChangeValue(int iszValue) override;
-	void FlushChanges(void) override;
+	void FlushChanges() override;
 	void KeyValue(struct KeyValueData_s*) override; //AJH
 
 	int Save(CSave& save) override;
@@ -135,7 +135,7 @@ void CInfoAlias::KeyValue(KeyValueData* pkvd) //AJH
 	}
 }
 
-void CInfoAlias::Spawn(void)
+void CInfoAlias::Spawn()
 {
 	if (m_iMode == 0)
 	{
@@ -237,7 +237,7 @@ void CInfoAlias::ChangeValue(int iszValue)
 	UTIL_AddToAliasList(this);
 }
 
-void CInfoAlias::FlushChanges(void)
+void CInfoAlias::FlushChanges()
 {
 	pev->message = pev->noise;
 	if (pev->spawnflags & SF_ALIAS_DEBUG)
@@ -393,8 +393,6 @@ CBaseEntity* CMultiAlias::FollowAlias(CBaseEntity* pStartEntity)
 {
 	CBaseEntity* pBestEntity = nullptr; // the entity we're currently planning to return.
 	int iBestOffset = -1; // the offset of that entity.
-	CBaseEntity* pTempEntity;
-	int iTempOffset;
 
 	int i = 0;
 	if (m_iMode)
@@ -426,11 +424,11 @@ CBaseEntity* CMultiAlias::FollowAlias(CBaseEntity* pStartEntity)
 
 	while (i < m_cTargets)
 	{
-		pTempEntity = UTIL_FindEntityByTargetname(pStartEntity, STRING(m_iszTargets[i]));
+		CBaseEntity* pTempEntity = UTIL_FindEntityByTargetname(pStartEntity, STRING(m_iszTargets[i]));
 		if (pTempEntity)
 		{
 			// We've found an entity; only use it if its offset is lower than the offset we've currently got.
-			iTempOffset = OFFSET(pTempEntity->pev);
+			int iTempOffset = OFFSET(pTempEntity->pev);
 			if (iBestOffset == -1 || iTempOffset < iBestOffset)
 			{
 				iBestOffset = iTempOffset;
@@ -470,15 +468,15 @@ CBaseEntity* CMultiAlias::FollowAlias(CBaseEntity* pStartEntity)
 class CTriggerChangeAlias : public CBaseEntity
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps() override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 };
 
 LINK_ENTITY_TO_CLASS(trigger_changealias, CTriggerChangeAlias);
 
-void CTriggerChangeAlias::Spawn(void)
+void CTriggerChangeAlias::Spawn()
 {
 }
 

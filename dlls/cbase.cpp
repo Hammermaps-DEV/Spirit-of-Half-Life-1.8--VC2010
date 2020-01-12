@@ -452,7 +452,7 @@ void SaveReadFields(SAVERESTOREDATA* pSaveData, const char* pname, void* pBaseDa
 	restoreHelper.ReadFields(pname, pBaseData, pFields, fieldCount);
 }
 
-edict_t* EHANDLE::Get(void)
+edict_t* EHANDLE::Get()
 {
 	if (m_pent)
 	{
@@ -503,7 +503,7 @@ CBaseEntity* EHANDLE::operator ->()
 }
 
 //LRC
-void CBaseEntity::Activate(void)
+void CBaseEntity::Activate()
 {
 	//LRC - rebuild the new assistlist as the game starts
 	if (m_iLFlags & LF_ASSISTLIST)
@@ -524,7 +524,7 @@ void CBaseEntity::Activate(void)
 }
 
 //LRC- called by activate() to support movewith
-void CBaseEntity::InitMoveWith(void)
+void CBaseEntity::InitMoveWith()
 {
 	SetParent(m_MoveWith);
 }
@@ -656,7 +656,7 @@ void CBaseEntity::SetParent(CBaseEntity* pParent, int m_iAttachment)
 	}
 }
 
-void CBaseEntity::ResetParent(void)
+void CBaseEntity::ResetParent()
 {
 	CBaseEntity* pTemp;
 
@@ -729,7 +729,7 @@ void CBaseEntity::ResetParent(void)
 }
 
 //LRC
-void CBaseEntity::DontThink(void)
+void CBaseEntity::DontThink()
 {
 	m_fNextThink = 0;
 	if (m_pMoveWith == nullptr && m_pChildMoveWith == nullptr)
@@ -744,7 +744,7 @@ void CBaseEntity::DontThink(void)
 //LRC
 // PUSH entities won't have their velocity applied unless they're thinking.
 // make them do so for the foreseeable future.
-void CBaseEntity::SetEternalThink(void)
+void CBaseEntity::SetEternalThink()
 {
 	if (pev->movetype == MOVETYPE_PUSH)
 	{
@@ -815,7 +815,7 @@ void CBaseEntity::AbsoluteNextThink(float time, BOOL correctSpeed)
 // on a depressingly frequent basis.)
 // for some reason, this doesn't always produce perfect movement - but it's close
 // enough for government work. (the player doesn't get stuck, at least.)
-void CBaseEntity::ThinkCorrection(void)
+void CBaseEntity::ThinkCorrection()
 {
 	if (pev->nextthink != m_fPevNextThink)
 	{
@@ -924,7 +924,7 @@ void CBaseEntity::Killed(entvars_t* pevAttacker, int iGib)
 	UTIL_Remove(this);
 }
 
-CBaseEntity* CBaseEntity::GetNextTarget(void)
+CBaseEntity* CBaseEntity::GetNextTarget()
 {
 	if (FStringNull(pev->target))
 		return nullptr;
@@ -1035,7 +1035,7 @@ void SetObjectCollisionBox(entvars_t* pev)
 	pev->absmax.z += 1;
 }
 
-void CBaseEntity::SetObjectCollisionBox(void)
+void CBaseEntity::SetObjectCollisionBox()
 {
 	::SetObjectCollisionBox(pev);
 }
@@ -1052,7 +1052,7 @@ int CBaseEntity::Intersects(CBaseEntity* pOther)
 	return 1;
 }
 
-void CBaseEntity::MakeDormant(void)
+void CBaseEntity::MakeDormant()
 {
 	SetBits(pev->flags, FL_DORMANT);
 
@@ -1072,12 +1072,12 @@ void CBaseEntity::MakeDormant(void)
 	UTIL_SetOrigin(this, pev->origin);
 }
 
-int CBaseEntity::IsDormant(void)
+int CBaseEntity::IsDormant()
 {
 	return FBitSet(pev->flags, FL_DORMANT) != 0;
 }
 
-BOOL CBaseEntity::IsInWorld(void)
+BOOL CBaseEntity::IsInWorld()
 {
 	// position 
 	if (pev->origin.x >= 4096) return FALSE;

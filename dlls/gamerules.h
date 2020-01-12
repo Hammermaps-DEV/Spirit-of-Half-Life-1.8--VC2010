@@ -62,24 +62,24 @@ enum
 class CGameRules
 {
 public:
-	virtual void RefreshSkillData(void); // fill skill data struct with proper values
-	virtual void Think(void) = 0;
+	virtual void RefreshSkillData(); // fill skill data struct with proper values
+	virtual void Think() = 0;
 	// GR_Think - runs every server frame, should handle any timer tasks, periodic events, etc.
 	virtual BOOL IsAllowedToSpawn(CBaseEntity* pEntity) = 0;
 	// Can this item spawn (eg monsters don't spawn in deathmatch).
 
-	virtual BOOL FAllowFlashlight(void) = 0; // Are players allowed to switch on their flashlight?
+	virtual BOOL FAllowFlashlight() = 0; // Are players allowed to switch on their flashlight?
 	virtual BOOL FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon) = 0;
 	// should the player switch to this weapon?
 	virtual BOOL GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon) = 0;
 	// I can't use this weapon anymore, get me the next best one.
 
 	// Functions to verify the single/multiplayer status of a game
-	virtual BOOL IsMultiplayer(void) = 0; // is this a multiplayer game? (either coop or deathmatch)
-	virtual BOOL IsDeathmatch(void) = 0; //is this a deathmatch game?
-	virtual BOOL IsTeamplay(void) { return FALSE; }; // is this deathmatch game being played with team rules?
-	virtual BOOL IsCoOp(void) = 0; // is this a coop game?
-	virtual const char* GetGameDescription(void) { return GAME_NAME; }
+	virtual BOOL IsMultiplayer() = 0; // is this a multiplayer game? (either coop or deathmatch)
+	virtual BOOL IsDeathmatch() = 0; //is this a deathmatch game?
+	virtual BOOL IsTeamplay() { return FALSE; }; // is this deathmatch game being played with team rules?
+	virtual BOOL IsCoOp() = 0; // is this a coop game?
+	virtual const char* GetGameDescription() { return GAME_NAME; }
 	// this is the game name that gets seen in the server browser
 
 	// Client connection/disconnection
@@ -109,7 +109,7 @@ public:
 	virtual edict_t* GetPlayerSpawnSpot(CBasePlayer* pPlayer);
 	// Place this player on their spawnspot and face them the proper direction.
 
-	virtual BOOL AllowAutoTargetCrosshair(void) { return TRUE; };
+	virtual BOOL AllowAutoTargetCrosshair() { return TRUE; };
 	virtual BOOL ClientCommand(CBasePlayer* pPlayer, const char* pcmd) { return FALSE; };
 	// handles the user commands;  returns TRUE if command handled properly
 	virtual void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)
@@ -159,8 +159,8 @@ public:
 	// by default, everything spawns
 
 	// Healthcharger respawn control
-	virtual float FlHealthChargerRechargeTime(void) = 0; // how long until a depleted HealthCharger recharges itself?
-	virtual float FlHEVChargerRechargeTime(void) { return 0; }
+	virtual float FlHealthChargerRechargeTime() = 0; // how long until a depleted HealthCharger recharges itself?
+	virtual float FlHEVChargerRechargeTime() { return 0; }
 	// how long until a depleted HealthCharger recharges itself?
 
 	// What happens to a dead player's weapons
@@ -184,19 +184,19 @@ public:
 	virtual const char* SetDefaultPlayerTeam(CBasePlayer* pPlayer) { return ""; }
 
 	// Sounds
-	virtual BOOL PlayTextureSounds(void) { return TRUE; }
+	virtual BOOL PlayTextureSounds() { return TRUE; }
 	virtual BOOL PlayFootstepSounds(CBasePlayer* pl, float fvol) { return TRUE; }
 
 	// Monsters
-	virtual BOOL FAllowMonsters(void) = 0; //are monsters allowed
+	virtual BOOL FAllowMonsters() = 0; //are monsters allowed
 
 	// Immediately end a multiplayer game
-	virtual void EndMultiplayerGame(void)
+	virtual void EndMultiplayerGame()
 	{
 	}
 };
 
-extern CGameRules* InstallGameRules(void);
+extern CGameRules* InstallGameRules();
 
 
 //=========================================================
@@ -206,20 +206,20 @@ extern CGameRules* InstallGameRules(void);
 class CHalfLifeRules : public CGameRules
 {
 public:
-	CHalfLifeRules(void);
+	CHalfLifeRules();
 
 	// GR_Think
-	void Think(void) override;
+	void Think() override;
 	BOOL IsAllowedToSpawn(CBaseEntity* pEntity) override;
-	BOOL FAllowFlashlight(void) override { return TRUE; };
+	BOOL FAllowFlashlight() override { return TRUE; };
 
 	BOOL FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon) override;
 	BOOL GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon) override;
 
 	// Functions to verify the single/multiplayer status of a game
-	BOOL IsMultiplayer(void) override;
-	BOOL IsDeathmatch(void) override;
-	BOOL IsCoOp(void) override;
+	BOOL IsMultiplayer() override;
+	BOOL IsDeathmatch() override;
+	BOOL IsCoOp() override;
 
 	// Client connection/disconnection
 	BOOL ClientConnected(edict_t* pEntity, const char* pszName, const char* pszAddress,
@@ -236,7 +236,7 @@ public:
 	BOOL FPlayerCanRespawn(CBasePlayer* pPlayer) override;
 	float FlPlayerSpawnTime(CBasePlayer* pPlayer) override;
 
-	BOOL AllowAutoTargetCrosshair(void) override;
+	BOOL AllowAutoTargetCrosshair() override;
 
 	// Client kills/scoring
 	int IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled) override;
@@ -270,7 +270,7 @@ public:
 	Vector VecAmmoRespawnSpot(CBasePlayerAmmo* pAmmo) override;
 
 	// Healthcharger respawn control
-	float FlHealthChargerRechargeTime(void) override;
+	float FlHealthChargerRechargeTime() override;
 
 	// What happens to a dead player's weapons
 	int DeadPlayerWeapons(CBasePlayer* pPlayer) override;
@@ -279,7 +279,7 @@ public:
 	int DeadPlayerAmmo(CBasePlayer* pPlayer) override;
 
 	// Monsters
-	BOOL FAllowMonsters(void) override;
+	BOOL FAllowMonsters() override;
 
 	// Teamplay stuff	
 	const char* GetTeamID(CBaseEntity* pEntity) override { return ""; };
@@ -296,18 +296,18 @@ public:
 	CHalfLifeMultiplay();
 
 	// GR_Think
-	void Think(void) override;
-	void RefreshSkillData(void) override;
+	void Think() override;
+	void RefreshSkillData() override;
 	BOOL IsAllowedToSpawn(CBaseEntity* pEntity) override;
-	BOOL FAllowFlashlight(void) override;
+	BOOL FAllowFlashlight() override;
 
 	BOOL FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon) override;
 	BOOL GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon) override;
 
 	// Functions to verify the single/multiplayer status of a game
-	BOOL IsMultiplayer(void) override;
-	BOOL IsDeathmatch(void) override;
-	BOOL IsCoOp(void) override;
+	BOOL IsMultiplayer() override;
+	BOOL IsDeathmatch() override;
+	BOOL IsCoOp() override;
 
 	// Client connection/disconnection
 	// If ClientConnected returns FALSE, the connection is rejected and the user is provided the reason specified in
@@ -330,7 +330,7 @@ public:
 	float FlPlayerSpawnTime(CBasePlayer* pPlayer) override;
 	edict_t* GetPlayerSpawnSpot(CBasePlayer* pPlayer) override;
 
-	BOOL AllowAutoTargetCrosshair(void) override;
+	BOOL AllowAutoTargetCrosshair() override;
 	BOOL ClientCommand(CBasePlayer* pPlayer, const char* pcmd) override;
 
 	// Client kills/scoring
@@ -367,8 +367,8 @@ public:
 	Vector VecAmmoRespawnSpot(CBasePlayerAmmo* pAmmo) override;
 
 	// Healthcharger respawn control
-	float FlHealthChargerRechargeTime(void) override;
-	float FlHEVChargerRechargeTime(void) override;
+	float FlHealthChargerRechargeTime() override;
+	float FlHEVChargerRechargeTime() override;
 
 	// What happens to a dead player's weapons
 	int DeadPlayerWeapons(CBasePlayer* pPlayer) override;
@@ -380,18 +380,18 @@ public:
 	const char* GetTeamID(CBaseEntity* pEntity) override { return ""; }
 	int PlayerRelationship(CBaseEntity* pPlayer, CBaseEntity* pTarget) override;
 
-	BOOL PlayTextureSounds(void) override { return FALSE; }
+	BOOL PlayTextureSounds() override { return FALSE; }
 	BOOL PlayFootstepSounds(CBasePlayer* pl, float fvol) override;
 
 	// Monsters
-	BOOL FAllowMonsters(void) override;
+	BOOL FAllowMonsters() override;
 
 	// Immediately end a multiplayer game
-	void EndMultiplayerGame(void) override { GoToIntermission(); }
+	void EndMultiplayerGame() override { GoToIntermission(); }
 
 protected:
-	virtual void ChangeLevel(void);
-	virtual void GoToIntermission(void);
+	virtual void ChangeLevel();
+	virtual void GoToIntermission();
 	float m_flIntermissionEndTime;
 	BOOL m_iEndIntermissionButtonHit;
 	void SendMOTDToClient(edict_t* client);

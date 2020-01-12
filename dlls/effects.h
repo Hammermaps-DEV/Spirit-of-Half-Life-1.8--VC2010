@@ -38,10 +38,10 @@
 class CSprite : public CPointEntity
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 
-	int ObjectCaps(void) override
+	int ObjectCaps() override
 	{
 		int flags = 0;
 		if (pev->spawnflags & SF_SPRITE_TEMPORARY)
@@ -49,14 +49,14 @@ public:
 		return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | flags;
 	}
 
-	void EXPORT AnimateThink(void);
-	void EXPORT ExpandThink(void);
+	void EXPORT AnimateThink();
+	void EXPORT ExpandThink();
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	void Animate(float frames);
 	void Expand(float scaleSpeed, float fadeSpeed);
 	void SpriteInit(const char* pSpriteName, const Vector& origin);
 
-	STATE GetState(void) override { return (pev->effects & EF_NODRAW) ? STATE_OFF : STATE_ON; };
+	STATE GetState() override { return (pev->effects & EF_NODRAW) ? STATE_OFF : STATE_ON; };
 
 	void SetAttachment(edict_t* pEntity, int attachment)
 	{
@@ -69,9 +69,9 @@ public:
 		}
 	}
 
-	void TurnOff(void);
-	void TurnOn(void);
-	float Frames(void) { return m_maxFrame; }
+	void TurnOff();
+	void TurnOn();
+	float Frames() { return m_maxFrame; }
 
 	void SetTransparency(int rendermode, int r, int g, int b, int a, int fx)
 	{
@@ -103,7 +103,7 @@ public:
 		SetNextThink(0);
 	}
 
-	void EXPORT AnimateUntilDead(void);
+	void EXPORT AnimateUntilDead();
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -120,10 +120,10 @@ public:
 class CBeam : public CBaseEntity
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 
-	int ObjectCaps(void) override
+	int ObjectCaps() override
 	{
 		int flags = 0;
 		if (pev->spawnflags & SF_BEAM_TEMPORARY)
@@ -164,28 +164,28 @@ public:
 	void SetFrame(float frame) { pev->frame = frame; }
 	void SetScrollRate(int speed) { pev->animtime = speed; }
 
-	int GetType(void) { return pev->rendermode & 0x0F; }
-	int GetFlags(void) { return pev->rendermode & 0xF0; }
-	int GetStartEntity(void) { return pev->sequence & 0xFFF; }
-	int GetEndEntity(void) { return pev->skin & 0xFFF; }
+	int GetType() { return pev->rendermode & 0x0F; }
+	int GetFlags() { return pev->rendermode & 0xF0; }
+	int GetStartEntity() { return pev->sequence & 0xFFF; }
+	int GetEndEntity() { return pev->skin & 0xFFF; }
 
-	const Vector& GetStartPos(void);
-	const Vector& GetEndPos(void);
+	const Vector& GetStartPos();
+	const Vector& GetEndPos();
 
-	Vector Center(void) override { return (GetStartPos() + GetEndPos()) * 0.5; }; // center point of beam
+	Vector Center() override { return (GetStartPos() + GetEndPos()) * 0.5; }; // center point of beam
 
-	int GetTexture(void) { return pev->modelindex; }
-	int GetWidth(void) { return pev->scale; }
-	int GetNoise(void) { return pev->body; }
+	int GetTexture() { return pev->modelindex; }
+	int GetWidth() { return pev->scale; }
+	int GetNoise() { return pev->body; }
 	// inline void GetColor( int r, int g, int b ) { pev->rendercolor.x = r; pev->rendercolor.y = g; pev->rendercolor.z = b; }
-	int GetBrightness(void) { return pev->renderamt; }
-	int GetFrame(void) { return pev->frame; }
-	int GetScrollRate(void) { return pev->animtime; }
+	int GetBrightness() { return pev->renderamt; }
+	int GetFrame() { return pev->frame; }
+	int GetScrollRate() { return pev->animtime; }
 
 	CBaseEntity* GetTripEntity(TraceResult* ptr); //LRC
 
 	// Call after you change start/end positions
-	void RelinkBeam(void);
+	void RelinkBeam();
 	//	void		SetObjectCollisionBox( void );
 
 	void DoSparks(const Vector& start, const Vector& end);
@@ -222,18 +222,18 @@ public:
 class CLaser : public CBeam
 {
 public:
-	void Spawn(void) override;
-	void PostSpawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void PostSpawn() override;
+	void Precache() override;
 	void KeyValue(KeyValueData* pkvd) override;
 
-	void TurnOn(void);
-	void TurnOff(void);
-	STATE GetState(void) override { return (pev->effects & EF_NODRAW) ? STATE_OFF : STATE_ON; };
+	void TurnOn();
+	void TurnOff();
+	STATE GetState() override { return (pev->effects & EF_NODRAW) ? STATE_OFF : STATE_ON; };
 
 	void FireAtPoint(Vector startpos, TraceResult& point);
 
-	void EXPORT StrikeThink(void);
+	void EXPORT StrikeThink();
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -255,10 +255,10 @@ public:
 class CRainSettings : public CBaseEntity
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 	void KeyValue(KeyValueData* pkvd) override;
 
-	int ObjectCaps(void) override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;
@@ -271,11 +271,11 @@ public:
 class CRainModify : public CBaseEntity
 {
 public:
-	void Spawn(void) override;
+	void Spawn() override;
 	void KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	int ObjectCaps(void) override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
 	int Save(CSave& save) override;
 	int Restore(CRestore& restore) override;

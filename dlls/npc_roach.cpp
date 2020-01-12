@@ -37,10 +37,10 @@
 class CRoach : public CBaseMonster
 {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
-	void SetYawSpeed(void) override;
-	void EXPORT MonsterThink(void) override;
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	void EXPORT MonsterThink() override;
 	void Move(float flInterval) override;
 	void PickNewDest(int iCondition);
 	void EXPORT Touch(CBaseEntity* pOther) override;
@@ -48,9 +48,9 @@ public:
 
 	float m_flLastLightLevel;
 	float m_flNextSmellTime;
-	int Classify(void) override;
+	int Classify() override;
 	void Look(int iDistance) override;
-	int ISoundMask(void) override;
+	int ISoundMask() override;
 
 	// UNDONE: These don't necessarily need to be save/restored, but if we add more data, it may
 	BOOL m_fLightHacked;
@@ -65,7 +65,7 @@ LINK_ENTITY_TO_CLASS(monster_cockroach, CRoach);
 // of sounds this monster regards. In the base class implementation,
 // monsters care about all sounds, but no scents.
 //=========================================================
-int CRoach::ISoundMask(void)
+int CRoach::ISoundMask()
 {
 	return bits_SOUND_CARCASS | bits_SOUND_MEAT;
 }
@@ -74,7 +74,7 @@ int CRoach::ISoundMask(void)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int CRoach::Classify(void)
+int CRoach::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_INSECT;
 }
@@ -105,7 +105,7 @@ void CRoach::Touch(CBaseEntity* pOther)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CRoach::SetYawSpeed(void)
+void CRoach::SetYawSpeed()
 {
 	int ys;
 
@@ -192,7 +192,7 @@ void CRoach::Killed(entvars_t* pevAttacker, int iGib)
 //=========================================================
 // MonsterThink, overridden for roaches.
 //=========================================================
-void CRoach::MonsterThink(void)
+void CRoach::MonsterThink()
 {
 	if (FNullEnt(FIND_CLIENT_IN_PVS(edict())) && !HaveCamerasInPVS(edict()))
 		SetNextThink(RANDOM_FLOAT(1, 1.5));
