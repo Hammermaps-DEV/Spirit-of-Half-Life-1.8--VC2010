@@ -1228,11 +1228,11 @@ int AddToFullPack(struct entity_state_s* state, int e, edict_t* ent, edict_t* ho
 	}
 
 	state->rendermode = ent->v.rendermode;
-	state->renderamt = ent->v.renderamt;
+	state->renderamt = (int)ent->v.renderamt;
 	state->renderfx = ent->v.renderfx;
-	state->rendercolor.r = ent->v.rendercolor.x;
-	state->rendercolor.g = ent->v.rendercolor.y;
-	state->rendercolor.b = ent->v.rendercolor.z;
+	state->rendercolor.r = (byte)ent->v.rendercolor.x;
+	state->rendercolor.g = (byte)ent->v.rendercolor.y;
+	state->rendercolor.b = (byte)ent->v.rendercolor.z;
 
 	state->aiment = 0;
 	if (ent->v.aiment)
@@ -1274,7 +1274,7 @@ int AddToFullPack(struct entity_state_s* state, int e, edict_t* ent, edict_t* ho
 		//		state->team			= ent->v.team;
 		//
 		state->usehull = (ent->v.flags & FL_DUCKING) ? 1 : 0;
-		state->health = ent->v.health;
+		state->health = (int)ent->v.health;
 	}
 
 	return 1;
@@ -1831,21 +1831,24 @@ int GetHullBounds(int hullnumber, float* mins, float* maxs)
 {
 	int iret = 0;
 
+	Vector& vecMins = *reinterpret_cast<Vector*>(mins);
+	Vector& vecMaxs = *reinterpret_cast<Vector*>(maxs);
+
 	switch (hullnumber)
 	{
 	case 0: // Normal player
-		mins = VEC_HULL_MIN;
-		maxs = VEC_HULL_MAX;
+		vecMins = VEC_HULL_MIN;
+		vecMaxs = VEC_HULL_MAX;
 		iret = 1;
 		break;
 	case 1: // Crouched player
-		mins = VEC_DUCK_HULL_MIN;
-		maxs = VEC_DUCK_HULL_MAX;
+		vecMins = VEC_DUCK_HULL_MIN;
+		vecMaxs = VEC_DUCK_HULL_MAX;
 		iret = 1;
 		break;
 	case 2: // Point based hull
-		mins = Vector(0, 0, 0);
-		maxs = Vector(0, 0, 0);
+		vecMins = Vector(0, 0, 0);
+		vecMaxs = Vector(0, 0, 0);
 		iret = 1;
 		break;
 	}

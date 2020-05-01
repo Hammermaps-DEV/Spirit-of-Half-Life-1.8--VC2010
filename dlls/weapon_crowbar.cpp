@@ -18,7 +18,6 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "gamerules.h"
 
@@ -37,7 +36,9 @@ enum crowbar_e
 	CROWBAR_ATTACK2MISS,
 	CROWBAR_ATTACK2HIT,
 	CROWBAR_ATTACK3MISS,
-	CROWBAR_ATTACK3HIT
+	CROWBAR_ATTACK3HIT,
+	CROWBAR_IDLE2,
+	CROWBAR_IDLE3
 };
 
 
@@ -205,6 +206,7 @@ int CCrowbar::Swing(int fFirst)
 				break;
 			}
 			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 			// play wiff or swish sound
 			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/cbar_miss1.wav", 1, ATTN_NORM, 0,
 			               94 + RANDOM_LONG(0, 0xF));
@@ -235,7 +237,14 @@ int CCrowbar::Swing(int fFirst)
 
 		ClearMultiDamage();
 
-		if ((m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase()) || g_pGameRules->IsMultiplayer())
+		// If building with the clientside weapon prediction system,
+		// UTIL_WeaponTimeBase() is always 0 and m_flNextPrimaryAttack is >= -1.0f, thus making
+		// m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase() always evaluate to false.
+		if ((m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase()) || g_pGameRules->IsMultiplayer()
+#ifdef CLIENT_WEAPONS
+			|| m_flNextPrimaryAttack == -1.0f
+#endif
+			)
 		{
 			// first swing does full damage
 			pEntity->TraceAttack(m_pPlayer->pev, gSkillData.plrDmgCrowbar, gpGlobals->v_forward, &tr, DMG_CLUB);
@@ -269,6 +278,7 @@ int CCrowbar::Swing(int fFirst)
 				if (!pEntity->IsAlive())
 				{
 					m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.25; //LRC: corrected half-life bug
+					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 					return TRUE;
 				}
 				flVol = 0.1;
@@ -310,8 +320,34 @@ int CCrowbar::Swing(int fFirst)
 		m_pPlayer->m_iWeaponVolume = flVol * CROWBAR_WALLHIT_VOLUME;
 #endif
 		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.25;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 		SetThink(&CCrowbar:: Smack);
 		SetNextThink(0.2);
 	}
 	return fDidHit;
+}
+
+void CCrowbar::WeaponIdle(void)
+{
+	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
+		return;
+
+	int iAnim;
+	float flAnimTime = 5.34; // Only CROWBAR_IDLE has a different time
+	switch (RANDOM_LONG(0, 2))
+	{
+	case 0:
+		iAnim = CROWBAR_IDLE;
+		flAnimTime = 2.7;
+		break;
+	case 1:
+		iAnim = CROWBAR_IDLE2;
+		break;
+	case 2:
+		iAnim = CROWBAR_IDLE3;
+		break;
+	}
+	
+	SendWeaponAnim(iAnim, 1);
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + flAnimTime;
 }

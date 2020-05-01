@@ -84,6 +84,10 @@ extern client_sprite_t *GetSpriteList(client_sprite_t *pList, const char *psz, i
 
 extern cvar_t *sensitivity;
 cvar_t *cl_lw = NULL;
+cvar_t* cl_rollangle;
+cvar_t* cl_rollspeed;
+cvar_t* cl_viewroll;
+cvar_t* cl_bobtilt;
 
 void ShutdownInput ();
 
@@ -407,6 +411,11 @@ void CHud :: Init( void )
 	CVAR_CREATE( "hud_classautokill", "1", FCVAR_ARCHIVE | FCVAR_USERINFO );		// controls whether or not to suicide immediately on TF class switch
 	CVAR_CREATE( "hud_takesshots", "0", FCVAR_ARCHIVE );		// controls whether or not to automatically take screenshots at the end of a round
 
+	cl_rollangle = CVAR_CREATE("cl_rollangle", "0.45", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
+	cl_rollspeed = CVAR_CREATE("cl_rollspeed", "200", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
+	cl_viewroll = CVAR_CREATE("cl_viewroll", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
+	cl_bobtilt = CVAR_CREATE("cl_bobtilt", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
+	
 	viewEntityIndex = 0; // trigger_viewset stuff
 	viewFlags = 0;
 	m_iLogo = 0;

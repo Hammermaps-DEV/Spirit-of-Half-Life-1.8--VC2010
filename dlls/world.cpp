@@ -98,9 +98,42 @@ public:
 	void KeyValue(KeyValueData* pkvd) override;
 	void EXPORT StaticDecal();
 	void EXPORT TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	virtual	int Save(CSave& save);
+	virtual	int Restore(CRestore& restore);
+	static	TYPEDESCRIPTION m_SaveData[];
+private:
+	float	m_fPlacedOnEntity;
 };
 
 LINK_ENTITY_TO_CLASS(infodecal, CDecal);
+
+TYPEDESCRIPTION CDecal::m_SaveData[] =
+{
+	DEFINE_FIELD(CDecal, m_fPlacedOnEntity, FIELD_BOOLEAN),
+};
+
+int CDecal::Save(CSave& save)
+{
+	if (!CBaseEntity::Save(save))
+		return 0;
+
+	return save.WriteFields("infodecal", "infodecal", this, m_SaveData, ARRAYSIZE(m_SaveData));
+}
+
+int CDecal::Restore(CRestore& restore)
+{
+	if (!CBaseEntity::Restore(restore))
+		return 0;
+
+	int status = restore.ReadFields("infodecal", this, m_SaveData, ARRAYSIZE(m_SaveData));
+
+	if (m_fPlacedOnEntity)
+		Spawn();
+	else
+		REMOVE_ENTITY(ENT(pev));
+
+	return status;
+}
 
 // UNDONE:  These won't get sent to joining players in multi-player
 void CDecal::Spawn()
@@ -165,7 +198,10 @@ void CDecal::StaticDecal()
 
 	g_engfuncs.pfnStaticDecal(pev->origin, static_cast<int>(pev->skin), entityIndex, modelIndex);
 
-	SUB_Remove();
+	m_fPlacedOnEntity = modelIndex > 0;
+
+	if (modelIndex == 0)
+		SUB_Remove();
 }
 
 void CDecal::KeyValue(KeyValueData* pkvd)
@@ -442,7 +478,6 @@ void CWorld::Spawn()
 {
 	g_fGameOver = FALSE;
 	Precache();
-	g_flWeaponCheat = CVAR_GET_FLOAT("sv_cheats"); // Is the impulse 101 command allowed?
 }
 
 void CWorld::Precache()
@@ -584,6 +619,9 @@ void CWorld::Precache()
 	else
 		CVAR_SET_FLOAT("sv_zmax", 4096);
 
+	// g-cont. moved here to right restore global WaveHeight on save\restore level
+	CVAR_SET_FLOAT("sv_wateramp", pev->scale);
+
 	if (CVAR_GET_FLOAT("r_detailtexturessupported") == 1)
 		CVAR_SET_FLOAT("r_detailtextures", 1);
 	else
@@ -621,6 +659,9 @@ void CWorld::Precache()
 	{
 		CVAR_SET_FLOAT("mp_defaultteam", 0);
 	}
+
+	// g-cont. moved here so cheats will working on restore level
+	g_flWeaponCheat = CVAR_GET_FLOAT("sv_cheats");  // Is the impulse 101 command allowed?
 }
 
 // Just to ignore the "wad" field.
@@ -642,7 +683,6 @@ void CWorld::KeyValue(KeyValueData* pkvd)
 		// Sent over net now.
 		pev->scale = atof(pkvd->szValue) * (1.0 / 8.0);
 		pkvd->fHandled = TRUE;
-		CVAR_SET_FLOAT("sv_wateramp", pev->scale);
 	}
 	else if (FStrEq(pkvd->szKeyName, "MaxRange"))
 	{

@@ -637,6 +637,7 @@ public:
 	void EXPORT SwingAgain();
 	void EXPORT Smack();
 	int GetItemInfo(ItemInfo* p) override;
+	void WeaponIdle(void);
 
 	void PrimaryAttack() override;
 	int Swing(int fFirst);
@@ -865,7 +866,7 @@ public:
 
 	int m_iTrail;
 	float m_flIgniteTime;
-	CRpg* m_pLauncher; // pointer back to the launcher that fired me. 
+	EHANDLE* m_hLauncher; // pointer back to the launcher that fired me. 
 };
 
 class CGauss : public CBasePlayerWeapon

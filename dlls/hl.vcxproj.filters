@@ -375,6 +375,9 @@
     <ClCompile Include="..\game\server\entities\xen\CXenSpore.cpp">
       <Filter>Source Files\game\server\entities\xen</Filter>
     </ClCompile>
+    <ClCompile Include="..\game\server\entities\CInfoAlias.cpp">
+      <Filter>Source Files\game\server\entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="activity.h">
@@ -547,6 +550,9 @@
     </ClInclude>
     <ClInclude Include="..\game\server\entities\xen\CXenSporeLarge.h">
       <Filter>Source Files\game\server\entities\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\CInfoAlias.h">
+      <Filter>Source Files\game\server\entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
