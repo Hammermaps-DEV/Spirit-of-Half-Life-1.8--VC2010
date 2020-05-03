@@ -21,6 +21,7 @@
 #include "util.h"
 #include "cbase.h"
 
+#include "CBaseMutableAlias.h"
 #include "CInfoAlias.h"
 
 /*********************

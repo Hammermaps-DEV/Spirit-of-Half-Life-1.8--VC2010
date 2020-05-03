@@ -15,6 +15,7 @@
 #include "player.h"
 #include "movewith.h"
 
+#include "CBaseMutableAlias.h"
 
 // Position/number marker
 class CMark : public CPointEntity

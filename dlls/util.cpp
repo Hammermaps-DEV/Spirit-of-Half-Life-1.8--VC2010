@@ -27,11 +27,13 @@
 #include <time.h>
 #include "shake.h"
 #include "decals.h"
+#include "game/server/entities/CInfoGroup.h"
 #include "player.h"
 #include "weapons.h"
 #include "gamerules.h"
 #include "movewith.h"
-#include "locus.h"
+
+#include "CBaseMutableAlias.h"
 
 float UTIL_WeaponTimeBase()
 {

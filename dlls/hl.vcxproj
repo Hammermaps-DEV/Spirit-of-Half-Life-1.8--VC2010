@@ -187,7 +187,7 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
       <WarningLevel>Level3</WarningLevel>
       <MinimalRebuild>false</MinimalRebuild>
       <DebugInformationFormat>None</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\dlls;..\engine;..\common;..\game_shared;..\pm_shared;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\dlls;..\engine;..\common;..\game_shared;..\pm_shared;..\;..\game\server\entities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;QUIVER;VOXEL;QUAKE2;VALVE_DLL;CLIENT_WEAPONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\debughl\</AssemblerListingLocation>
       <BrowseInformation>true</BrowseInformation>
@@ -232,7 +232,11 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\game\server\entities\CActAnimating.cpp" />
+    <ClCompile Include="..\game\server\entities\CBaseMutableAlias.cpp" />
     <ClCompile Include="..\game\server\entities\CInfoAlias.cpp" />
+    <ClCompile Include="..\game\server\entities\CInfoGroup.cpp" />
+    <ClCompile Include="..\game\server\entities\CMultiAlias.cpp" />
+    <ClCompile Include="..\game\server\entities\CTriggerChangeAlias.cpp" />
     <ClCompile Include="..\game\server\entities\xen\CXenHair.cpp" />
     <ClCompile Include="..\game\server\entities\xen\CXenHull.cpp" />
     <ClCompile Include="..\game\server\entities\xen\CXenPLight.cpp" />
@@ -351,7 +355,11 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game\server\entities\CActAnimating.h" />
+    <ClInclude Include="..\game\server\entities\CBaseMutableAlias.h" />
     <ClInclude Include="..\game\server\entities\CInfoAlias.h" />
+    <ClInclude Include="..\game\server\entities\CInfoGroup.h" />
+    <ClInclude Include="..\game\server\entities\CMultiAlias.h" />
+    <ClInclude Include="..\game\server\entities\CTriggerChangeAlias.h" />
     <ClInclude Include="..\game\server\entities\xen\CXenHair.h" />
     <ClInclude Include="..\game\server\entities\xen\CXenHull.h" />
     <ClInclude Include="..\game\server\entities\xen\CXenPLight.h" />

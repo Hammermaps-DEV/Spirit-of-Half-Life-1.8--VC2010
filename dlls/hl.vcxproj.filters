@@ -378,6 +378,18 @@
     <ClCompile Include="..\game\server\entities\CInfoAlias.cpp">
       <Filter>Source Files\game\server\entities</Filter>
     </ClCompile>
+    <ClCompile Include="..\game\server\entities\CInfoGroup.cpp">
+      <Filter>Source Files\game\server\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\CBaseMutableAlias.cpp">
+      <Filter>Source Files\game\server\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\CMultiAlias.cpp">
+      <Filter>Source Files\game\server\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\CTriggerChangeAlias.cpp">
+      <Filter>Source Files\game\server\entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="activity.h">
@@ -552,6 +564,18 @@
       <Filter>Source Files\game\server\entities\xen</Filter>
     </ClInclude>
     <ClInclude Include="..\game\server\entities\CInfoAlias.h">
+      <Filter>Source Files\game\server\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\CInfoGroup.h">
+      <Filter>Source Files\game\server\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\CBaseMutableAlias.h">
+      <Filter>Source Files\game\server\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\CMultiAlias.h">
+      <Filter>Source Files\game\server\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\CTriggerChangeAlias.h">
       <Filter>Source Files\game\server\entities</Filter>
     </ClInclude>
   </ItemGroup>

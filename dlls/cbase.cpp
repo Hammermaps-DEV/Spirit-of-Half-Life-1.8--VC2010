@@ -25,6 +25,8 @@
 #include	"skill.h"
 #include	"weapons.h"
 
+#include	"CBaseMutableAlias.h"
+
 void EntvarsKeyvalue(entvars_t* pev, KeyValueData* pkvd);
 
 extern "C" void PM_Move(struct playermove_s* ppmove, int server);
