@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, 2000 Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   This source code contains proprietary and confidential information of
@@ -12,9 +12,6 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-//=========================================================
-// Agrunt - Dominant, warlike alien grunt monster
-//=========================================================
 
 #include	"extdll.h"
 #include	"util.h"
@@ -24,113 +21,9 @@
 #include	"squadmonster.h"
 #include	"weapons.h"
 #include	"soundent.h"
-#include	"hornet.h"
 #include	"scripted.h"
 
-//=========================================================
-// monster-specific schedule types
-//=========================================================
-enum
-{
-	SCHED_AGRUNT_SUPPRESS = LAST_COMMON_SCHEDULE + 1,
-	SCHED_AGRUNT_THREAT_DISPLAY,
-};
-
-//=========================================================
-// monster-specific tasks
-//=========================================================
-enum
-{
-	TASK_AGRUNT_SETUP_HIDE_ATTACK = LAST_COMMON_TASK + 1,
-	TASK_AGRUNT_GET_PATH_TO_ENEMY_CORPSE,
-};
-
-int iAgruntMuzzleFlash;
-
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
-#define		AGRUNT_AE_HORNET1	( 1 )
-#define		AGRUNT_AE_HORNET2	( 2 )
-#define		AGRUNT_AE_HORNET3	( 3 )
-#define		AGRUNT_AE_HORNET4	( 4 )
-#define		AGRUNT_AE_HORNET5	( 5 )
-// some events are set up in the QC file that aren't recognized by the code yet.
-#define		AGRUNT_AE_PUNCH		( 6 )
-#define		AGRUNT_AE_BITE		( 7 )
-
-#define		AGRUNT_AE_LEFT_FOOT	 ( 10 )
-#define		AGRUNT_AE_RIGHT_FOOT ( 11 )
-
-#define		AGRUNT_AE_LEFT_PUNCH ( 12 )
-#define		AGRUNT_AE_RIGHT_PUNCH ( 13 )
-
-
-#define		AGRUNT_MELEE_DIST	100
-
-//LRC - body definitions for the Agrunt model
-#define		AGRUNT_BODY_HASGUN 0
-#define		AGRUNT_BODY_NOGUN  1
-
-class CAGrunt : public CSquadMonster
-{
-public:
-	void Spawn() override;
-	void Precache() override;
-	void SetYawSpeed() override;
-	int Classify() override;
-	int ISoundMask() override;
-	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-
-	void SetObjectCollisionBox() override
-	{
-		pev->absmin = pev->origin + Vector(-32, -32, 0);
-		pev->absmax = pev->origin + Vector(32, 32, 85);
-	}
-
-	Schedule_t* GetSchedule() override;
-	Schedule_t* GetScheduleOfType(int Type) override;
-	BOOL FCanCheckAttacks() override;
-	BOOL CheckMeleeAttack1(float flDot, float flDist) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-	void StartTask(Task_t* pTask) override;
-	void AlertSound() override;
-	void DeathSound() override;
-	void PainSound() override;
-	void AttackSound();
-	void PrescheduleThink() override;
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
-	                 int bitsDamageType) override;
-	int IRelationship(CBaseEntity* pTarget) override;
-	void StopTalking();
-	BOOL ShouldSpeak();
-	void Killed(entvars_t* pevAttacker, int iGib) override;
-
-
-	CUSTOM_SCHEDULES;
-
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
-	static const char* pAttackHitSounds[];
-	static const char* pAttackMissSounds[];
-	static const char* pAttackSounds[];
-	static const char* pDieSounds[];
-	static const char* pPainSounds[];
-	static const char* pIdleSounds[];
-	static const char* pAlertSounds[];
-
-	BOOL m_fCanHornetAttack;
-	float m_flNextHornetAttackCheck;
-
-	float m_flNextPainTime;
-
-	// three hacky fields for speech stuff. These don't really need to be saved.
-	float m_flNextSpeakTime;
-	float m_flNextWordTime;
-	int m_iLastWord;
-};
+#include	"CAGrunt.h"
 
 LINK_ENTITY_TO_CLASS(monster_alien_grunt, CAGrunt);
 
@@ -320,7 +213,7 @@ void CAGrunt::PrescheduleThink()
 
 			do
 			{
-				num = RANDOM_LONG(0,ARRAYSIZE(pIdleSounds) - 1);
+				num = RANDOM_LONG(0, ARRAYSIZE(pIdleSounds) - 1);
 			}
 			while (num == m_iLastWord);
 
@@ -350,7 +243,7 @@ void CAGrunt::DeathSound()
 {
 	StopTalking();
 
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, pDieSounds[RANDOM_LONG(0,ARRAYSIZE(pDieSounds) - 1)], 1.0, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, pDieSounds[RANDOM_LONG(0, ARRAYSIZE(pDieSounds) - 1)], 1.0, ATTN_NORM);
 }
 
 //=========================================================
@@ -360,7 +253,7 @@ void CAGrunt::AlertSound()
 {
 	StopTalking();
 
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, pAlertSounds[RANDOM_LONG(0,ARRAYSIZE(pAlertSounds) - 1)], 1.0, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, pAlertSounds[RANDOM_LONG(0, ARRAYSIZE(pAlertSounds) - 1)], 1.0, ATTN_NORM);
 }
 
 //=========================================================
@@ -370,7 +263,7 @@ void CAGrunt::AttackSound()
 {
 	StopTalking();
 
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, pAttackSounds[RANDOM_LONG(0,ARRAYSIZE(pAttackSounds) - 1)], 1.0, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, pAttackSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackSounds) - 1)], 1.0, ATTN_NORM);
 }
 
 //=========================================================
@@ -387,7 +280,7 @@ void CAGrunt::PainSound()
 
 	StopTalking();
 
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, pPainSounds[RANDOM_LONG(0,ARRAYSIZE(pPainSounds) - 1)], 1.0, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, pPainSounds[RANDOM_LONG(0, ARRAYSIZE(pPainSounds) - 1)], 1.0, ATTN_NORM);
 }
 
 //=========================================================
@@ -534,7 +427,7 @@ void CAGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 250;
 				}
 
-				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0,ARRAYSIZE(pAttackHitSounds) - 1)],
+				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackHitSounds) - 1)],
 				               1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 
 				Vector vecArmPos, vecArmAng;
@@ -545,7 +438,7 @@ void CAGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 			{
 				// Play a random attack miss sound
 				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON,
-				               pAttackMissSounds[RANDOM_LONG(0,ARRAYSIZE(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0,
+				               pAttackMissSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0,
 				               100 + RANDOM_LONG(-5, 5));
 			}
 		}
@@ -567,7 +460,7 @@ void CAGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -250;
 				}
 
-				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0,ARRAYSIZE(pAttackHitSounds) - 1)],
+				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pAttackHitSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackHitSounds) - 1)],
 				               1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5, 5));
 
 				Vector vecArmPos, vecArmAng;
@@ -578,7 +471,7 @@ void CAGrunt::HandleAnimEvent(MonsterEvent_t* pEvent)
 			{
 				// Play a random attack miss sound
 				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON,
-				               pAttackMissSounds[RANDOM_LONG(0,ARRAYSIZE(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0,
+				               pAttackMissSounds[RANDOM_LONG(0, ARRAYSIZE(pAttackMissSounds) - 1)], 1.0, ATTN_NORM, 0,
 				               100 + RANDOM_LONG(-5, 5));
 			}
 		}

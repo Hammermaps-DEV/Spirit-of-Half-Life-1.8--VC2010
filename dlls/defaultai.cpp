@@ -49,7 +49,7 @@ Schedule_t slFail[] =
 //=========================================================
 //	Idle Schedules
 //=========================================================
-Task_t tlIdleStand1[] =
+Task_t tlIdleStand[] =
 {
 	{TASK_STOP_MOVING, 0},
 	{TASK_SET_ACTIVITY, static_cast<float>(ACT_IDLE)},
@@ -60,8 +60,8 @@ Task_t tlIdleStand1[] =
 Schedule_t slIdleStand[] =
 {
 	{
-		tlIdleStand1,
-		ARRAYSIZE(tlIdleStand1),
+		tlIdleStand,
+		ARRAYSIZE(tlIdleStand),
 		bits_COND_NEW_ENEMY |
 		bits_COND_SEE_FEAR |
 		bits_COND_LIGHT_DAMAGE |
@@ -86,8 +86,8 @@ Schedule_t slIdleStand[] =
 Schedule_t slIdleTrigger[] =
 {
 	{
-		tlIdleStand1,
-		ARRAYSIZE(tlIdleStand1),
+		tlIdleStand,
+		ARRAYSIZE(tlIdleStand),
 		bits_COND_LIGHT_DAMAGE |
 		bits_COND_HEAVY_DAMAGE,
 		0,

@@ -1,95 +1,29 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
 *
 ****/
-//=========================================================
-// monster_barney for SOHL 1.8 VC++ 2010
-//=========================================================
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"talkmonster.h"
-#include	"schedule.h"
-#include	"defaultai.h"
-#include	"scripted.h"
-#include	"weapons.h"
-#include	"soundent.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "talkmonster.h"
+#include "schedule.h"
+#include "defaultai.h"
+#include "weapons.h"
+#include "soundent.h"
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
-enum { SCHED_BARNEY_COVER_AND_RELOAD };
-
-#define	BARNEY_AE_DRAW		( 2 )
-#define	BARNEY_AE_SHOOT		( 3 )
-#define	BARNEY_AE_HOLSTER	( 4 )
-#define	BARNEY_AE_RELOAD	( 5 )
-
-#define	BARNEY_BODY_GUNHOLSTERED	0
-#define	BARNEY_BODY_GUNDRAWN		1
-#define BARNEY_BODY_GUNGONE			2
-
-class CBarney : public CTalkMonster
-{
-public:
-	void Spawn() override;
-	void Precache() override;
-	void SetYawSpeed() override;
-	int ISoundMask() override;
-	void BarneyFirePistol();
-	void CheckAmmo() override;
-	void AlertSound() override;
-	int Classify() override;
-	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
-
-	void RunTask(Task_t* pTask) override;
-	void StartTask(Task_t* pTask) override;
-	int ObjectCaps() override { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
-	BOOL CheckRangeAttack1(float flDot, float flDist) override;
-
-	void DeclineFollowing() override;
-
-	// Override these to set behavior
-	Schedule_t* GetScheduleOfType(int Type) override;
-	Schedule_t* GetSchedule() override;
-	MONSTERSTATE GetIdealState() override;
-
-	void DeathSound() override;
-	void PainSound() override;
-
-	void TalkInit();
-
-	void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
-	                 int bitsDamageType) override;
-	void Killed(entvars_t* pevAttacker, int iGib) override;
-
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-
-	int m_iBaseBody; //LRC - for barneys with different bodies
-	BOOL m_fGunDrawn;
-	float m_painTime;
-	float m_checkAttackTime;
-	BOOL m_lastAttackCheck;
-	int m_cClipSize;
-	float m_flPlayerDamage; // how much pain has the player inflicted on me?
-
-	CUSTOM_SCHEDULES;
-};
+#include "CBarney.h"
 
 LINK_ENTITY_TO_CLASS(monster_barney, CBarney);
 
@@ -251,11 +185,6 @@ void CBarney::CheckAmmo()
 		SetConditions(bits_COND_NO_AMMO_LOADED);
 }
 
-void CBarney::StartTask(Task_t* pTask)
-{
-	CTalkMonster::StartTask(pTask);
-}
-
 void CBarney::RunTask(Task_t* pTask)
 {
 	switch (pTask->iTask)
@@ -291,15 +220,6 @@ int CBarney::ISoundMask()
 }
 
 //=========================================================
-// Classify - indicates this monster's place in the 
-// relationship table.
-//=========================================================
-int CBarney::Classify()
-{
-	return m_iClass ? m_iClass : CLASS_PLAYER_ALLY;
-}
-
-//=========================================================
 // ALertSound - barney says "Freeze!"
 //=========================================================
 void CBarney::AlertSound()
@@ -311,7 +231,7 @@ void CBarney::AlertSound()
 			if (m_iszSpeakAs)
 			{
 				char szBuf[32];
-				strcpy(szBuf,STRING(m_iszSpeakAs));
+				strcpy(szBuf, STRING(m_iszSpeakAs));
 				strcat_s(szBuf, "_ATTACK");
 				PlaySentence(szBuf, RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
 			}
@@ -329,9 +249,7 @@ void CBarney::AlertSound()
 //=========================================================
 void CBarney::SetYawSpeed()
 {
-	int ys;
-
-	ys = 0;
+	int ys = 0;
 
 	switch (m_Activity)
 	{
@@ -351,7 +269,6 @@ void CBarney::SetYawSpeed()
 
 	pev->yaw_speed = ys;
 }
-
 
 //=========================================================
 // CheckRangeAttack1
@@ -501,7 +418,7 @@ void CBarney::Spawn()
 	m_afCapability = bits_CAP_HEAR | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
 	MonsterInit();
-	SetUse(&CBarney :: FollowerUse);
+	SetUse(&CBarney::FollowerUse);
 }
 
 //=========================================================
@@ -626,7 +543,7 @@ int CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 				if (m_iszSpeakAs)
 				{
 					char szBuf[32];
-					strcpy(szBuf,STRING(m_iszSpeakAs));
+					strcpy(szBuf, STRING(m_iszSpeakAs));
 					strcat_s(szBuf, "_MAD");
 					PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
 				}
@@ -642,7 +559,7 @@ int CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 				if (m_iszSpeakAs)
 				{
 					char szBuf[32];
-					strcpy(szBuf,STRING(m_iszSpeakAs));
+					strcpy(szBuf, STRING(m_iszSpeakAs));
 					strcat_s(szBuf, "_SHOT");
 					PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
 				}
@@ -657,7 +574,7 @@ int CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 			if (m_iszSpeakAs)
 			{
 				char szBuf[32];
-				strcpy(szBuf,STRING(m_iszSpeakAs));
+				strcpy(szBuf, STRING(m_iszSpeakAs));
 				strcat_s(szBuf, "_SHOT");
 				PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
 			}
@@ -668,7 +585,6 @@ int CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 
 	return ret;
 }
-
 
 //=========================================================
 // PainSound
@@ -816,8 +732,7 @@ Schedule_t* CBarney::GetSchedule()
 {
 	if (HasConditions(bits_COND_HEAR_SOUND))
 	{
-		CSound* pSound;
-		pSound = PBestSound();
+		CSound* pSound = PBestSound();
 
 		ASSERT(pSound != NULL);
 		if (pSound && (pSound->m_iType & bits_SOUND_DANGER))
@@ -830,7 +745,7 @@ Schedule_t* CBarney::GetSchedule()
 		if (m_iszSpeakAs)
 		{
 			char szBuf[32];
-			strcpy(szBuf,STRING(m_iszSpeakAs));
+			strcpy(szBuf, STRING(m_iszSpeakAs));
 			strcat_s(szBuf, "_KILL");
 			PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
 		}
@@ -909,6 +824,12 @@ void CBarney::DeclineFollowing()
 {
 	PlaySentence(m_szGrp[TLK_DECLINE], 2, VOL_NORM, ATTN_NORM); //LRC
 }
+
+
+
+
+
+
 
 //=========================================================
 // DEAD BARNEY PROP

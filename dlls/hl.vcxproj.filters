@@ -25,12 +25,18 @@
     <Filter Include="Source Files\game\server\entities\xen">
       <UniqueIdentifier>{5f63c9ff-cdd3-4b71-bef3-cdbe259f1a5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game\server\entities\npcs">
+      <UniqueIdentifier>{e2c4843c-85b2-4b33-8165-3cbcfb78b980}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\server\entities\nodes">
+      <UniqueIdentifier>{c7146c79-4c69-4afe-bb43-0607fa87e30f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\server\entities\projectile">
+      <UniqueIdentifier>{f53e6ca6-559f-4320-b352-c15cddc9fa32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AI_BaseNPC_Schedule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="alias.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="animating.cpp">
@@ -195,22 +201,7 @@
     <ClCompile Include="world.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="npc_apache.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="npc_aflock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_agrunt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_barnacle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_barney.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_bigmomma.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="npc_bloater.cpp">
@@ -389,6 +380,120 @@
     </ClCompile>
     <ClCompile Include="..\game\server\entities\CTriggerChangeAlias.cpp">
       <Filter>Source Files\game\server\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CAGrunt.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CApache.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CBarnacle.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CBarney.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CBaseMonster.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CBaseTurret.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CBigMomma.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CBloater.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CBullsquid.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CController.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CFlockingFlyerFlock.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CFlyingMonster.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CGargantua.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CGenericMonster.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CGMan.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CHAssassin.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CHeadCrab.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CHGrunt.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CHoundeye.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CIchthyosaur.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CISlave.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CLeech.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CMiniTurret.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CNihilanth.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\COsprey.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\COtis.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CRat.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CRoach.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CScientist.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CSentry.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CSquadMonster.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CTalkMonster.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CTentacle.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CTurret.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CZombie.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CFlockingFlyer.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\nodes\CInfoBM.cpp">
+      <Filter>Source Files\game\server\entities\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\projectile\CBMortar.cpp">
+      <Filter>Source Files\game\server\entities\projectile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -577,6 +682,120 @@
     </ClInclude>
     <ClInclude Include="..\game\server\entities\CTriggerChangeAlias.h">
       <Filter>Source Files\game\server\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CAGrunt.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CApache.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CBarnacle.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CBarney.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CBaseMonster.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CBaseTurret.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CBigMomma.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CBloater.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CBullsquid.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CController.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CFlockingFlyerFlock.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CFlyingMonster.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CGargantua.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CGenericMonster.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CGMan.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CHAssassin.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CHeadCrab.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CHGrunt.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CHoundeye.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CIchthyosaur.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CISlave.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CLeech.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CMiniTurret.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CNihilanth.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\COsprey.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\COtis.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CRat.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CRoach.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CScientist.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CSentry.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CSquadMonster.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CTalkMonster.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CTentacle.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CTurret.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CZombie.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CFlockingFlyer.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\nodes\CInfoBM.h">
+      <Filter>Source Files\game\server\entities\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\projectile\CBMortar.h">
+      <Filter>Source Files\game\server\entities\projectile</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
