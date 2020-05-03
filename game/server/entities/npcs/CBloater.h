@@ -14,8 +14,29 @@
 *
 ****/
 
-#ifndef GAME_SERVER_ENTITIES_NPCS_CAGRUNT_H
-#define GAME_SERVER_ENTITIES_NPCS_CAGRUNT_H
+#ifndef GAME_SERVER_ENTITIES_NPCS_CBLOATER_H
+#define GAME_SERVER_ENTITIES_NPCS_CBLOATER_H
 
+#define	BLOATER_AE_ATTACK_MELEE1		0x01
 
-#endif //GAME_SERVER_ENTITIES_NPCS_CAGRUNT_H
+class CBloater : public CBaseMonster
+{
+public:
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int Classify() override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+
+	void PainSound() override;
+	void AlertSound() override;
+	void IdleSound() override;
+	void AttackSnd();
+
+	// No range attacks
+	BOOL CheckRangeAttack1(float flDot, float flDist) override { return FALSE; }
+	BOOL CheckRangeAttack2(float flDot, float flDist) override { return FALSE; }
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+};
+
+#endif //GAME_SERVER_ENTITIES_NPCS_CBLOATER_H

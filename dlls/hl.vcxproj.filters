@@ -34,6 +34,9 @@
     <Filter Include="Source Files\game\server\entities\projectile">
       <UniqueIdentifier>{f53e6ca6-559f-4320-b352-c15cddc9fa32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game\server\entities\effects">
+      <UniqueIdentifier>{e3f70f48-d81a-4727-9c10-defea463cd05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AI_BaseNPC_Schedule.cpp">
@@ -201,70 +204,10 @@
     <ClCompile Include="world.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="npc_aflock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_bloater.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_bullsquid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_zombie.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_turret.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_tentacle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_scientist.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_roach.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_rat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_osprey.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="npc_nihilanth.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="npc_leech.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_islave.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_ichthyosaur.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_houndeye.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_hgrunt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_headcrab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_hassassin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_gman.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="npc_gargantua.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_controller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_genericmonster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="weapon_satchel.cpp">
@@ -328,9 +271,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="weapon_handgrenade.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_otis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\game\server\entities\xen\xen.cpp">
@@ -493,6 +433,36 @@
       <Filter>Source Files\game\server\entities\nodes</Filter>
     </ClCompile>
     <ClCompile Include="..\game\server\entities\projectile\CBMortar.cpp">
+      <Filter>Source Files\game\server\entities\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CBabyCrab.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CDeadOtis.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CDeadGenericMonster.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\npcs\CTentacleMaw.cpp">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\projectile\CSquidSpit.cpp">
+      <Filter>Source Files\game\server\entities\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\projectile\CControllerZapBall.cpp">
+      <Filter>Source Files\game\server\entities\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\projectile\CControllerHeadBall.cpp">
+      <Filter>Source Files\game\server\entities\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\projectile\CStomp.cpp">
+      <Filter>Source Files\game\server\entities\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\effects\CSpiral.cpp">
+      <Filter>Source Files\game\server\entities\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\server\entities\projectile\CNihilanthHVR.cpp">
       <Filter>Source Files\game\server\entities\projectile</Filter>
     </ClCompile>
   </ItemGroup>
@@ -795,6 +765,36 @@
       <Filter>Source Files\game\server\entities\nodes</Filter>
     </ClInclude>
     <ClInclude Include="..\game\server\entities\projectile\CBMortar.h">
+      <Filter>Source Files\game\server\entities\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CBabyCrab.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CDeadOtis.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CDeadGenericMonster.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\npcs\CTentacleMaw.h">
+      <Filter>Source Files\game\server\entities\npcs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\projectile\CSquidSpit.h">
+      <Filter>Source Files\game\server\entities\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\projectile\CControllerZapBall.h">
+      <Filter>Source Files\game\server\entities\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\projectile\CControllerHeadBall.h">
+      <Filter>Source Files\game\server\entities\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\projectile\CStomp.h">
+      <Filter>Source Files\game\server\entities\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\effects\CSpiral.h">
+      <Filter>Source Files\game\server\entities\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\projectile\CNihilanthHVR.h">
       <Filter>Source Files\game\server\entities\projectile</Filter>
     </ClInclude>
   </ItemGroup>
