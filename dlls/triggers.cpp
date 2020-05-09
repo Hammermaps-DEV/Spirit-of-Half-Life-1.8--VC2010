@@ -29,12 +29,11 @@
 #include "saverestore.h"
 #include "trains.h"			// trigger_camera has train functionality
 #include "gamerules.h"
-#include "talkmonster.h"
 #include "weapons.h" //LRC, for trigger_hevcharge
 #include "movewith.h" //LRC
 #include "locus.h" //LRC
-//#include "hgrunt.h"
-//#include "islave.h"
+#include "monsters.h"
+#include "npcs/CTalkMonster.h"
 
 #define	SF_TRIGGER_PUSH_START_OFF	2//spawnflag that makes trigger_push spawn turned OFF
 #define SF_TRIGGER_HURT_TARGETONCE	1// Only fire hurt target once

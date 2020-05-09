@@ -19,13 +19,13 @@
 #include	"monsters.h"
 #include	"schedule.h"
 #include	"animation.h"
-#include	"squadmonster.h"
 #include	"weapons.h"
-#include	"talkmonster.h"
+#include "CTalkMonster.h"
 #include	"soundent.h"
 #include	"effects.h"
 #include	"customentity.h"
 #include	"scripted.h" //LRC
+#include "CSquadMonster.h"
 #include "CHGrunt.h"
 
 int g_fGruntQuestion; // true if an idle grunt asked a question. Cleared when someone answers.

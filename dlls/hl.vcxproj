@@ -237,6 +237,7 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
     <ClCompile Include="..\game\server\entities\CInfoGroup.cpp" />
     <ClCompile Include="..\game\server\entities\CMultiAlias.cpp" />
     <ClCompile Include="..\game\server\entities\CTriggerChangeAlias.cpp" />
+    <ClCompile Include="..\game\server\entities\effects\CSmoker.cpp" />
     <ClCompile Include="..\game\server\entities\effects\CSpiral.cpp" />
     <ClCompile Include="..\game\server\entities\nodes\CInfoBM.cpp" />
     <ClCompile Include="..\game\server\entities\npcs\CAGrunt.cpp" />
@@ -312,12 +313,10 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
     <ClCompile Include="effects.cpp" />
     <ClCompile Include="weapon_egon.cpp" />
     <ClCompile Include="explode.cpp" />
-    <ClCompile Include="flyingmonster.cpp" />
     <ClCompile Include="func_break.cpp" />
     <ClCompile Include="func_tank.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gamerules.cpp" />
-    <ClCompile Include="npc_gargantua.cpp" />
     <ClCompile Include="weapon_gauss.cpp" />
     <ClCompile Include="ggrenade.cpp" />
     <ClCompile Include="globals.cpp" />
@@ -342,7 +341,6 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
     <ClCompile Include="movewith.cpp" />
     <ClCompile Include="weapon_mp5.cpp" />
     <ClCompile Include="multiplay_gamerules.cpp" />
-    <ClCompile Include="npc_nihilanth.cpp" />
     <ClCompile Include="nodes.cpp" />
     <ClCompile Include="pathcorner.cpp" />
     <ClCompile Include="plane.cpp" />
@@ -361,12 +359,9 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="soundent.cpp" />
     <ClCompile Include="spectator.cpp" />
-    <ClCompile Include="squadmonster.cpp" />
     <ClCompile Include="weapon_squeakgrenade.cpp" />
     <ClCompile Include="subs.cpp" />
-    <ClCompile Include="talkmonster.cpp" />
     <ClCompile Include="teamplay_gamerules.cpp" />
-    <ClCompile Include="tempmonster.cpp" />
     <ClCompile Include="triggers.cpp" />
     <ClCompile Include="weapon_tripmine.cpp" />
     <ClCompile Include="util.cpp" />
@@ -381,6 +376,7 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
     <ClInclude Include="..\game\server\entities\CInfoGroup.h" />
     <ClInclude Include="..\game\server\entities\CMultiAlias.h" />
     <ClInclude Include="..\game\server\entities\CTriggerChangeAlias.h" />
+    <ClInclude Include="..\game\server\entities\effects\CSmoker.h" />
     <ClInclude Include="..\game\server\entities\effects\CSpiral.h" />
     <ClInclude Include="..\game\server\entities\nodes\CInfoBM.h" />
     <ClInclude Include="..\game\server\entities\npcs\CAGrunt.h" />
@@ -453,7 +449,6 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
     <ClInclude Include="enginecallback.h" />
     <ClInclude Include="explode.h" />
     <ClInclude Include="extdll.h" />
-    <ClInclude Include="flyingmonster.h" />
     <ClInclude Include="func_break.h" />
     <ClInclude Include="gamerules.h" />
     <ClInclude Include="hornet.h" />
@@ -478,8 +473,6 @@ copy $(TargetDir)spirit.dll "C:\games\half-life\spirit\dlls\spirit.dll"</Command
     <ClInclude Include="skill.h" />
     <ClInclude Include="soundent.h" />
     <ClInclude Include="spectator.h" />
-    <ClInclude Include="squadmonster.h" />
-    <ClInclude Include="talkmonster.h" />
     <ClInclude Include="teamplay_gamerules.h" />
     <ClInclude Include="trains.h" />
     <ClInclude Include="util.h" />

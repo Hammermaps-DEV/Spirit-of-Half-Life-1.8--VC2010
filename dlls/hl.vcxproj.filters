@@ -69,9 +69,6 @@
     <ClCompile Include="explode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="flyingmonster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="func_break.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -174,19 +171,10 @@
     <ClCompile Include="spectator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="squadmonster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="subs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="talkmonster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="teamplay_gamerules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tempmonster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="triggers.cpp">
@@ -202,12 +190,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="world.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_nihilanth.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="npc_gargantua.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="weapon_satchel.cpp">
@@ -465,6 +447,9 @@
     <ClCompile Include="..\game\server\entities\projectile\CNihilanthHVR.cpp">
       <Filter>Source Files\game\server\entities\projectile</Filter>
     </ClCompile>
+    <ClCompile Include="..\game\server\entities\effects\CSmoker.cpp">
+      <Filter>Source Files\game\server\entities\effects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="activity.h">
@@ -510,9 +495,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="extdll.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="flyingmonster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="func_break.h">
@@ -585,12 +567,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="spectator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="squadmonster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="talkmonster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="teamplay_gamerules.h">
@@ -796,6 +772,9 @@
     </ClInclude>
     <ClInclude Include="..\game\server\entities\projectile\CNihilanthHVR.h">
       <Filter>Source Files\game\server\entities\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\server\entities\effects\CSmoker.h">
+      <Filter>Source Files\game\server\entities\effects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -18,11 +18,11 @@
 #include	"cbase.h"
 #include	"monsters.h"
 #include	"schedule.h"
-#include	"squadmonster.h"
 #include	"weapons.h"
 #include	"soundent.h"
 #include	"scripted.h"
 
+#include "CSquadMonster.h"
 #include	"CAGrunt.h"
 
 LINK_ENTITY_TO_CLASS(monster_alien_grunt, CAGrunt);

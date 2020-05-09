@@ -17,7 +17,9 @@
 #ifndef GAME_SERVER_ENTITIES_NPCS_COTIS_H
 #define GAME_SERVER_ENTITIES_NPCS_COTIS_H
 
-#include "talkmonster.h"
+#ifndef GAME_SERVER_ENTITIES_NPCS_CTALKMONSTER_H
+#include "CTalkMonster.h"
+#endif
 
 //=========================================================
 // monster-specific DEFINE's

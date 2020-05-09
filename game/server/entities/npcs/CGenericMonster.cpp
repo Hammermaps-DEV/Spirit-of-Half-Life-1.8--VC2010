@@ -13,11 +13,11 @@
 *
 ****/
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"talkmonster.h"
-#include	"CGenericMonster.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "CTalkMonster.h"
+#include "CGenericMonster.h"
 
 LINK_ENTITY_TO_CLASS(monster_generic, CGenericMonster);
 

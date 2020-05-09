@@ -17,12 +17,12 @@
 #include "util.h"
 #include "cbase.h"
 #include "monsters.h"
-#include "talkmonster.h"
 #include "schedule.h"
 #include "defaultai.h"
 #include "weapons.h"
 #include "soundent.h"
 
+#include "CTalkMonster.h"
 #include "CBarney.h"
 
 LINK_ENTITY_TO_CLASS(monster_barney, CBarney);

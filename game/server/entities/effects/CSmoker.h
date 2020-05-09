@@ -14,8 +14,14 @@
 *
 ****/
 
-#ifndef GAME_SERVER_ENTITIES_CBASEMONSTER_H
-#define GAME_SERVER_ENTITIES_CBASEMONSTER_H
+#ifndef GAME_SERVER_ENTITIES_EFFECTS_CSMOKER_H
+#define GAME_SERVER_ENTITIES_EFFECTS_CSMOKER_H
 
+class CSmoker : public CBaseEntity
+{
+public:
+	void Spawn() override;
+	void Think() override;
+};
 
-#endif //GAME_SERVER_ENTITIES_CBASEMONSTER_H
+#endif //GAME_SERVER_ENTITIES_EFFECTS_CSMOKER_H

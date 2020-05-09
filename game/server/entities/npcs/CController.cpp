@@ -19,8 +19,8 @@
 #include	"monsters.h"
 #include	"effects.h"
 #include	"schedule.h"
-#include	"squadmonster.h"
 #include	"scripted.h"
+#include "CSquadMonster.h"
 #include "CController.h"
 
 LINK_ENTITY_TO_CLASS(monster_alien_controller, CController);

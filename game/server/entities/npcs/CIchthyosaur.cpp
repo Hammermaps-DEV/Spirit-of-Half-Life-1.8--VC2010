@@ -13,18 +13,13 @@
 *
 ****/
 
-//=========================================================
-// icthyosaur - evin, satan fish monster
-//=========================================================
-
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
-#include    "flyingmonster.h"
-#include	"soundent.h"
-#include "effects.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
+#include "soundent.h"
+#include "CFlyingMonster.h"
 #include "CIchthyosaur.h"
 
 LINK_ENTITY_TO_CLASS(monster_ichthyosaur, CIchthyosaur);

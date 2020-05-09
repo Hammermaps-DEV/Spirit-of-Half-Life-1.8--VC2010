@@ -17,11 +17,11 @@
 #include "util.h"
 #include "cbase.h"
 #include "monsters.h"
-#include "talkmonster.h"
 #include "schedule.h"
 #include "defaultai.h"
 #include "animation.h"
 #include "soundent.h"
+#include "CTalkMonster.h"
 #include "CScientist.h"
 
 LINK_ENTITY_TO_CLASS(monster_scientist, CScientist);
